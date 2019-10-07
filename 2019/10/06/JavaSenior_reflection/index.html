@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Java反射机制概述反射方式 反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java反射机制">
+<meta property="og:url" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java反射机制概述反射方式 反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/12.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/13.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/14.png">
+<meta property="og:updated_time" content="2019-10-07T13:00:28.907Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java反射机制">
+<meta name="twitter:description" content="Java反射机制概述反射方式 反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/06/JavaSenior_reflection/JavaSenior_reflection/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/06/JavaSenior_reflection/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Java反射机制 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">0</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">2</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">4</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/06/JavaSenior_reflection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Java反射机制
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-06 16:22:01" itemprop="dateCreated datePublished" datetime="2019-10-06T16:22:01+08:00">2019-10-06</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-07 21:00:28" itemprop="dateModified" datetime="2019-10-07T21:00:28+08:00">2019-10-07</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java高级/" itemprop="url" rel="index"><span itemprop="name">Java高级</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Java反射机制概述"><a href="#Java反射机制概述" class="headerlink" title="Java反射机制概述"></a>Java反射机制概述</h1><h2 id="反射方式"><a href="#反射方式" class="headerlink" title="反射方式"></a>反射方式</h2><p><img src="JavaSenior_reflection/1.png" alt></p>
+<h2 id="反射机制提供的功能"><a href="#反射机制提供的功能" class="headerlink" title="反射机制提供的功能"></a>反射机制提供的功能</h2><p><img src="JavaSenior_reflection/2.png" alt></p>
+<h2 id="反射相关API"><a href="#反射相关API" class="headerlink" title="反射相关API"></a>反射相关API</h2><p><img src="JavaSenior_reflection/3.png" alt></p>
+<h2 id="反射和封装"><a href="#反射和封装" class="headerlink" title="反射和封装"></a>反射和封装</h2><p>Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？</p>
+<p>建议直接使用new方式。</p>
+<p>Q2：什么时候使用反射的方式？</p>
+<p>反射的特征：动态性。如果编译时不确定new哪个类的对象</p>
+<p>Q3：反射与封装是不是矛盾的？如何看待两个技术？</p>
+<a id="more"></a>
+
+<p>不矛盾。</p>
+<h1 id="java-lang-Class类的理解"><a href="#java-lang-Class类的理解" class="headerlink" title="java.lang.Class类的理解"></a>java.lang.Class类的理解</h1><h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>程序经过javac.exe命令以后，会生成一个或多个字节码文件(.class结尾)。接着我们使用java.exe命令对某个字节码文件进行解释运行。相当于将某个字节码文件加载到内存中。此过程就称为类的加载。加载到内存中的类，我们就称为运行时类，此运行时类，就作为Class的一个实例。</p>
+<p><img src="JavaSenior_reflection/4.png" alt></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Person.class;</span><br></pre></td></tr></table></figure>
+
+<p> 换句话说，Class的实例就对应着一个运行时类。加载到内存中的运行时类，会缓存一定的时间。再次运行时间之内，可以通过不同的方式来获取此运行时类。</p>
+<p>Q4：万事万物皆对象的体现？</p>
+<p>对象.xxx、File、URL、反射、前端、数据库操作</p>
+<h2 id="获取Class实例的四种方式"><a href="#获取Class实例的四种方式" class="headerlink" title="获取Class实例的四种方式"></a>获取Class实例的四种方式</h2><p>方式一：调用运行时类的属性.class（★★）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;Person&gt;  clazz1 = Person.class;</span><br></pre></td></tr></table></figure>
+
+<p>方式二：通过运行时类的对象,调用getClass()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Person p1 = <span class="keyword">new</span> Person();</span><br><span class="line">Class clazz2 = p1.getClass();</span><br></pre></td></tr></table></figure>
+
+<p>方式三：调用Class的静态方法：forName(String classPath)（★★★）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class clazz3 = Class.forName(<span class="string">"com.xiaoyu.java.Person"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>方式四：使用类的加载器ClassLoader(了解)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader = ReflectionTest.class.getClassLoader();</span><br><span class="line">Class clazz4 = classLoader.loadClass(<span class="string">"com.xiaoyu.java.Person"</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="哪些类型可以有Class对象"><a href="#哪些类型可以有Class对象" class="headerlink" title="哪些类型可以有Class对象"></a>哪些类型可以有Class对象</h2><p><img src="JavaSenior_reflection/5.png" alt></p>
+<p><img src="JavaSenior_reflection/6.png" alt></p>
+<h3 id="类的加载过程（理解）"><a href="#类的加载过程（理解）" class="headerlink" title="类的加载过程（理解）"></a>类的加载过程（理解）</h3><p>当程序主动使用某个类时，如果该类还未被加载到内存中，则系统会通过如下三个步骤来对该类进行初始化。</p>
+<p><img src="JavaSenior_reflection/8.png" alt></p>
+<h3 id="类加载器ClassLoader的理解"><a href="#类加载器ClassLoader的理解" class="headerlink" title="类加载器ClassLoader的理解"></a>类加载器ClassLoader的理解</h3><p><img src="JavaSenior_reflection/9.png" alt></p>
+<p>类加载器作用：</p>
+<ul>
+<li><p>类加载的作用：将class文件字节码内容加载到内存中，并将这些静态数据转换成方法区的运行时数据结构，然后在堆中生成一个代表这个类的java.lang.Class对象，作为方法区中类数据的访问入口。</p>
+</li>
+<li><p>类缓存：标准的JavaSE类加载器可以按照要求查找类，但一旦某个类被加载到类加载器中，他将维持加载一段时间。不过JVM垃圾回收机制可以回收这些Class对象。</p>
+<p>JVM规范中定义了如下类型的类加载器<img src="JavaSenior_reflection/10.png" alt></p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//对于自定义类，使用系统类加载器进行加载</span></span><br><span class="line">    ClassLoader classLoader = ClassLoaderTest.class.getClassLoader();</span><br><span class="line">    <span class="comment">//调用系统类加载器的getParent()获取扩展类加载器</span></span><br><span class="line">    ClassLoader classLoader1 = classLoader.getParent();</span><br><span class="line">    <span class="comment">//调用扩展类加载器的getParent()获取引导类加载器</span></span><br><span class="line">    <span class="comment">//引导类加载器主要负责加载java的核心类库，无法加载自定义类的。</span></span><br><span class="line">  ClassLoader classLoader2 = classLoader1.getParent(); <span class="comment">//null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用ClassLoader加载配置文件"><a href="#使用ClassLoader加载配置文件" class="headerlink" title="使用ClassLoader加载配置文件"></a>使用ClassLoader加载配置文件</h3><p>properties:用来读取配置文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    Properties pros = <span class="keyword">new</span> Properties();</span><br><span class="line">    <span class="comment">//此时的文件jdbc.properties默认在当前的module下</span></span><br><span class="line">    <span class="comment">//读取配置文件方式一</span></span><br><span class="line">    FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">"jdbc.properties"</span>);</span><br><span class="line">    pros.load(fis);</span><br><span class="line">    <span class="comment">//方式二：使用classLoader</span></span><br><span class="line">    <span class="comment">//此时jdbc1.properties文件默认识别为：当前module的src下</span></span><br><span class="line">    ClassLoader classLoader = ClassLoaderTest.class.getClassLoader();</span><br><span class="line">    InputStream is = classLoader.getResourceAsStream(<span class="string">"jdbc1.properties"</span>);</span><br><span class="line">    pros.load(is);</span><br><span class="line">    </span><br><span class="line">    String user = pros.getProperty(<span class="string">"user"</span>);</span><br><span class="line">    String passwd = pros.getProperty(<span class="string">"password"</span>);</span><br><span class="line">    System.out.println(<span class="string">"user="</span>+user+<span class="string">",password="</span>+password);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建运行时类的对象"><a href="#创建运行时类的对象" class="headerlink" title="创建运行时类的对象"></a>创建运行时类的对象</h2><p>通过反射创建对应运行时类的对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class NewInstanceTest&#123;</span><br><span class="line">    public void test1() throws IllegalAccessException,InstantiationException&#123;</span><br><span class="line">        Class&lt;Person&gt; clazz = Person.class;</span><br><span class="line">        //newInstance():创建对应的运行时类的对象。</span><br><span class="line">        //内部调用的运行时类的空参构造器</span><br><span class="line">        //要想此方法正常的创建运行时类的对象，要求：</span><br><span class="line">        //1.运行时类必须提供空参的构造器</span><br><span class="line">        //2.空参构造器的访问权限通常设置为public</span><br><span class="line">        //在javabean中要求提供一个public的空参构造器，原因：</span><br><span class="line">        //1.便于通过反射，创建运行时类的对象</span><br><span class="line">        //2.便于子类继承此运行时类时，默认调用super()时，保证父类有次构造器</span><br><span class="line">        Person obj = clazz.newInstance();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="体会反射的动态性"><a href="#体会反射的动态性" class="headerlink" title="体会反射的动态性"></a>体会反射的动态性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test02</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">100</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> num = <span class="keyword">new</span> Random().nextInt(<span class="number">3</span>);<span class="comment">//0,1,2</span></span><br><span class="line">        String classPath = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">switch</span>(num)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">            	classPath = <span class="string">"java.util.Date"</span>;</span><br><span class="line">            	<span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">            	classPath = <span class="string">"java.lang.Object"</span>;</span><br><span class="line">            	<span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">            	classPath = <span class="string">"com.xiaoyu.java.Person"</span>;</span><br><span class="line">            	<span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Object obj = getInstance(classPath);</span><br><span class="line">            System.out.println(obj);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//创建一个指定类的对象</span></span><br><span class="line"><span class="comment">//classPath：指定类的全类名</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getInstace</span><span class="params">(String classPath)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    Class clazz = Class.forName(classPath);</span><br><span class="line">    <span class="keyword">return</span> clazz.newInstance();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="运行时类的完整结构"><a href="#运行时类的完整结构" class="headerlink" title="运行时类的完整结构"></a>运行时类的完整结构</h1><h2 id="获取运行时类的属性"><a href="#获取运行时类的属性" class="headerlink" title="获取运行时类的属性"></a>获取运行时类的属性</h2><p>getFields():获取当前运行时类及其父类中声明为public访问权限的属性</p>
+<p>getDeclaredFields():获取当前运行时类中声明的所有属性（不包含父类中声明的属性）</p>
+<p>运行时类的属性：权限修饰符、数据类型、变量名</p>
+<p><img src="JavaSenior_reflection/12.png" alt></p>
+<p><img src="JavaSenior_reflection/13.png" alt></p>
+<h2 id="获取运行时类的方法结构"><a href="#获取运行时类的方法结构" class="headerlink" title="获取运行时类的方法结构"></a>获取运行时类的方法结构</h2><p>getMethods():获取当前运行时类及其父类中声明为public访问权限的方法</p>
+<p>getDeclaredMethods():获取当前运行时类中声明的所有方法（不包含父类中声明的方法）</p>
+<p>方法结构：@Xxx、权限修饰符、返回值类型、方法名(参数类型1 形参名1,…) throws XxxException</p>
+<h2 id="获取运行时类的构造器结构"><a href="#获取运行时类的构造器结构" class="headerlink" title="获取运行时类的构造器结构"></a>获取运行时类的构造器结构</h2><p>getConstructors():获取当前运行时类中声明为public的构造器</p>
+<p>getDeclaredConstructors():获取当前运行时类中声明的所有构造器</p>
+<h2 id="获取运行时类的父类及父类的泛型"><a href="#获取运行时类的父类及父类的泛型" class="headerlink" title="获取运行时类的父类及父类的泛型"></a>获取运行时类的父类及父类的泛型</h2><p>getSuperclass():获取运行时类的父类</p>
+<p>getGenericSuperclass():获取运行时类带泛型的父类</p>
+<p>获取运行时类带泛型的父类的泛型</p>
+<p><img src="JavaSenior_reflection/14.png" alt></p>
+<h2 id="获取运行时类的接口、所在包、注解"><a href="#获取运行时类的接口、所在包、注解" class="headerlink" title="获取运行时类的接口、所在包、注解"></a>获取运行时类的接口、所在包、注解</h2><p>getInterfaces():获取运行时类实现的接口</p>
+<p>getPackage():获取运行类所在的包</p>
+<p>getAnnotations():获取运行时类声明的注解</p>
+<h1 id="调用运行时类的指定结构"><a href="#调用运行时类的指定结构" class="headerlink" title="调用运行时类的指定结构"></a>调用运行时类的指定结构</h1><p>属性、方法、构造器</p>
+<h2 id="调用运行时类中指定属性"><a href="#调用运行时类中指定属性" class="headerlink" title="调用运行时类中指定属性"></a>调用运行时类中指定属性</h2><p>getField(String name):获取指定的属性声明为public（通常不使用该方法）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void test01() throws Exception&#123;</span><br><span class="line">    Class clazz = Person.class;</span><br><span class="line">    //创建运行时类的对象</span><br><span class="line">    Person p = (Person)clazz.newInstance();</span><br><span class="line">    //获取指定的属性</span><br><span class="line">    Field id = clazz.getField(&quot;id&quot;);</span><br><span class="line">    //设置当前属性的值</span><br><span class="line">    //set():参数1：指明设置那个对象的属性 参数2：将此属性值设置为多少</span><br><span class="line">    id.set(p,1001);</span><br><span class="line">    //获取当前属性的值</span><br><span class="line">    //get():参数1：获取那个对象的当前属性值</span><br><span class="line">    int pId = id.get(p);</span><br><span class="line">    System.out.println(pId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>getDeclaredField(String fieldName):获取运行时类中指定变量名的属性（★★★）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public void test02() throws Exception&#123;</span><br><span class="line">    Class clazz = Person.class;</span><br><span class="line">    //创建运行时类的对象</span><br><span class="line">    Person p = (Person)clazz.newInstance();</span><br><span class="line">    //1.获取指定变量名的属性</span><br><span class="line">    Field name = clazz.getDeclaredField(&quot;name&quot;);</span><br><span class="line">    //2.保证当前属性可访问</span><br><span class="line">    name.setAccessible(true);</span><br><span class="line">    //3.设置当前属性的值</span><br><span class="line">    //set():参数1：指明设置那个对象的属性 参数2：将此属性值设置为多少</span><br><span class="line">    name.set(p,&quot;Tom&quot;);</span><br><span class="line">    //获取当前属性的值</span><br><span class="line">    //get():参数1：获取那个对象的当前属性值</span><br><span class="line">    int pId = id.get(p);</span><br><span class="line">    System.out.println(pId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="调用运行时类中指定的方法"><a href="#调用运行时类中指定的方法" class="headerlink" title="调用运行时类中指定的方法"></a>调用运行时类中指定的方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test03</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    Class clazz = Person.class;</span><br><span class="line">    <span class="comment">//创建运行时类的对象</span></span><br><span class="line">    Person p = (Person)clazz.newInstance();</span><br><span class="line">    <span class="comment">//1.获取指定的方法</span></span><br><span class="line">    <span class="comment">//getDeclaredMethod():</span></span><br><span class="line">    <span class="comment">//参数1：指明获取的方法名称</span></span><br><span class="line">    <span class="comment">//参数2：指明获取的方法的参数列表</span></span><br><span class="line">    Method show = clazz.getDeclaredMethod(<span class="string">"show"</span>,String.class);</span><br><span class="line">    <span class="comment">//2.保证当前方法可访问</span></span><br><span class="line">    show.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//调用invoke()方法</span></span><br><span class="line">    <span class="comment">//invoke():参数1：方法的调用者 参数2：给方法形参赋值的实参</span></span><br><span class="line">    <span class="comment">//invoke()的返回值即为对应类中调用的方法的返回值</span></span><br><span class="line">    Object returnValue = show.invoke(p,<span class="string">"chn"</span>);</span><br><span class="line">    System.out.println(returnValue);</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">/************如何调用静态方法***********/</span></span><br><span class="line">    Method showDesc = clazz.getDeclaredMethod(<span class="string">"showDesc"</span>);</span><br><span class="line">    showDesc.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//如果调用的运行时类中的方法没有返回值，则此invoke()返回null</span></span><br><span class="line">    Object returnValue = showDesc.invoke(Person.class);</span><br><span class="line">    System.out.println(returnValue);<span class="comment">//null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="调用运行时类中指定的构造器"><a href="#调用运行时类中指定的构造器" class="headerlink" title="调用运行时类中指定的构造器"></a>调用运行时类中指定的构造器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public void test04() throws Exception&#123;</span><br><span class="line">    Class clazz = Person.class;</span><br><span class="line">    //private Person(String name)&#123;this.name = name;&#125;</span><br><span class="line">    //1.获取指定的构造器</span><br><span class="line">    //getDeclaredConstructor()</span><br><span class="line">    //参数：指明构造器的参数列表</span><br><span class="line">    Constructor constructor = clazz.getDeclaredConstructor(String.class);</span><br><span class="line">    //2.保证此构造器可访问</span><br><span class="line">    constructor.setAccessible(true);</span><br><span class="line">    //3.调用此构造器创建运行时类的对象</span><br><span class="line">    Person per = (Person)constructor.newInstance(&quot;Tom&quot;);</span><br><span class="line">    System.out.println(per);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="反射的应用：动态代理"><a href="#反射的应用：动态代理" class="headerlink" title="反射的应用：动态代理"></a>反射的应用：动态代理</h1>
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/05/mdkey/" rel="next" title="md快捷键">
+                  <i class="fa fa-chevron-left"></i> md快捷键
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java反射机制概述"><span class="nav-number">1.</span> <span class="nav-text">Java反射机制概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#反射方式"><span class="nav-number">1.1.</span> <span class="nav-text">反射方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射机制提供的功能"><span class="nav-number">1.2.</span> <span class="nav-text">反射机制提供的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射相关API"><span class="nav-number">1.3.</span> <span class="nav-text">反射相关API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射和封装"><span class="nav-number">1.4.</span> <span class="nav-text">反射和封装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java-lang-Class类的理解"><span class="nav-number">2.</span> <span class="nav-text">java.lang.Class类的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的加载过程"><span class="nav-number">2.1.</span> <span class="nav-text">类的加载过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取Class实例的四种方式"><span class="nav-number">2.2.</span> <span class="nav-text">获取Class实例的四种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哪些类型可以有Class对象"><span class="nav-number">2.3.</span> <span class="nav-text">哪些类型可以有Class对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的加载过程（理解）"><span class="nav-number">2.3.1.</span> <span class="nav-text">类的加载过程（理解）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器ClassLoader的理解"><span class="nav-number">2.3.2.</span> <span class="nav-text">类加载器ClassLoader的理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用ClassLoader加载配置文件"><span class="nav-number">2.3.3.</span> <span class="nav-text">使用ClassLoader加载配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建运行时类的对象"><span class="nav-number">2.4.</span> <span class="nav-text">创建运行时类的对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#体会反射的动态性"><span class="nav-number">2.4.1.</span> <span class="nav-text">体会反射的动态性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行时类的完整结构"><span class="nav-number">3.</span> <span class="nav-text">运行时类的完整结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取运行时类的属性"><span class="nav-number">3.1.</span> <span class="nav-text">获取运行时类的属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取运行时类的方法结构"><span class="nav-number">3.2.</span> <span class="nav-text">获取运行时类的方法结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取运行时类的构造器结构"><span class="nav-number">3.3.</span> <span class="nav-text">获取运行时类的构造器结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取运行时类的父类及父类的泛型"><span class="nav-number">3.4.</span> <span class="nav-text">获取运行时类的父类及父类的泛型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取运行时类的接口、所在包、注解"><span class="nav-number">3.5.</span> <span class="nav-text">获取运行时类的接口、所在包、注解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调用运行时类的指定结构"><span class="nav-number">4.</span> <span class="nav-text">调用运行时类的指定结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调用运行时类中指定属性"><span class="nav-number">4.1.</span> <span class="nav-text">调用运行时类中指定属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用运行时类中指定的方法"><span class="nav-number">4.2.</span> <span class="nav-text">调用运行时类中指定的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用运行时类中指定的构造器"><span class="nav-number">4.3.</span> <span class="nav-text">调用运行时类中指定的构造器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#反射的应用：动态代理"><span class="nav-number">5.</span> <span class="nav-text">反射的应用：动态代理</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/avatar.gif"
+      alt="小鱼">
+  <p class="site-author-name" itemprop="name">小鱼</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.1</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
