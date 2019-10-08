@@ -55,16 +55,15 @@
   };
 </script>
 
-  <meta name="description" content="Java反射机制概述反射方式   反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
+  <meta name="description" content="Java反射机制概述反射方式 反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java反射机制">
 <meta property="og:url" content="http://yoursite.com/2019/10/06/reflection/index.html">
 <meta property="og:site_name" content="一只鱼的博客">
-<meta property="og:description" content="Java反射机制概述反射方式   反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
+<meta property="og:description" content="Java反射机制概述反射方式 反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/1.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/10/06/reflection/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/3.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/4.png">
@@ -76,10 +75,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/12.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/13.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/06/reflection/14.png">
-<meta property="og:updated_time" content="2019-10-08T09:48:44.801Z">
+<meta property="og:updated_time" content="2019-10-08T09:50:00.712Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java反射机制">
-<meta name="twitter:description" content="Java反射机制概述反射方式   反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
+<meta name="twitter:description" content="Java反射机制概述反射方式 反射机制提供的功能 反射相关API 反射和封装Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？ 建议直接使用new方式。 Q2：什么时候使用反射的方式？ 反射的特征：动态性。如果编译时不确定new哪个类的对象 Q3：反射与封装是不是矛盾的？如何看待两个技术？">
 <meta name="twitter:image" content="http://yoursite.com/2019/10/06/reflection/1.png">
   <link rel="canonical" href="http://yoursite.com/2019/10/06/reflection/">
 
@@ -395,7 +394,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-08 17:48:44" itemprop="dateModified" datetime="2019-10-08T17:48:44+08:00">2019-10-08</time>
+                <time title="修改时间：2019-10-08 17:50:00" itemprop="dateModified" datetime="2019-10-08T17:50:00+08:00">2019-10-08</time>
               </span>
             
           
@@ -425,8 +424,6 @@
 
       
         <h1 id="Java反射机制概述"><a href="#Java反射机制概述" class="headerlink" title="Java反射机制概述"></a>Java反射机制概述</h1><h2 id="反射方式"><a href="#反射方式" class="headerlink" title="反射方式"></a>反射方式</h2><p><img src="/2019/10/06/reflection/1.png" alt></p>
-<img src="/2019/10/06/reflection/10/06/reflection/1.png" title="reflection的图片的说明">
-
 <h2 id="反射机制提供的功能"><a href="#反射机制提供的功能" class="headerlink" title="反射机制提供的功能"></a>反射机制提供的功能</h2><p><img src="/2019/10/06/reflection/2.png" alt></p>
 <h2 id="反射相关API"><a href="#反射相关API" class="headerlink" title="反射相关API"></a>反射相关API</h2><p><img src="/2019/10/06/reflection/3.png" alt></p>
 <h2 id="反射和封装"><a href="#反射和封装" class="headerlink" title="反射和封装"></a>反射和封装</h2><p>Q1：通过直接new的方式或反射的方式都可以调用公共的结构，开发中用哪个？</p>
