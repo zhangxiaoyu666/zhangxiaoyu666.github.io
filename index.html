@@ -206,7 +206,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">3</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">5</span></a>
 
   </li>
       
@@ -250,7 +250,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">7</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">8</span></a>
 
   </li>
       
@@ -339,6 +339,126 @@
   
   
   <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/09/数据结构与算法之链表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/09/数据结构与算法之链表/" class="post-title-link" itemprop="url">如何实现LRU缓存淘汰算法</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-09 08:37:54 / 修改时间：15:09:00" itemprop="dateCreated datePublished" datetime="2019-10-09T08:37:54+08:00">2019-10-09</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>缓存是一种提高数据读取性能的技术，常见的CPU缓存、数据库缓存、浏览器缓存等。但是缓存大小有限，当缓存被用满时，哪些数据应该被清理出去，哪些数据应该被保留，就需要缓存淘汰策略来决定。常见的策略有三种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">先进先出策略FIFO(First In First Out)</span><br><span class="line">最少使用策略LFU(Least Frequently Used)</span><br><span class="line">最近最少使用策略LRU(Least Recently Used)</span><br></pre></td></tr></table></figure>
+
+<h1 id="链表结构"><a href="#链表结构" class="headerlink" title="链表结构"></a>链表结构</h1><h2 id="底层结构"><a href="#底层结构" class="headerlink" title="底层结构"></a>底层结构</h2><p><img src="/2019/10/09/数据结构与算法之链表/1.png" alt></p>
+<p>数组要求连续的内存空间，而链表恰恰相反，它通过指针将一组零散的内存块串联起来使用。</p>
+<h2 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h2><p><img src="/2019/10/09/数据结构与算法之链表/2.png" alt></p>
+<p>单链表的插入与删除，时间复杂度为O(1)，查找的时间复杂度为O(n)。</p>
+<p><img src="/2019/10/09/数据结构与算法之链表/3.png" alt></p>
+<h2 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h2><p>循环链表是一种特殊的单链表，唯一的区别是循环链表的尾结点指向链表的头结点</p>
+<p><img src="/2019/10/09/数据结构与算法之链表/4.png" alt></p>
+<p>与单链表相比，循环链表的优点是从链尾到链头比较方便，当要处理环形结构时，适合采用循环链表，比如约瑟夫问题。</p>
+<h2 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h2><p>双向链表需要额外的两个空间来存储后继结点和前驱结点的地址，所以如果存储同样多的数据，双向链表要比单链表占用更多的内存空间。</p>
+<p>支持双向遍历，从结构上看，双向链表支持O(1)时间复杂度下找到前驱结点，使得双向链表在某些情况下的插入和删除操作要比单链表更简单、高效。</p>
+<p><img src="/2019/10/09/数据结构与算法之链表/5.png" alt></p>
+<p>但是单链表的插入和删除时间复杂度已经时O(1),如何更高效？</p>
+<p>链表中删除一个元素有以下两种情况：</p>
+<ul>
+<li>删除结点中“值等于某个给定值”的结点</li>
+<li>删除给定指针指向的结点</li>
+</ul>
+<p>第一种情况，单链表和双向链表都需要从头结点开始遍历，直到找到值等于给定值的结点，再删除，时间复杂度为O(n)。</p>
+<p>第二种情况，已知要删除的结点，但要知道其前驱结点，单链表不知道其前驱结点，所以需要从头遍历，找到其前驱结点，时间复杂度为O(n);而双向链表已经保存了前驱结点的指针，不需要遍历，所以时间复杂度为O(1)。</p>
+<p>同理，如果希望在指定结点前插入一个结点，双向链表的时间复杂度为O(1),而单链表的时间复杂度为O(n)。</p>
+<p>除了删除和插入有优势之外，对于有序链表，双向链表的按值查询的效率也要高于单链表。双向链表可以决定向前查找还是向后查找，平均只需要查找一般的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LinkedHashMap的底层实现原理就使用到了双向链表</span><br></pre></td></tr></table></figure>
+
+<h2 id="设计思想：用空间换时间"><a href="#设计思想：用空间换时间" class="headerlink" title="设计思想：用空间换时间"></a>设计思想：用空间换时间</h2>
+          <!--noindex-->
+          
+            <div class="post-button">
+              <a class="btn" href="/2019/10/09/数据结构与算法之链表/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/08/数据结构与算法之数组/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -379,7 +499,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-09 08:33:23" itemprop="dateModified" datetime="2019-10-09T08:33:23+08:00">2019-10-09</time>
+                <time title="修改时间：2019-10-09 08:42:44" itemprop="dateModified" datetime="2019-10-09T08:42:44+08:00">2019-10-09</time>
               </span>
             
           
@@ -503,11 +623,19 @@
                 
               
 
-              <time title="创建时间：2019-10-08 18:35:23 / 修改时间：20:35:46" itemprop="dateCreated datePublished" datetime="2019-10-08T18:35:23+08:00">2019-10-08</time>
+              <time title="创建时间：2019-10-08 18:35:23" itemprop="dateCreated datePublished" datetime="2019-10-08T18:35:23+08:00">2019-10-08</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-09 08:43:03" itemprop="dateModified" datetime="2019-10-09T08:43:03+08:00">2019-10-09</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -1109,7 +1237,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1135,7 +1263,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
