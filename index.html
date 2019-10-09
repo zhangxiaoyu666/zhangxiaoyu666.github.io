@@ -368,7 +368,7 @@
                 
               
 
-              <time title="创建时间：2019-10-09 08:37:54 / 修改时间：16:03:49" itemprop="dateCreated datePublished" datetime="2019-10-09T08:37:54+08:00">2019-10-09</time>
+              <time title="创建时间：2019-10-09 08:37:54 / 修改时间：16:19:16" itemprop="dateCreated datePublished" datetime="2019-10-09T08:37:54+08:00">2019-10-09</time>
             </span>
           
             
@@ -405,28 +405,6 @@
 
 <h1 id="链表结构"><a href="#链表结构" class="headerlink" title="链表结构"></a>链表结构</h1><h2 id="底层结构"><a href="#底层结构" class="headerlink" title="底层结构"></a>底层结构</h2><p><img src="/2019/10/09/数据结构与算法之链表/1.png" alt></p>
 <p>数组要求连续的内存空间，而链表恰恰相反，它通过指针将一组零散的内存块串联起来使用。</p>
-<h2 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h2><p><img src="/2019/10/09/数据结构与算法之链表/2.png" alt></p>
-<p>单链表的插入与删除，时间复杂度为O(1)，查找的时间复杂度为O(n)。</p>
-<p><img src="/2019/10/09/数据结构与算法之链表/3.png" alt></p>
-<h2 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h2><p>循环链表是一种特殊的单链表，唯一的区别是循环链表的尾结点指向链表的头结点</p>
-<p><img src="/2019/10/09/数据结构与算法之链表/4.png" alt></p>
-<p>与单链表相比，循环链表的优点是从链尾到链头比较方便，当要处理环形结构时，适合采用循环链表，比如约瑟夫问题。</p>
-<h2 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h2><p>双向链表需要额外的两个空间来存储后继结点和前驱结点的地址，所以如果存储同样多的数据，双向链表要比单链表占用更多的内存空间。</p>
-<p>支持双向遍历，从结构上看，双向链表支持O(1)时间复杂度下找到前驱结点，使得双向链表在某些情况下的插入和删除操作要比单链表更简单、高效。</p>
-<p><img src="/2019/10/09/数据结构与算法之链表/5.png" alt></p>
-<p>但是单链表的插入和删除时间复杂度已经时O(1),如何更高效？</p>
-<p>链表中删除一个元素有以下两种情况：</p>
-<ul>
-<li>删除结点中“值等于某个给定值”的结点</li>
-<li>删除给定指针指向的结点</li>
-</ul>
-<p>第一种情况，单链表和双向链表都需要从头结点开始遍历，直到找到值等于给定值的结点，再删除，时间复杂度为O(n)。</p>
-<p>第二种情况，已知要删除的结点，但要知道其前驱结点，单链表不知道其前驱结点，所以需要从头遍历，找到其前驱结点，时间复杂度为O(n);而双向链表已经保存了前驱结点的指针，不需要遍历，所以时间复杂度为O(1)。</p>
-<p>同理，如果希望在指定结点前插入一个结点，双向链表的时间复杂度为O(1),而单链表的时间复杂度为O(n)。</p>
-<p>除了删除和插入有优势之外，对于有序链表，双向链表的按值查询的效率也要高于单链表。双向链表可以决定向前查找还是向后查找，平均只需要查找一般的数据。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LinkedHashMap的底层实现原理就使用到了双向链表</span><br></pre></td></tr></table></figure>
-
-<h2 id="设计思想：用空间换时间"><a href="#设计思想：用空间换时间" class="headerlink" title="设计思想：用空间换时间"></a>设计思想：用空间换时间</h2>
           <!--noindex-->
           
             <div class="post-button">
@@ -499,7 +477,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-09 08:42:44" itemprop="dateModified" datetime="2019-10-09T08:42:44+08:00">2019-10-09</time>
+                <time title="修改时间：2019-10-09 16:18:46" itemprop="dateModified" datetime="2019-10-09T16:18:46+08:00">2019-10-09</time>
               </span>
             
           
@@ -535,33 +513,6 @@
 <p><img src="/2019/10/08/数据结构与算法之数组/1.png" alt></p>
 <p>与线性表对应的就是非线性表，非线性表中的数据之间不是简单的前后关系，如二叉树、堆、图等，</p>
 <p><img src="/2019/10/08/数据结构与算法之数组/2.png" alt></p>
-<h2 id="随机访问"><a href="#随机访问" class="headerlink" title="随机访问"></a>随机访问</h2><ul>
-<li>连续的内存空间和相同类型的数据   —-&gt;”随机访问”</li>
-</ul>
-<p>数组如何实现根据下表随机访问数组元素？如图</p>
-<p><img src="/2019/10/08/数据结构与算法之数组/3.png" alt></p>
-<p>内存块的首地址为base_address = 1000,计算机会给每个内存单元分配一个地址，计算机通过地址来访问内存中的数据。寻址公式为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a[i]_address = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
-
-<p>data_type_size:数组中每个元素的大小，int类型数据data_type_size 为4个字节。</p>
-<p>二维数组的寻址公式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">对于m*n的二维数组，a[i][j](i &lt; m,j &lt; n)的地址为</span><br><span class="line">a[i][j]_address = base_address + (i*n+j)*type_size</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">数组适合查找操作，但是查找的时间复杂度不是O(1),即使是排好序的数组，使用二分查找，时间复杂度也为O(logn),所以正确的表述为：数组支持随机访问，根据下标随机访问的时间复杂度是O(1)。</span><br></pre></td></tr></table></figure>
-
-<h1 id="低效的“插入”和“删除”"><a href="#低效的“插入”和“删除”" class="headerlink" title="低效的“插入”和“删除”"></a>低效的“插入”和“删除”</h1><h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>最好时间复杂度：O(1)  在数组的末尾插入元素</p>
-<p>最坏时间复杂度：O(n)  在数组的开头插入元素，所有的数据要依次往后移一位</p>
-<p>平均时间复杂度： O(n) </p>
-<p>优化：若数组中元素是无序的，如果将某个元素插入到第k个位置，为了避免大量数据的搬移，直接将第k个位置的数据搬移到数组的最后，把新的元素直接放到第k个位置。</p>
-<p><img src="/2019/10/08/数据结构与算法之数组/4.png" alt></p>
-<p>这样时间复杂度为O(1),这个思想在快排中也会用到。</p>
-<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>最好时间复杂度：O(1)  删除数组末尾的元素</p>
-<p>最坏时间复杂度：O(n)  删除数组开头的元素，所有的数据要依次往前移一位</p>
-<p>平均时间复杂度： O(n) </p>
-<p>优化：某些场景下不一定追求数组中数据的连续性，将多次删除操作集中在一起执行。</p>
-<p><img src="/2019/10/08/数据结构与算法之数组/5.png" alt></p>
-<p>要依次删除a，b，c三个元素，为了避免后面的数据被搬移三次，可以先记录下已经删除的数据，当数组没有更多的存储空间时，触发一次真正的删除操作。——&gt;JVM标记清除垃圾回收算法</p>
-<h3 id="JVM标记清除垃圾回收算法"><a href="#JVM标记清除垃圾回收算法" class="headerlink" title="JVM标记清除垃圾回收算法"></a>JVM标记清除垃圾回收算法</h3>
           <!--noindex-->
           
             <div class="post-button">
