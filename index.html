@@ -250,7 +250,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">6</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">7</span></a>
 
   </li>
       
@@ -334,6 +334,141 @@
           <div id="content" class="content">
             
   <div id="posts" class="posts-expand">
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/08/数据结构与算法之数组/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/08/数据结构与算法之数组/" class="post-title-link" itemprop="url">数组：为什么很多编程语言数组都是从0开始编号？</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-08 20:39:19" itemprop="dateCreated datePublished" datetime="2019-10-08T20:39:19+08:00">2019-10-08</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-09 08:33:23" itemprop="dateModified" datetime="2019-10-09T08:33:23+08:00">2019-10-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><p>数组：一种线性表数据结构，用一组连续的内存空间来存储一组具有相同类型的数据。</p>
+<h2 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h2><ul>
+<li>线性表  线性表上的数据最多只有前和后两个方向。数组、队列、链表、栈都是线性结构。</li>
+</ul>
+<p><img src="/2019/10/08/数据结构与算法之数组/1.png" alt></p>
+<p>与线性表对应的就是非线性表，非线性表中的数据之间不是简单的前后关系，如二叉树、堆、图等，</p>
+<p><img src="/2019/10/08/数据结构与算法之数组/2.png" alt></p>
+<h2 id="随机访问"><a href="#随机访问" class="headerlink" title="随机访问"></a>随机访问</h2><ul>
+<li>连续的内存空间和相同类型的数据   —-&gt;”随机访问”</li>
+</ul>
+<p>数组如何实现根据下表随机访问数组元素？如图</p>
+<p><img src="/2019/10/08/数据结构与算法之数组/3.png" alt></p>
+<p>内存块的首地址为base_address = 1000,计算机会给每个内存单元分配一个地址，计算机通过地址来访问内存中的数据。寻址公式为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a[i]_address = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+
+<p>data_type_size:数组中每个元素的大小，int类型数据data_type_size 为4个字节。</p>
+<p>二维数组的寻址公式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">对于m*n的二维数组，a[i][j](i &lt; m,j &lt; n)的地址为</span><br><span class="line">a[i][j]_address = base_address + (i*n+j)*type_size</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">数组适合查找操作，但是查找的时间复杂度不是O(1),即使是排好序的数组，使用二分查找，时间复杂度也为O(logn),所以正确的表述为：数组支持随机访问，根据下标随机访问的时间复杂度是O(1)。</span><br></pre></td></tr></table></figure>
+
+<h1 id="低效的“插入”和“删除”"><a href="#低效的“插入”和“删除”" class="headerlink" title="低效的“插入”和“删除”"></a>低效的“插入”和“删除”</h1><h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>最好时间复杂度：O(1)  在数组的末尾插入元素</p>
+<p>最坏时间复杂度：O(n)  在数组的开头插入元素，所有的数据要依次往后移一位</p>
+<p>平均时间复杂度： O(n) </p>
+<p>优化：若数组中元素是无序的，如果将某个元素插入到第k个位置，为了避免大量数据的搬移，直接将第k个位置的数据搬移到数组的最后，把新的元素直接放到第k个位置。</p>
+<p><img src="/2019/10/08/数据结构与算法之数组/4.png" alt></p>
+<p>这样时间复杂度为O(1),这个思想在快排中也会用到。</p>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>最好时间复杂度：O(1)  删除数组末尾的元素</p>
+<p>最坏时间复杂度：O(n)  删除数组开头的元素，所有的数据要依次往前移一位</p>
+<p>平均时间复杂度： O(n) </p>
+<p>优化：某些场景下不一定追求数组中数据的连续性，将多次删除操作集中在一起执行。</p>
+<p><img src="/2019/10/08/数据结构与算法之数组/5.png" alt></p>
+<p>要依次删除a，b，c三个元素，为了避免后面的数据被搬移三次，可以先记录下已经删除的数据，当数组没有更多的存储空间时，触发一次真正的删除操作。——&gt;JVM标记清除垃圾回收算法</p>
+<h3 id="JVM标记清除垃圾回收算法"><a href="#JVM标记清除垃圾回收算法" class="headerlink" title="JVM标记清除垃圾回收算法"></a>JVM标记清除垃圾回收算法</h3>
+          <!--noindex-->
+          
+            <div class="post-button">
+              <a class="btn" href="/2019/10/08/数据结构与算法之数组/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
         <article itemscope itemtype="http://schema.org/Article">
   
   
@@ -974,7 +1109,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
