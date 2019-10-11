@@ -206,7 +206,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">9</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">10</span></a>
 
   </li>
       
@@ -228,7 +228,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">7</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">8</span></a>
 
   </li>
       
@@ -250,7 +250,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">12</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">13</span></a>
 
   </li>
       
@@ -334,6 +334,242 @@
           <div id="content" class="content">
             
   <div id="posts" class="posts-expand">
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/Java之集合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/11/Java之集合/" class="post-title-link" itemprop="url">Java之集合</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-11 11:29:27 / 修改时间：18:39:04" itemprop="dateCreated datePublished" datetime="2019-10-11T11:29:27+08:00">2019-10-11</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><p>集合就是一种容器，都是用于保存一组元素。</p>
+<p>集合和数组的对比：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">数组的不足：</span><br><span class="line">1. 数组的长度必须提前指定，一旦指定不能更改</span><br><span class="line">2. 数组只能保存相同类型的元素</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">集合：</span><br><span class="line">1. 集合在使用时，长度不用指定，可以实现自动扩容或截断</span><br><span class="line">2. 集合没有指定泛型之前，默认保存的是Object类型。指定泛型后，可以保存对应类型的元素。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/Java之集合/1.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">数组：适合保存基本类型的元素</span><br><span class="line">集合：适合保存引用类型的元素(对象)</span><br></pre></td></tr></table></figure>
+
+<h1 id="集合框架体系图"><a href="#集合框架体系图" class="headerlink" title="集合框架体系图"></a>集合框架体系图</h1><p>Java集合分为Collection(单列集合)和Map(双列集合)</p>
+<p><img src="/2019/10/11/Java之集合/3.png" alt></p>
+<p><img src="/2019/10/11/Java之集合/4.png" alt></p>
+<h1 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a>Collection接口</h1><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p>位于java.util包内，没有提供直接的实现类，而是提供了子接口，子接口中有具体的实现类。该接口中提供了一系列常见的集合操作方法：增加、删除、查找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List: 有序、可重复</span><br><span class="line"></span><br><span class="line">Set: 无序、不可重复</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见方法"><a href="#常见方法" class="headerlink" title="常见方法"></a>常见方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. add(E e) / addAll(Collection col) <span class="comment">//增加</span></span><br><span class="line"><span class="number">2</span>. remove(E e) / removeAll(Collection col) <span class="comment">//删除</span></span><br><span class="line"><span class="number">3</span>. clear() <span class="comment">//清除刷新</span></span><br><span class="line"><span class="number">4</span>. contains(E e) / containsAll(Collection col) <span class="comment">//查找</span></span><br><span class="line"><span class="number">5</span>. size() <span class="comment">//实际元素个数</span></span><br><span class="line"><span class="number">6</span>. isEmpty() <span class="comment">//是否为空</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="遍历方式"><a href="#遍历方式" class="headerlink" title="遍历方式"></a>遍历方式</h2><h3 id="使用Iterator"><a href="#使用Iterator" class="headerlink" title="使用Iterator"></a>使用Iterator</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. boolean hasNext()</span><br><span class="line">2. E next()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/Java之集合/6.png" alt></p>
+<ul>
+<li>特点：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 每次只能下移一位</span><br><span class="line">2. 只能下移，不能上移</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实现</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Collection col = <span class="keyword">new</span> ArrayList();</span><br><span class="line">col.add(<span class="string">"Tom"</span>);</span><br><span class="line">col.add(<span class="string">"Lucy"</span>);</span><br><span class="line">col.add(<span class="string">"Lily"</span>);</span><br><span class="line">Iterator iterator = col.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="增强For"><a href="#增强For" class="headerlink" title="增强For"></a>增强For</h3><p>增强for本质就是Iterator</p>
+<ul>
+<li>语法:</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(元素类型 元素名：集合或数组名)&#123;</span><br><span class="line">    <span class="comment">//访问元素即可</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Collection col = new ArrayList();</span><br><span class="line">col.add(&quot;Tom&quot;);</span><br><span class="line">col.add(&quot;Lucy&quot;);</span><br><span class="line">col.add(&quot;Lily&quot;);</span><br><span class="line">for(Object o:col)&#123;</span><br><span class="line">    System.out.println(o);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意 </li>
+</ul>
+<ol>
+<li>在迭代过程中，添加和删除操作都会报“非同步异常ConCurrentModificationException”</li>
+</ol>
+<p><img src="/2019/10/11/Java之集合/7.png" alt></p>
+<ol start="2">
+<li>在迭代过程中可以修改属性值，如果更改地址，没有效果</li>
+<li>如果非要做删除，可以使用迭代器本身的remove方法 </li>
+</ol>
+<p><img src="/2019/10/11/Java之集合/17.png" alt></p>
+<ul>
+<li>源码分析</li>
+</ul>
+<p><img src="/2019/10/11/Java之集合/18.png" alt></p>
+<p><img src="/2019/10/11/Java之集合/D:%5CBlog%5Csource_posts%5CJava%E4%B9%8B%E9%9B%86%E5%90%88%5C19.png" alt></p>
+<ul>
+<li>断点调试快捷键</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">F6 ： 单步执行，不进入方法</span><br><span class="line">F5 ： 单步执行，进入方法</span><br><span class="line">F7 ： 结束当前方法的执行，返回调用方法</span><br><span class="line">F8 ： 跳过当前断点，直接执行下一断点</span><br></pre></td></tr></table></figure>
+
+<h2 id="List接口"><a href="#List接口" class="headerlink" title="List接口"></a>List接口</h2><h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><ol>
+<li>有序</li>
+</ol>
+<p><img src="/2019/10/11/Java之集合/20.png" alt></p>
+<p>List接口维护一个整型索引，因此List集合是有序的（插入和取出的顺序一致）</p>
+<ol start="2">
+<li>允许重复</li>
+</ol>
+<p>允许多个null值</p>
+<h3 id="特有方法"><a href="#特有方法" class="headerlink" title="特有方法"></a>特有方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. add(int index,E e)</span><br><span class="line">2. get(int index)</span><br><span class="line">3. remove(int index)</span><br><span class="line">4. set(int index,E e)</span><br><span class="line">5. subList(int fromIndex,int toIndex)</span><br><span class="line">6. indexOf(E e)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/Java之集合/21.png" alt></p>
+<h3 id="遍历方式-1"><a href="#遍历方式-1" class="headerlink" title="遍历方式"></a>遍历方式</h3><ul>
+<li><p>使用迭代器</p>
+</li>
+<li><p>增强For</p>
+</li>
+<li><p>普通for循环</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ;i &lt; list.size();i++)&#123;</span><br><span class="line">    System.out.println(list.get(i))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>遍历排序</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; list.size()-<span class="number">1</span>;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j &lt; list.size()-i-<span class="number">1</span>;j++)&#123;</span><br><span class="line">        Book b1 = (Book)list.get(j);</span><br><span class="line">        Book b2 = (Book)list.get(j+<span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(b1.getPrice() &gt; b2.getPrice())&#123;</span><br><span class="line">            list.set(j,b2);</span><br><span class="line">            list.set(j+<span class="number">1</span>,b1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="List接口的实现类：ArrayList"><a href="#List接口的实现类：ArrayList" class="headerlink" title="List接口的实现类：ArrayList"></a>List接口的实现类：ArrayList</h3><p>底层结构：可变数组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Arraylist list = <span class="keyword">new</span> ArrayList();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">10</span>;i++)&#123;</span><br><span class="line">    list.add(<span class="string">"join"</span>+i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">10</span>;i &lt; <span class="number">20</span>;i++)&#123;</span><br><span class="line">    list.add(<span class="string">"join"</span>+i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>底层</li>
+</ul>
+<p>ArrayList 初始维护了一个Object类型的数组，数组长度为0</p>
+<p><img src="/2019/10/11/Java之集合/22.png" alt></p>
+<p>当添加第一个元素的时候，elementData数组初始化长度为10</p>
+<p><img src="/2019/10/11/Java之集合/23.png" alt></p>
+<p>添加10个元素后，再继续添加元素，elementData数组长度扩容为15</p>
+<p><img src="/2019/10/11/Java之集合/24.png" alt></p>
+<p>当15个元素添加结束后，再继续添加时，elementData数组扩容为22</p>
+<p><img src="/2019/10/11/Java之集合/25.png" alt></p>
+<p>所以得出结论，ArrayList每次扩容1.5倍</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdk8:ArrayList中维护了Object[] elementData,初始容量为0.第一次添加时，将初始elementData的容量为10，再次添加时，如果容量足够，则不用扩容，直接将新元素放到第一个空位上，若容量不够，会扩容1.5倍</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdk7:Arraylist中维护了Object[] elementData,初始容量为10。添加时，如果容量足够，则不用扩容，直接将新元素放到第一个空位上，若容量不够，会扩容1.5倍</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">区别：</span><br><span class="line">jdk7 相当于饿汉式，创建对象时，初始容量为10</span><br><span class="line">jdk8 相当于懒汉式，创建对象时，并没有初始容量为10，而在添加时，才初始化容量为10.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>源码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayList list = <span class="keyword">new</span> ArrayList();</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/Java之集合/26.png" alt></p>
+<p>添加元素</p>
+<p><img src="/2019/10/11/Java之集合/31.png" alt></p>
+<h3 id="List接口的实现类：Vector"><a href="#List接口的实现类：Vector" class="headerlink" title="List接口的实现类：Vector"></a>List接口的实现类：Vector</h3><p>底层结构：可变数组</p>
+<p><img src="/2019/10/11/Java之集合/32.png" alt></p>
+<p>ArrayList和Vector的对比</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">		 	底层结构	版本	线程同步	效率	扩容倍数</span><br><span class="line">ArrayList	可变数组	新	不同步		高		1.5倍</span><br><span class="line">Vector		可变数组	旧	同步		低		2倍</span><br></pre></td></tr></table></figure>
+
+<h3 id="List接口的实现类：LinkedList"><a href="#List接口的实现类：LinkedList" class="headerlink" title="List接口的实现类：LinkedList"></a>List接口的实现类：LinkedList</h3><p>底层结构：双向链表</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Linkedlist list = <span class="keyword">new</span> LinkedList();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">10</span>;i++)&#123;</span><br><span class="line">    list.add(<span class="string">"join"</span>+i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">10</span>;i &lt; <span class="number">20</span>;i++)&#123;</span><br><span class="line">    list.add(<span class="string">"join"</span>+i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>LinkedList维护了first和last两个属性，分别指向首/尾结点</p>
+<p><img src="/2019/10/11/Java之集合/Java%E4%B9%8B%E9%9B%86%E5%90%88%5C33.png" alt></p>
+<p>每个结点中有三个属性值（item,next,prev）分别指向当前元素、下一个、上一个元素，最终实现手拉手的链表结构</p>
+<p>添加第一个元素</p>
+<p><img src="/2019/10/11/Java之集合/34.png" alt></p>
+<p>添加第二个元素后，两个元素实现双向链接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">john1.next = john2;</span><br><span class="line"></span><br><span class="line">john2.prev = john1;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/Java之集合/35.png" alt></p>
+<h3 id="实现类对比"><a href="#实现类对比" class="headerlink" title="实现类对比"></a>实现类对比</h3><ul>
+<li>ArrayList和Vector的对比</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">		 	底层结构	版本	线程同步	效率		扩容倍数</span><br><span class="line">ArrayList	可变数组	新	 不同步	  高		   1.5倍</span><br><span class="line">Vector		可变数组	旧	 同步		   低		2倍</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ArrayList和LinkedList对比</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">			底层结构	  增删效率		改查效率</span><br><span class="line"></span><br><span class="line">ArrayList	可变数组	前面和中间较低		 高</span><br><span class="line"></span><br><span class="line">LinkedList	双向链表	前面和中间较高		 低</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>总结</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果考虑线程安全问题：Vector</span><br><span class="line">不考虑线程安全问题：</span><br><span class="line">				查找较多：ArrayList</span><br><span class="line">				增删较多：LinkedList</span><br></pre></td></tr></table></figure>
+
+<h2 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a>Set接口</h2>
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
         <article itemscope itemtype="http://schema.org/Article">
   
   
@@ -1290,112 +1526,6 @@
   </article>
 
     
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/05/mdkey/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="小鱼儿">
-      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
-      <meta itemprop="image" content="/images/fish.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="一只鱼的博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/10/05/mdkey/" class="post-title-link" itemprop="url">md快捷键</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-10-05 21:12:39" itemprop="dateCreated datePublished" datetime="2019-10-05T21:12:39+08:00">2019-10-05</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-06 23:45:26" itemprop="dateModified" datetime="2019-10-06T23:45:26+08:00">2019-10-06</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/快捷键/" itemprop="url" rel="index"><span itemprop="name">快捷键</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>插入代码 ···</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>一级标题  #  标题名</p>
-<h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2>
-          <!--noindex-->
-          
-            <div class="post-button">
-              <a class="btn" href="/2019/10/05/mdkey/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
   </div>
 
   
@@ -1447,7 +1577,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1460,7 +1590,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -1473,7 +1603,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
