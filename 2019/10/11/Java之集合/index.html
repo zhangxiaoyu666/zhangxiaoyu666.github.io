@@ -83,7 +83,26 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/33.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/34.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/35.png">
-<meta property="og:updated_time" content="2019-10-11T10:49:29.487Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/36.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/37.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/38.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/39.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/40.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/42.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/41.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/43.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/44.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/45.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/46.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/47.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/48.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/49.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/50.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/51.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/55.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/56.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/Java之集合/57.png">
+<meta property="og:updated_time" content="2019-10-12T10:37:04.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java之集合">
 <meta name="twitter:description" content="集合集合就是一种容器，都是用于保存一组元素。 集合和数组的对比： 123数组的不足：1. 数组的长度必须提前指定，一旦指定不能更改2. 数组只能保存相同类型的元素  123集合：1. 集合在使用时，长度不用指定，可以实现自动扩容或截断2. 集合没有指定泛型之前，默认保存的是Object类型。指定泛型后，可以保存对应类型的元素。">
@@ -391,11 +410,19 @@
                 
               
 
-              <time title="创建时间：2019-10-11 11:29:27 / 修改时间：18:49:29" itemprop="dateCreated datePublished" datetime="2019-10-11T11:29:27+08:00">2019-10-11</time>
+              <time title="创建时间：2019-10-11 11:29:27" itemprop="dateCreated datePublished" datetime="2019-10-11T11:29:27+08:00">2019-10-11</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-12 18:37:04" itemprop="dateModified" datetime="2019-10-12T18:37:04+08:00">2019-10-12</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -576,7 +603,112 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果考虑线程安全问题：Vector</span><br><span class="line">不考虑线程安全问题：</span><br><span class="line">				查找较多：ArrayList</span><br><span class="line">				增删较多：LinkedList</span><br></pre></td></tr></table></figure>
 
-<h2 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a>Set接口</h2>
+<h2 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a>Set接口</h2><h3 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a>特点</h3><p><img src="/2019/10/11/Java之集合/36.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.不允许重复，至多一个null</span><br><span class="line">2.无序（插入和取出的顺序不一致），没有索引</span><br></pre></td></tr></table></figure>
+
+<h3 id="特有方法-1"><a href="#特有方法-1" class="headerlink" title="特有方法"></a>特有方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">没有特有方法，都是从Collection接口中继承来的</span><br></pre></td></tr></table></figure>
+
+<h3 id="遍历方式-2"><a href="#遍历方式-2" class="headerlink" title="遍历方式"></a>遍历方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">和Collection遍历方式相同</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CollectionUtils</span></span>&#123;</span><br><span class="line">    <span class="comment">//使用迭代器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print1</span><span class="params">(Collection col)</span></span>&#123;</span><br><span class="line">        Iterator iterator = col.iterator();</span><br><span class="line">        <span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">            System.out.println(iterator.next());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//使用增强For</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print2</span><span class="params">(Collection col)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(Object obj:col)&#123;</span><br><span class="line">            System.out.println(obj);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Set接口的实现类：HashSet"><a href="#Set接口的实现类：HashSet" class="headerlink" title="Set接口的实现类：HashSet"></a>Set接口的实现类：HashSet</h3><ul>
+<li>底层结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">维护了一个HashMap对象，也就是和HashMap的底层一样，基于哈希表</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/Java之集合/37.png" alt></p>
+<p><img src="/2019/10/11/Java之集合/38.png" alt></p>
+<p>先计算HashCode，如果哈希值相同，再进行equals判断 </p>
+<p><img src="/2019/10/11/Java之集合/39.png" alt></p>
+<ul>
+<li>如何去重？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">底层通过调用hashCode方法和equals方法实现去重。</span><br><span class="line">先调用hashCode：</span><br><span class="line">（1）如果不相等，则可以直接添加；</span><br><span class="line">（2）如果相等，则继续判断equals，如果不相等，则可以添加，否则返回false</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.hashcode的返回值和判断属性相关</span><br><span class="line">2.两个元素的属性一样，则哈希值肯定一样</span><br><span class="line">  属性不一样，尽最大限让哈希值不一样。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>应用：通过HashSet添加元素时，如果认为内容相等为重复元素，则需要重写该元素的hashCode和equals方法。</li>
+</ul>
+<p><img src="/2019/10/11/Java之集合/40.png" alt></p>
+<p><img src="/2019/10/11/Java之集合/42.png" alt></p>
+<p><img src="/2019/10/11/Java之集合/41.png" alt></p>
+<h3 id="Set接口的实现类：TreeSet"><a href="#Set接口的实现类：TreeSet" class="headerlink" title="Set接口的实现类：TreeSet"></a>Set接口的实现类：TreeSet</h3><ul>
+<li>特点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.不允许重复，不允许null值</span><br><span class="line">2.可以实现对里面元素进行排序</span><br><span class="line">	自然排序</span><br><span class="line">	定制排序</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>底层结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TreeSet底层维护了了一个TreeMap，TreeMap底层是红黑树结构，可以实现对元素的排序</span><br></pre></td></tr></table></figure>
+
+<p>自然排序：需要添加的元素类实现Comparable接口，内部实现CompareTo()方法</p>
+<p><img src="/2019/10/11/Java之集合/43.png" alt></p>
+<p>定制排序：创建TreeSet对象时，传入Comparator接口，实现内部conpare()</p>
+<p><img src="/2019/10/11/Java之集合/44.png" alt></p>
+<ul>
+<li>如何实现去重？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">通过比较方法的返回值是否为0来判断是否重复</span><br></pre></td></tr></table></figure>
+
+<h1 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a>Map接口</h1><h2 id="特点-3"><a href="#特点-3" class="headerlink" title="特点"></a>特点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">用于保存一组键值对key-value,</span><br><span class="line">其中key不可重复，value可重复，一个key只能映射一个value</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见方法-1"><a href="#常见方法-1" class="headerlink" title="常见方法"></a>常见方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1.put(K key,V value)</span><br><span class="line">2.remove(K key)</span><br><span class="line">3.get(K key)</span><br><span class="line">4.containsKey(K key)</span><br><span class="line">5.containsValue(V value)</span><br><span class="line">6.clear()</span><br><span class="line">7.size() //键值对映射关系数目</span><br><span class="line">8.isEmpty() </span><br><span class="line">9.entrySet() // 获取所有的关系</span><br><span class="line">10.keySet() //获取所有的键</span><br><span class="line">11.values() //获取所有的值</span><br></pre></td></tr></table></figure>
+
+<p>通过size()==0和isEmpty()判断效率谁高？</p>
+<h2 id="遍历方式-3"><a href="#遍历方式-3" class="headerlink" title="遍历方式"></a>遍历方式</h2><p><img src="/2019/10/11/Java之集合/45.png" alt></p>
+<ul>
+<li>方式一:  通过调用entrySet</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//步骤1：获取所有关系</span></span><br><span class="line">Set entrys = map.entrySet();</span><br><span class="line"><span class="comment">//步骤2：遍历所有关系</span></span><br><span class="line">Iterator iterator = entrys.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">    <span class="comment">//获取每一对关系</span></span><br><span class="line">    Map.Entry entry = (Entry)iterator.next();</span><br><span class="line">    <span class="comment">//根据关系获取key</span></span><br><span class="line">    <span class="comment">//根据key获取value</span></span><br><span class="line"> System.out.println(entry.getKey()+<span class="string">":"</span>+entry.getValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方式二：通过调用keySet</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//步骤1：获取所有的key</span></span><br><span class="line">Set keys = map.keySet();</span><br><span class="line"><span class="comment">//步骤2：遍历所有的key</span></span><br><span class="line"><span class="keyword">for</span>(Object obj:keys)&#123;</span><br><span class="line">    System.out.println(obj+<span class="string">":"</span>+map.get(obj));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Map接口实现类HashMap"><a href="#Map接口实现类HashMap" class="headerlink" title="Map接口实现类HashMap"></a>Map接口实现类HashMap</h2><p><img src="/2019/10/11/Java之集合/46.png" alt></p>
+<p><img src="/2019/10/11/Java之集合/47.png" alt></p>
+<ul>
+<li>底层结构：哈希表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jdk7:数组+链表</span><br><span class="line">jdk8：数组+链表+红黑树</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>底层源码</li>
+</ul>
+<p><img src="/2019/10/11/Java之集合/48.png" alt></p>
+<p>创建对象时，加载因子=0.75</p>
+<p><img src="/2019/10/11/Java之集合/49.png" alt></p>
+<p>第一次写入数据，初始化长度为16的数组</p>
+<p><img src="/2019/10/11/Java之集合/50.png" alt></p>
+<p>当写入第13个数据时，超过阈值，此时数组扩容为原来的2倍</p>
+<p><img src="/2019/10/11/Java之集合/51.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">jdk8：</span><br><span class="line">HashMap中维护了Node类型的数组table，当HashMap创建对象时，只是对loadfactor初始化为0.75，table还是保持默认值null</span><br><span class="line">当第一次添加时，将初始table容量为16，临界值为12</span><br><span class="line">每次添加调用putVal方法：</span><br><span class="line">	1.先获取key的二次哈希值并进行与运算，得到存放位置</span><br><span class="line">	2.判断该存放位置上是否有元素，如果没有直接存放；如果该存放位置上有元素，则继续进行判断</span><br><span class="line">		如果和当前元素相等，则覆盖；如果不相等，则继续判断是否为链表结构还是树状结构，按照对应的判断方式判断相等。</span><br><span class="line">	3.将size更新，判断是否超过临界值，如果超过了，则需要重新resize()进行2倍扩容，并打乱原来的顺序，重新排列。</span><br><span class="line">	4.当一个桶中的链表的节点数&gt;=8 &amp;&amp; 桶的总个数（table的容量）&gt;=64时，会将链表结构变成红黑树结构。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">jdk7和jdk8的区别</span><br><span class="line">1.jdk7：创建HashMap对象时，初始table容量为16</span><br><span class="line">  jdk8：创建HashMap对象时，没有初始table，仅仅初始加载因子，只有当第一次添加的时候，才会初始table容量为16</span><br><span class="line">2.jdk7：tbale的类型为Entry</span><br><span class="line">  jdk8：table的类型为Node</span><br><span class="line">3.jdk7：哈希表为数组+链表，不管链表的总结点数是多少都不会变成树结构</span><br><span class="line">  jdk8：哈希表为数组+链表+红黑树，当一个桶中的链表的节点数&gt;=8 &amp;&amp; 桶的总个数（table的容量）&gt;=64时，会将链表结构变成红黑树结构</span><br></pre></td></tr></table></figure>
+
+<p>应用：要求添加元素的key要重写equals和HashCode方法</p>
+<h2 id="Map接口实现类Hashtable"><a href="#Map接口实现类Hashtable" class="headerlink" title="Map接口实现类Hashtable"></a>Map接口实现类Hashtable</h2><p>底层结构：哈希表，同HashMap</p>
+<h2 id="Map接口实现类TreeMap"><a href="#Map接口实现类TreeMap" class="headerlink" title="Map接口实现类TreeMap"></a>Map接口实现类TreeMap</h2><p><img src="/2019/10/11/Java之集合/55.png" alt></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="title">implement</span> <span class="title">Comparable</span></span>&#123;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">double</span> salary;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Object o)</span></span>&#123;</span><br><span class="line">        Employee e = (Employee)o;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.id &gt; e.id)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.id &lt; e.id)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.compare(<span class="keyword">this</span>.salary,e.salary);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    TreeMap map = <span class="keyword">new</span> TreeMap();</span><br><span class="line">    <span class="comment">//添加元素</span></span><br><span class="line">    map.put();</span><br><span class="line">    ...;</span><br><span class="line">    <span class="comment">//遍历元素</span></span><br><span class="line">    Set entrys = map.entrySet();</span><br><span class="line">    <span class="keyword">for</span>(Object o:entrys)&#123;</span><br><span class="line">        Map.Entry entry = (Entry)o;</span><br><span class="line">        System.out.println(entry.getKey());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test02</span><span class="params">()</span></span>&#123;</span><br><span class="line">    HashMap map = <span class="keyword">new</span> HashMap(<span class="keyword">new</span> Comparator()&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Object o1,Object o2)</span></span>&#123;</span><br><span class="line">             Employee e1 = (Employee)o1;</span><br><span class="line">             Employee e2 = (Employee)o2;</span><br><span class="line">             <span class="keyword">if</span>(e1.id &gt; e2.id)&#123;</span><br><span class="line">                 <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">             &#125;<span class="keyword">else</span> <span class="keyword">if</span>(e1.id &lt; e2.id)&#123;</span><br><span class="line">                 <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">             &#125;</span><br><span class="line">             <span class="keyword">return</span> Double.compare(e1.salary,e2.salary);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>底层结构：红黑树，可以实现对添加元素的key进行排序</p>
+<p>应用：自然排序</p>
+<p>​        定制排序</p>
+<h2 id="实现类对比-1"><a href="#实现类对比-1" class="headerlink" title="实现类对比"></a>实现类对比</h2><h4 id="HashMap和Hashtable的对比"><a href="#HashMap和Hashtable的对比" class="headerlink" title="HashMap和Hashtable的对比"></a>HashMap和Hashtable的对比</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">			底层结构	版本		线程安全	允许null键null值</span><br><span class="line">HashMap		哈希表		 1.2	   不安全		    允许</span><br><span class="line"></span><br><span class="line">HashTable	哈希表		 1.0		安全			不允许</span><br></pre></td></tr></table></figure>
+
+<h1 id="Collections工具类"><a href="#Collections工具类" class="headerlink" title="Collections工具类"></a>Collections工具类</h1><h2 id="常见方法-2"><a href="#常见方法-2" class="headerlink" title="常见方法"></a>常见方法</h2><p><img src="/2019/10/11/Java之集合/56.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">排序操作</span><br><span class="line">1.reverse(List):反转</span><br><span class="line">2.shuffle(List)：随机排序</span><br><span class="line">3.sort(List)：根据自然顺序对集合元素按升序排序</span><br><span class="line">4.sort(List,Comparator)：根据定制顺序对集合元素排序</span><br><span class="line">5.swap(List,int,int):交换</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/Java之集合/57.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">查找、替换操作</span><br><span class="line">1.Object max(Collection):根据元素自然顺序，返回集合中的最大元素</span><br><span class="line">2.Object max(Collection，Comparator):根据元素定制顺序，返回集合中的最大元素</span><br><span class="line">3.Object min(Collection):根据元素自然顺序，返回集合中的最小元素</span><br><span class="line">4.Object min(Collection，Comparator):根据元素定制顺序，返回集合中的最小元素</span><br><span class="line">5.int frequency(Collection,Object):返回几何中指定元素的出现次数</span><br><span class="line">6.void copy(List dest,List src):将src中的内容复制到dest中</span><br><span class="line">7.boolean replaceAll(List list,Object oldVal,Object newVal):使用新值替换List对象的所有旧值</span><br></pre></td></tr></table></figure>
+
+
     </div>
 
     
@@ -676,7 +808,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集合"><span class="nav-number">1.</span> <span class="nav-text">集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集合框架体系图"><span class="nav-number">2.</span> <span class="nav-text">集合框架体系图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Collection接口"><span class="nav-number">3.</span> <span class="nav-text">Collection接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">3.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见方法"><span class="nav-number">3.2.</span> <span class="nav-text">常见方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历方式"><span class="nav-number">3.3.</span> <span class="nav-text">遍历方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Iterator"><span class="nav-number">3.3.1.</span> <span class="nav-text">使用Iterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增强For"><span class="nav-number">3.3.2.</span> <span class="nav-text">增强For</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List接口"><span class="nav-number">3.4.</span> <span class="nav-text">List接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特有方法"><span class="nav-number">3.4.2.</span> <span class="nav-text">特有方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历方式-1"><span class="nav-number">3.4.3.</span> <span class="nav-text">遍历方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口的实现类：ArrayList"><span class="nav-number">3.4.4.</span> <span class="nav-text">List接口的实现类：ArrayList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口的实现类：Vector"><span class="nav-number">3.4.5.</span> <span class="nav-text">List接口的实现类：Vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口的实现类：LinkedList"><span class="nav-number">3.4.6.</span> <span class="nav-text">List接口的实现类：LinkedList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现类对比"><span class="nav-number">3.4.7.</span> <span class="nav-text">实现类对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set接口"><span class="nav-number">3.5.</span> <span class="nav-text">Set接口</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集合"><span class="nav-number">1.</span> <span class="nav-text">集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集合框架体系图"><span class="nav-number">2.</span> <span class="nav-text">集合框架体系图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Collection接口"><span class="nav-number">3.</span> <span class="nav-text">Collection接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">3.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见方法"><span class="nav-number">3.2.</span> <span class="nav-text">常见方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历方式"><span class="nav-number">3.3.</span> <span class="nav-text">遍历方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Iterator"><span class="nav-number">3.3.1.</span> <span class="nav-text">使用Iterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增强For"><span class="nav-number">3.3.2.</span> <span class="nav-text">增强For</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List接口"><span class="nav-number">3.4.</span> <span class="nav-text">List接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特有方法"><span class="nav-number">3.4.2.</span> <span class="nav-text">特有方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历方式-1"><span class="nav-number">3.4.3.</span> <span class="nav-text">遍历方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口的实现类：ArrayList"><span class="nav-number">3.4.4.</span> <span class="nav-text">List接口的实现类：ArrayList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口的实现类：Vector"><span class="nav-number">3.4.5.</span> <span class="nav-text">List接口的实现类：Vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口的实现类：LinkedList"><span class="nav-number">3.4.6.</span> <span class="nav-text">List接口的实现类：LinkedList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现类对比"><span class="nav-number">3.4.7.</span> <span class="nav-text">实现类对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set接口"><span class="nav-number">3.5.</span> <span class="nav-text">Set接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点-2"><span class="nav-number">3.5.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特有方法-1"><span class="nav-number">3.5.2.</span> <span class="nav-text">特有方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历方式-2"><span class="nav-number">3.5.3.</span> <span class="nav-text">遍历方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set接口的实现类：HashSet"><span class="nav-number">3.5.4.</span> <span class="nav-text">Set接口的实现类：HashSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set接口的实现类：TreeSet"><span class="nav-number">3.5.5.</span> <span class="nav-text">Set接口的实现类：TreeSet</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Map接口"><span class="nav-number">4.</span> <span class="nav-text">Map接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点-3"><span class="nav-number">4.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见方法-1"><span class="nav-number">4.2.</span> <span class="nav-text">常见方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历方式-3"><span class="nav-number">4.3.</span> <span class="nav-text">遍历方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map接口实现类HashMap"><span class="nav-number">4.4.</span> <span class="nav-text">Map接口实现类HashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map接口实现类Hashtable"><span class="nav-number">4.5.</span> <span class="nav-text">Map接口实现类Hashtable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map接口实现类TreeMap"><span class="nav-number">4.6.</span> <span class="nav-text">Map接口实现类TreeMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现类对比-1"><span class="nav-number">4.7.</span> <span class="nav-text">实现类对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HashMap和Hashtable的对比"><span class="nav-number">4.7.0.1.</span> <span class="nav-text">HashMap和Hashtable的对比</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Collections工具类"><span class="nav-number">5.</span> <span class="nav-text">Collections工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常见方法-2"><span class="nav-number">5.1.</span> <span class="nav-text">常见方法</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
