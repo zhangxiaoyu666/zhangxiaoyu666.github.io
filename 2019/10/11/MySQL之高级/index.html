@@ -85,7 +85,36 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/9.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/21.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/22.png">
-<meta property="og:updated_time" content="2019-10-12T02:26:11.856Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/23.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/24.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/25.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/26.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/27.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/28.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/29.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/30.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/31.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/33.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/32.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/34.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/35.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/36.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/37.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/38.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/39.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/40.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/41.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/42.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/43.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/44.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/45.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/46.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/47.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/50.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/53.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/51.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/11/MySQL之高级/52.png">
+<meta property="og:updated_time" content="2019-10-13T04:35:46.301Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL之高级">
 <meta name="twitter:description" content="索引分析索引简介什么是索引？ 官方定义：是帮助MySQL高效获取数据的数据结构  1索引的本质是数据结构   索引的目的在一提高查询效率，可以类比字典">
@@ -404,7 +433,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-12 10:26:11" itemprop="dateModified" datetime="2019-10-12T10:26:11+08:00">2019-10-12</time>
+                <time title="修改时间：2019-10-13 12:35:46" itemprop="dateModified" datetime="2019-10-13T12:35:46+08:00">2019-10-13</time>
               </span>
             
           
@@ -508,9 +537,7 @@
 
 <p>★执行计划包含的信息</p>
 <p><img src="/2019/10/11/MySQL之高级/10.png" alt></p>
-<ul>
-<li>id   select查询的序列号，包含一组数字，表示查询中执行select子句或操作表的顺序，有如下三种情况</li>
-</ul>
+<h5 id="id"><a href="#id" class="headerlink" title="id"></a>id</h5><p>id   select查询的序列号，包含一组数字，表示查询中执行select子句或操作表的顺序，有如下三种情况</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.id相同，执行顺序由上至下</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2019/10/11/MySQL之高级/11.png" alt></p>
@@ -520,49 +547,33 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3.id相同不同，同时存在</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2019/10/11/MySQL之高级/13.png" alt></p>
-<ul>
-<li>select_type :查询的类型，主要适用于区别普通查询、联合查询、子查询等复杂的查询</li>
-</ul>
+<h5 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h5><p>select_type :查询的类型，主要适用于区别普通查询、联合查询、子查询等复杂的查询</p>
 <p><img src="/2019/10/11/MySQL之高级/14.png" alt></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SIMPLE:简单的select查询，查询中不包含子查询或者UNION</span><br><span class="line">PRIMARY:查询中包含任何复杂的子部分，最外层查询则被标记为PRIMARY</span><br><span class="line">SUBQUERY:在select或where列表中包含了子查询</span><br><span class="line">DERIVED:在FROM列表中包含的子查询被标记为DERIVED（衍生），mysql会递归执行这些子查询，把结果放在临时表中</span><br><span class="line">UNION:若第二个select出现在UNION之后，则被标记为UNION;若UNION包含在FROM子句的查询中，外层select将被标记为：DERIVED</span><br><span class="line">UNION RESULT:从UNION表获取结果的select</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>table ：显示这一行的数据是关于哪张表的</li>
-<li>type ：访问类型排列</li>
-</ul>
+<h5 id="table"><a href="#table" class="headerlink" title="table"></a>table</h5><p>table ：显示这一行的数据是关于哪张表的</p>
+<h5 id="type"><a href="#type" class="headerlink" title="type"></a>type</h5><p>type ：访问类型排列</p>
 <p><img src="/2019/10/11/MySQL之高级/15.png" alt></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">显示查询使用了何种类型，从好到差依次是：</span><br><span class="line">system&gt;const&gt;eq_ref&gt;ref&gt;range&gt;index&gt;All</span><br></pre></td></tr></table></figure>
 
 <p>一般来说，得保证至少达到range级别，最好能达到ref</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.system:表只有一行记录（等于系统表），这是const类型的特例</span><br><span class="line">2.const：表示通过索引一次就找到了，const用于比较primary key或者unique索引。因为只匹配一行数据，所以很快。如将主键置于where列中</span><br><span class="line">3.eq_ref:唯一性索引扫描，对于每个索引键，表中只有一条记录与之匹配。常见于主键或唯一索引扫描</span><br><span class="line">4.ref:非唯一性索引扫描，返回匹配某个单独值的所有行。本质上也是一种索引访问，它返回所有匹配某个单独值的行，然而它可能会找到多个符合条件的行，所以它应该属于查找和扫描的混合体。</span><br><span class="line">5.range：只检索给定范围的行，使用一个索引来选择行，key列显示使用了哪个索引，一般就是在你的where语句中出现了between,&lt;,&gt;,in等查询，这种范围扫描索引扫描比全表扫描要好，因为它只需要开始于索引的某一点，而结束零一点，不用扫描全部索引</span><br><span class="line">6.index：Full Index Scan，index与All区别为index类型只遍历索引树。这通常比All快，因为索引文件通常比数据文件小（也就是说虽然all和index都是读全表，但是index是从索引中读取的，而all是从硬盘中读取的）</span><br><span class="line">7.all：Full Table Scan，将遍历全表以找到匹配的行</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>possible_keys : 显示可能应用在这张表中的索引，一个或多个。查询设计到的字段上若存在索引，则将该索引列出。</li>
-</ul>
+<h5 id="possible-keys"><a href="#possible-keys" class="headerlink" title="possible_keys"></a>possible_keys</h5><p>possible_keys : 显示可能应用在这张表中的索引，一个或多个。查询设计到的字段上若存在索引，则将该索引列出。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">但不一定被查询实际使用</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>key ：实际使用的索引，如果为null，则没有使用索引。</li>
-</ul>
+<h5 id="key"><a href="#key" class="headerlink" title="key"></a>key</h5><p>key ：实际使用的索引，如果为null，则没有使用索引。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查询中若使用了覆盖索引，则该索引仅出现在key列表中</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2019/10/11/MySQL之高级/16.png" alt></p>
-<ul>
-<li>key_len : 表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度。在不损失精确度的情况下，长度越短越好</li>
-</ul>
+<h5 id="key-len"><a href="#key-len" class="headerlink" title="key_len"></a>key_len</h5><p>key_len : 表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度。在不损失精确度的情况下，长度越短越好</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">key_len显示的值为索引字段的最大可能长度，并非实际使用长度</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>ref ：显示索引的哪一列被使用了，如果可能的话，是一个常数。哪些列或常量被用于查找索引列上的值。</li>
-</ul>
+<h5 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h5><p>ref：显示索引的哪一列被使用了，如果可能的话，是一个常数。哪些列或常量被用于查找索引列上的值。</p>
 <p><img src="/2019/10/11/MySQL之高级/17.png" alt></p>
-<ul>
-<li>rows : 根据表统计信息及索引选用情况，大致估算出所需的记录所需要读取的行数</li>
-</ul>
+<h5 id="rows"><a href="#rows" class="headerlink" title="rows"></a>rows</h5><p>rows: 根据表统计信息及索引选用情况，大致估算出所需的记录所需要读取的行数</p>
 <p><img src="/2019/10/11/MySQL之高级/18.png" alt></p>
-<ul>
-<li>Extra : 包含不适合在其他列中显示，但是十分重要的额外信息</li>
-</ul>
+<h5 id="Extra"><a href="#Extra" class="headerlink" title="Extra"></a>Extra</h5><p>Extra: 包含不适合在其他列中显示，但是十分重要的额外信息</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.Using filesort:对数据使用一个外部的索引排序，而不是按照表内的索引顺序读取。MySQL中无法使用索引完成的排序称为“文件排序”</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2019/10/11/MySQL之高级/19.png" alt></p>
@@ -586,7 +597,111 @@
 </ol>
 <p><img src="/2019/10/11/MySQL之高级/21.png" alt></p>
 <p><img src="/2019/10/11/MySQL之高级/22.png" alt></p>
-<h2 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h2>
+<h2 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h2><h3 id="索引分析-1"><a href="#索引分析-1" class="headerlink" title="索引分析"></a>索引分析</h3><h4 id="单表"><a href="#单表" class="headerlink" title="单表"></a>单表</h4><ul>
+<li>建表</li>
+</ul>
+<p><img src="/2019/10/11/MySQL之高级/23.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from article;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>案例</li>
+</ul>
+<p><img src="/2019/10/11/MySQL之高级/24.png" alt></p>
+<p><img src="/2019/10/11/MySQL之高级/25.png" alt></p>
+<p>进行优化：新建索引+删除索引</p>
+<p>方式一：</p>
+<p><img src="/2019/10/11/MySQL之高级/26.png" alt></p>
+<p><img src="/2019/10/11/MySQL之高级/27.png" alt></p>
+<p>删除第一次建立的索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP INDEX idx_article_ccv ON article</span><br></pre></td></tr></table></figure>
+
+<p>第二次建立索引</p>
+<p><img src="/2019/10/11/MySQL之高级/28.png" alt></p>
+<p>优化完成。</p>
+<h4 id="两表"><a href="#两表" class="headerlink" title="两表"></a>两表</h4><p>创建两个表</p>
+<p><img src="/2019/10/11/MySQL之高级/29.png" alt></p>
+<p><img src="/2019/10/11/MySQL之高级/30.png" alt></p>
+<p>type有All，需要优化</p>
+<p>首先，在book表上添加索引</p>
+<p><img src="/2019/10/11/MySQL之高级/31.png" alt></p>
+<p><img src="/2019/10/11/MySQL之高级/33.png" alt></p>
+<p>删除book表上的索引Y，在class表上添加索引</p>
+<p><img src="/2019/10/11/MySQL之高级/32.png" alt></p>
+<p>结论</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">左连接----在右表上建立索引</span><br><span class="line">右连接----在左表上建立索引</span><br></pre></td></tr></table></figure>
+
+<h4 id="三表"><a href="#三表" class="headerlink" title="三表"></a>三表</h4><p>在上面两个表的基础上，再建立一个表</p>
+<p><img src="/2019/10/11/MySQL之高级/34.png" alt></p>
+<p>三表连接</p>
+<p><img src="/2019/10/11/MySQL之高级/35.png" alt></p>
+<p>在book表上新建索引Y，phone表上新建索引z</p>
+<p><img src="/2019/10/11/MySQL之高级/36.png" alt></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">索引最好设置在需要经常查询的字段中</span><br></pre></td></tr></table></figure>
+
+<p>join语句的优化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.尽可能减少Join语句中NestedLoop的循环总次数：“永远用小结果集驱动大的结果集”</span><br><span class="line">2.优先优化NestedLoop的内层循环</span><br><span class="line">3.保证Join语句中被驱动表上Join条件字段已经被索引</span><br><span class="line">4.当无法保证被驱动表的Join条件字段被索引且内存资源充足的前提下，不要太吝惜JoinBuffer的设置</span><br></pre></td></tr></table></figure>
+
+<h3 id="索引失效（应该避免）"><a href="#索引失效（应该避免）" class="headerlink" title="索引失效（应该避免）"></a>索引失效（应该避免）</h3><ul>
+<li>建表并添加一个复合索引</li>
+</ul>
+<p><img src="/2019/10/11/MySQL之高级/37.png" alt></p>
+<ul>
+<li>索引失效案例</li>
+</ul>
+<p><img src="/2019/10/11/MySQL之高级/38.png" alt></p>
+<ol>
+<li>违背了“最佳做前缀法则”</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/39.png" alt></p>
+<p><img src="/2019/10/11/MySQL之高级/40.png" alt="40"></p>
+<p><img src="/2019/10/11/MySQL之高级/41.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“最佳做前缀法则”：如果索引了多列，要遵守最左前缀法则，指的是查询从索引的最左前列开始并且不跳过索引中的列。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“带头大哥不能死，中间兄弟不能断”</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在索引列上做计算、函数、(自动or手动)类型转换等操作</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/42.png" alt></p>
+<ol start="3">
+<li>存储引擎不能使用索引中范围条件右边的列</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/43.png" alt></p>
+<ol start="4">
+<li>尽量使用覆盖索引（只访问索引的查询（索引列和查询列一致）），减少select*</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/44.png" alt></p>
+<ol start="5">
+<li>mysql在使用（!=或者&lt;&gt;）的时候无法使用索引会导致全表扫描</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/45.png" alt></p>
+<ol start="6">
+<li>is null,is not null 也无法使用索引</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/46.png" alt></p>
+<ol start="7">
+<li>like以通配符开头(‘%abc…’)mysql索引失效会变成全表扫描的操作</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/47.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用like&apos;字符串%&apos;,索引不会失效</span><br></pre></td></tr></table></figure>
+
+<p>问题：解决like’%字符串%’时索引不被使用的方法？？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用覆盖索引</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>字符串不加单引号，索引会失效</li>
+</ol>
+<p><img src="/2019/10/11/MySQL之高级/50.png" alt></p>
+<ol start="9">
+<li>少用or，用它来连接时会导致索引失效</li>
+</ol>
+<p>总结</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">带头大哥不能死，中间兄弟不能断</span><br><span class="line">索引列上不计算（计算、函数、(自动or手动)类型转换）</span><br><span class="line">范围之后全失效</span><br><span class="line">like的%放右边</span><br><span class="line">字符串要加单引号</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/11/MySQL之高级/53.png" alt></p>
+<p><img src="/2019/10/11/MySQL之高级/51.png" alt></p>
+<h3 id="一般性建议"><a href="#一般性建议" class="headerlink" title="一般性建议"></a>一般性建议</h3><p><img src="/2019/10/11/MySQL之高级/52.png" alt></p>
+
     </div>
 
     
@@ -686,7 +801,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引分析"><span class="nav-number">1.</span> <span class="nav-text">索引分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引简介"><span class="nav-number">1.1.</span> <span class="nav-text">索引简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是索引？"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是索引？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优势"><span class="nav-number">1.1.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#劣势"><span class="nav-number">1.1.3.</span> <span class="nav-text">劣势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql索引分类"><span class="nav-number">1.1.4.</span> <span class="nav-text">mysql索引分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分类"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本语法"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">基本语法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql索引结构"><span class="nav-number">1.1.5.</span> <span class="nav-text">mysql索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#BTree索引"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">BTree索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hash索引"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">Hash索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#full-text全文索引"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">full-text全文索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#R-Tree索引"><span class="nav-number">1.1.5.4.</span> <span class="nav-text">R-Tree索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些情况需要创建索引"><span class="nav-number">1.1.6.</span> <span class="nav-text">哪些情况需要创建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些情况不要创建索引"><span class="nav-number">1.1.7.</span> <span class="nav-text">哪些情况不要创建索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能分析"><span class="nav-number">1.2.</span> <span class="nav-text">性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL-Query-Optimizer"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">MySQL Query Optimizer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL常见瓶颈"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">MySQL常见瓶颈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Explain"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">Explain</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引优化"><span class="nav-number">1.3.</span> <span class="nav-text">索引优化</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引分析"><span class="nav-number">1.</span> <span class="nav-text">索引分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引简介"><span class="nav-number">1.1.</span> <span class="nav-text">索引简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是索引？"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是索引？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优势"><span class="nav-number">1.1.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#劣势"><span class="nav-number">1.1.3.</span> <span class="nav-text">劣势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql索引分类"><span class="nav-number">1.1.4.</span> <span class="nav-text">mysql索引分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分类"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本语法"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">基本语法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql索引结构"><span class="nav-number">1.1.5.</span> <span class="nav-text">mysql索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#BTree索引"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">BTree索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hash索引"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">Hash索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#full-text全文索引"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">full-text全文索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#R-Tree索引"><span class="nav-number">1.1.5.4.</span> <span class="nav-text">R-Tree索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些情况需要创建索引"><span class="nav-number">1.1.6.</span> <span class="nav-text">哪些情况需要创建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些情况不要创建索引"><span class="nav-number">1.1.7.</span> <span class="nav-text">哪些情况不要创建索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能分析"><span class="nav-number">1.2.</span> <span class="nav-text">性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL-Query-Optimizer"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">MySQL Query Optimizer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL常见瓶颈"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">MySQL常见瓶颈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Explain"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">Explain</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#id"><span class="nav-number">1.2.0.3.1.</span> <span class="nav-text">id</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#select-type"><span class="nav-number">1.2.0.3.2.</span> <span class="nav-text">select_type</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#table"><span class="nav-number">1.2.0.3.3.</span> <span class="nav-text">table</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#type"><span class="nav-number">1.2.0.3.4.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#possible-keys"><span class="nav-number">1.2.0.3.5.</span> <span class="nav-text">possible_keys</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#key"><span class="nav-number">1.2.0.3.6.</span> <span class="nav-text">key</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#key-len"><span class="nav-number">1.2.0.3.7.</span> <span class="nav-text">key_len</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ref"><span class="nav-number">1.2.0.3.8.</span> <span class="nav-text">ref</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rows"><span class="nav-number">1.2.0.3.9.</span> <span class="nav-text">rows</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Extra"><span class="nav-number">1.2.0.3.10.</span> <span class="nav-text">Extra</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引优化"><span class="nav-number">1.3.</span> <span class="nav-text">索引优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引分析-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">索引分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单表"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">单表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两表"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">两表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三表"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">三表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引失效（应该避免）"><span class="nav-number">1.3.2.</span> <span class="nav-text">索引失效（应该避免）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一般性建议"><span class="nav-number">1.3.3.</span> <span class="nav-text">一般性建议</span></a></li></ol></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
