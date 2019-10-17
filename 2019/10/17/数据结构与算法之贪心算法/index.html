@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="贪心算法的理解贪心算法的经典应用：霍夫曼编码、Prim、Kruskal最小生成树算法，还有Dijkstra单源最短路径算法。">
+<meta name="keywords" content="贪心算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="贪心算法">
+<meta property="og:url" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="贪心算法的理解贪心算法的经典应用：霍夫曼编码、Prim、Kruskal最小生成树算法，还有Dijkstra单源最短路径算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/11.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/12.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/13.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/14.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/15.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/16.png">
+<meta property="og:updated_time" content="2019-10-17T08:09:39.475Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="贪心算法">
+<meta name="twitter:description" content="贪心算法的理解贪心算法的经典应用：霍夫曼编码、Prim、Kruskal最小生成树算法，还有Dijkstra单源最短路径算法。">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>贪心算法 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">15</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">9</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">20</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">贪心算法
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-17 10:52:21 / 修改时间：16:09:39" itemprop="dateCreated datePublished" datetime="2019-10-17T10:52:21+08:00">2019-10-17</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="贪心算法的理解"><a href="#贪心算法的理解" class="headerlink" title="贪心算法的理解"></a>贪心算法的理解</h1><p>贪心算法的经典应用：霍夫曼编码、Prim、Kruskal最小生成树算法，还有Dijkstra单源最短路径算法。</p>
+<a id="more"></a>
+
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><p>假如有一个可以容纳100kg物品的背包，可以装各种物品，有以下5种豆子，每种豆子的总量和总价值各不相同。为了让背包中所装物品的总价值最大，如何选择在背包中装哪些豆子，每种豆子又该装多少？</p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/1.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">先计算每个物品的单价，按照单价从高到低依次来装，所以可以往背包里装20kg黑豆，30kg绿豆，50kg红豆</span><br></pre></td></tr></table></figure>
+
+<h2 id="贪心算法解决问题的步骤"><a href="#贪心算法解决问题的步骤" class="headerlink" title="贪心算法解决问题的步骤"></a>贪心算法解决问题的步骤</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.针对一组数据，定义了限制值和期望值，希望从中选出几个数据，在满足限制值的情况下，期望值最大。遇到这种情况，要首先联想到贪心算法</span><br><span class="line">2.每次选择当前情况下，在对限制值同等贡献量的情况下，对期望值贡献最大的数据，可以尝试这个问题是否可以是用贪心算法解决</span><br><span class="line">3.举例验证贪心算法产生的结果是否是最优的。</span><br></pre></td></tr></table></figure>
+
+<p>实际上，用贪心算法解决问题的思路，并不总能给出最优解。</p>
+<p>在一个有权图中，从顶点s开始，找到一条到顶点T的最短路径。贪心算法的解决思路是，每次都选择一条跟当前节点相连的权最小的边，直到找到顶点T。按照这种思路，求出最短路径是S-&gt;A-&gt;E-&gt;T，路径长度为9.</p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/2.png" alt></p>
+<p>但实际上，最短路径为S-&gt;B-&gt;D-&gt;T，长度为6。贪心算法前面的选择会影响后面的选择</p>
+<h1 id="贪心算法实战分析"><a href="#贪心算法实战分析" class="headerlink" title="贪心算法实战分析"></a>贪心算法实战分析</h1><h2 id="分糖果"><a href="#分糖果" class="headerlink" title="分糖果"></a>分糖果</h2><p><img src="/2019/10/17/数据结构与算法之贪心算法/3.png" alt></p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/4.png" alt></p>
+<h2 id="钱币找零"><a href="#钱币找零" class="headerlink" title="钱币找零"></a>钱币找零</h2><p><img src="/2019/10/17/数据结构与算法之贪心算法/5.png" alt></p>
+<p>在贡献相同期望值（纸币数目）的情况下，希望多贡献点金额，就可以让纸币数更少。</p>
+<h2 id="区间覆盖"><a href="#区间覆盖" class="headerlink" title="区间覆盖"></a>区间覆盖</h2><p><img src="/2019/10/17/数据结构与算法之贪心算法/6.png" alt></p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/7.png" alt></p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/8.png" alt></p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/9.png" alt></p>
+<h1 id="如何使用贪心算法实现Huffman压缩"><a href="#如何使用贪心算法实现Huffman压缩" class="headerlink" title="如何使用贪心算法实现Huffman压缩"></a>如何使用贪心算法实现Huffman压缩</h1><p>霍夫曼编码不仅会考察文本中有多少各不同字符，还会考察每个字符出现的频率，根据频率的不同，选择不同长度的编码。根据贪心算法，可以把出现频率较多的字符用稍短一些的编码，出现频率较少的字符，用稍微长一些的编码。</p>
+<p>霍夫曼编码要求各个字符的编码之间，不会出现某个编码是另一个编码前缀的情况。</p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/10.png" alt></p>
+<p>假设这6个字符出现的频率从高到低依次是a,b,c,d,e,f。可以把他们编码成下面的样子。</p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/11.png" alt></p>
+<p>如何根据字符出现的频率不同，给不同的字符进行不同长度的编码？</p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/12.png" alt></p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/13.png" alt></p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/14.png" alt></p>
+<p><img src="/2019/10/17/数据结构与算法之贪心算法/15.png" alt></p>
+<h1 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h1><p><img src="/2019/10/17/数据结构与算法之贪心算法/16.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">由最高位开始，比较低一位数字，如果高位大，移除，若高位小，则向右移一位继续比较两个数字，直到高位大于低位则移除，循环k次。</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/" title="贪心算法">http://yoursite.com/2019/10/17/数据结构与算法之贪心算法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/贪心算法/" rel="tag"># 贪心算法</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/16/数据结构与算法之排序/" rel="next" title="排序">
+                  <i class="fa fa-chevron-left"></i> 排序
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/17/数据结构与算法之二分查找/" rel="prev" title="数据结构与算法之二分查找">
+                  数据结构与算法之二分查找 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#贪心算法的理解"><span class="nav-number">1.</span> <span class="nav-text">贪心算法的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#例题"><span class="nav-number">1.1.</span> <span class="nav-text">例题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#贪心算法解决问题的步骤"><span class="nav-number">1.2.</span> <span class="nav-text">贪心算法解决问题的步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#贪心算法实战分析"><span class="nav-number">2.</span> <span class="nav-text">贪心算法实战分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分糖果"><span class="nav-number">2.1.</span> <span class="nav-text">分糖果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#钱币找零"><span class="nav-number">2.2.</span> <span class="nav-text">钱币找零</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区间覆盖"><span class="nav-number">2.3.</span> <span class="nav-text">区间覆盖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何使用贪心算法实现Huffman压缩"><span class="nav-number">3.</span> <span class="nav-text">如何使用贪心算法实现Huffman压缩</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考题"><span class="nav-number">4.</span> <span class="nav-text">思考题</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

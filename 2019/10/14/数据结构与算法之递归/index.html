@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="如何理解“递归”？递归：去的过程叫“递”，回来的过程叫“归”，基本上，所有的递归公式都可以用递归公式来表示。 递归需要满足三个条件：">
+<meta name="keywords" content="递归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何用三行代码找到“最终推荐人”？">
+<meta property="og:url" content="http://yoursite.com/2019/10/14/数据结构与算法之递归/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="如何理解“递归”？递归：去的过程叫“递”，回来的过程叫“归”，基本上，所有的递归公式都可以用递归公式来表示。 递归需要满足三个条件：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/14/数据结构与算法之递归/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/14/数据结构与算法之递归/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/14/数据结构与算法之递归/3.png">
+<meta property="og:updated_time" content="2019-10-17T08:08:32.059Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何用三行代码找到“最终推荐人”？">
+<meta name="twitter:description" content="如何理解“递归”？递归：去的过程叫“递”，回来的过程叫“归”，基本上，所有的递归公式都可以用递归公式来表示。 递归需要满足三个条件：">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/14/数据结构与算法之递归/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/14/数据结构与算法之递归/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>如何用三行代码找到“最终推荐人”？ | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">15</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">9</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">20</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/数据结构与算法之递归/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">如何用三行代码找到“最终推荐人”？
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-14 22:24:35" itemprop="dateCreated datePublished" datetime="2019-10-14T22:24:35+08:00">2019-10-14</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-17 16:08:32" itemprop="dateModified" datetime="2019-10-17T16:08:32+08:00">2019-10-17</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="如何理解“递归”？"><a href="#如何理解“递归”？" class="headerlink" title="如何理解“递归”？"></a>如何理解“递归”？</h1><p>递归：去的过程叫“递”，回来的过程叫“归”，基本上，所有的递归公式都可以用递归公式来表示。</p>
+<h2 id="递归需要满足三个条件："><a href="#递归需要满足三个条件：" class="headerlink" title="递归需要满足三个条件："></a>递归需要满足三个条件：</h2><a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.一个问题可以分解为几个子问题的解</span><br><span class="line">2.这个问题与分解之后的子问题，除了数据规模不同，求i接思路完全一样</span><br><span class="line">3.存在递归终止条件</span><br></pre></td></tr></table></figure>
+
+<h1 id="如何编写递归代码"><a href="#如何编写递归代码" class="headerlink" title="如何编写递归代码"></a>如何编写递归代码</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">写出递推公式，找到终止条件</span><br></pre></td></tr></table></figure>
+
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p><img src="/2019/10/14/数据结构与算法之递归/1.png" alt></p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>首先找到递归公式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">可以根据第一步的走法，把所有的走法分为两类，第一类是第一步走了1个台阶，另一类是第一步走了两个台阶。</span><br><span class="line">所以n个台阶的走法就等于先走1个台阶后，n-1个台阶的走法加上先走2阶后，n-2个台阶的走法</span><br></pre></td></tr></table></figure>
+
+<p>公式表示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(n) = f(n-1)+f(n-2)</span><br></pre></td></tr></table></figure>
+
+<p>第二步找到终止条件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当有一个台阶时，就不需要递归，只有一种走法，f(1) = 1;</span><br></pre></td></tr></table></figure>
+
+<p>若终止条件只有f(1) = 1，这个递归条件足够吗？</p>
+<p>可以使用n=2，n=3这样比较小的数进行验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">n = 2时，</span><br><span class="line">f(2) = f(1)+f(0);</span><br><span class="line">而递归条件只有一个，所以无法得出f(2)。</span><br></pre></td></tr></table></figure>
+
+<p>所以除了f(1) = 1,我们还需要f(0) = 1,表示0个台阶有一种走法，不过这样看起来不符合逻辑思维。所以，我们可以把f(2)=2作为一种终止条件，表示2个台阶，有两种走法。所以最终终止条件为： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f(1) = 1;</span><br><span class="line">f(2) = 2;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>有了公式和终止条件，就可以转化成递归代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> f(n-<span class="number">1</span>)+f(n-<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="递归要警惕堆栈溢出"><a href="#递归要警惕堆栈溢出" class="headerlink" title="递归要警惕堆栈溢出"></a>递归要警惕堆栈溢出</h1><p><img src="/2019/10/14/数据结构与算法之递归/2.png" alt></p>
+<h2 id="如何避免堆栈溢出？"><a href="#如何避免堆栈溢出？" class="headerlink" title="如何避免堆栈溢出？"></a>如何避免堆栈溢出？</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">通过在代码中限制递归调用的最大深度的方式来解决。递归调用超过一定深度之后，就不继续往下再递归了，直接返回报错。</span><br></pre></td></tr></table></figure>
+
+<h2 id="伪码实现"><a href="#伪码实现" class="headerlink" title="伪码实现"></a>伪码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//全局变量，表示递归深度</span></span><br><span class="line"><span class="keyword">int</span> depth = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    ++depth;</span><br><span class="line">    <span class="keyword">if</span>(depth &gt; <span class="number">100</span>)&#123;</span><br><span class="line">        <span class="keyword">throw</span> exception</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> f(n-<span class="number">1</span>)+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种做法不能完全解决问题，因为最大允许的递归深度和当前线程剩余的栈空间大小有关，实现无法计算。如果实时计算，代码过于复杂，就会影响代码的可读性。所以如果最大深度比较小，如10、50，就可以使用这种方法，否则该方法不是很实用。</p>
+<h1 id="递归要警惕重复计算"><a href="#递归要警惕重复计算" class="headerlink" title="递归要警惕重复计算"></a>递归要警惕重复计算</h1><p>像上面的跳台阶问题，把整个递归过程分解：</p>
+<p><img src="/2019/10/14/数据结构与算法之递归/3.png" alt></p>
+<p>从图中可以清楚看到，f(3)被计算多次.</p>
+<h2 id="如何让避免重复计算"><a href="#如何让避免重复计算" class="headerlink" title="如何让避免重复计算"></a>如何让避免重复计算</h2><p>为了避免重复计算，可以通过数据结构来保存已经求解过的f(k).当递归调用f(k)时，先看下是否已经求解过。如果是，则直接从散列表中取值返回，不需要重复计算没这样就避免了重复计算的问题。</p>
+<h2 id="伪码实现-1"><a href="#伪码实现-1" class="headerlink" title="伪码实现"></a>伪码实现</h2><p>所以我们可以进行代码的改造</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//hasSolvedList可以理解为一个Map，key是n，value是f(n)</span></span><br><span class="line">    <span class="keyword">if</span>(hasSolvedList.containsKey(n))&#123;</span><br><span class="line">        <span class="keyword">return</span> hasSolvedList.get(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ret = f(n-<span class="number">1</span>)+f(n-<span class="number">2</span>);</span><br><span class="line">    hasSolvedList.put(n,ret);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="将递归代码写成非递归代码"><a href="#将递归代码写成非递归代码" class="headerlink" title="将递归代码写成非递归代码"></a>将递归代码写成非递归代码</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">递归有利有弊</span><br><span class="line">利：表达能力强，写起来简洁</span><br><span class="line">弊：空间复杂度高，有堆栈溢出风险、存在重复计算、过多的函数调用会耗时较多等问题。</span><br></pre></td></tr></table></figure>
+
+<p>所以可以使用迭代循环将递归代码改写为非递归代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> pre = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">int</span> prepre = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">3</span>;i &lt;= n;i++)&#123;</span><br><span class="line">        ret = pre +prepre;</span><br><span class="line">        prepre = pre;</span><br><span class="line">        pre = ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>笼统的讲，递归本身是借助栈来实现的，只不过我们使用的栈是系统本身提供的。</p>
+<h1 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h1><p>如何调试递归代码？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.打印日志发现递归值</span><br><span class="line">2.结合条件断点进行调试</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/14/数据结构与算法之递归/" title="如何用三行代码找到“最终推荐人”？">http://yoursite.com/2019/10/14/数据结构与算法之递归/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/递归/" rel="tag"># 递归</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/12/数据结构与算法之队列/" rel="next" title="队列在线程池等有限资源池中的应用">
+                  <i class="fa fa-chevron-left"></i> 队列在线程池等有限资源池中的应用
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/16/数据结构与算法之排序/" rel="prev" title="排序">
+                  排序 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何理解“递归”？"><span class="nav-number">1.</span> <span class="nav-text">如何理解“递归”？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#递归需要满足三个条件："><span class="nav-number">1.1.</span> <span class="nav-text">递归需要满足三个条件：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何编写递归代码"><span class="nav-number">2.</span> <span class="nav-text">如何编写递归代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number">2.1.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">2.1.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">2.1.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递归要警惕堆栈溢出"><span class="nav-number">3.</span> <span class="nav-text">递归要警惕堆栈溢出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免堆栈溢出？"><span class="nav-number">3.1.</span> <span class="nav-text">如何避免堆栈溢出？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪码实现"><span class="nav-number">3.2.</span> <span class="nav-text">伪码实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递归要警惕重复计算"><span class="nav-number">4.</span> <span class="nav-text">递归要警惕重复计算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何让避免重复计算"><span class="nav-number">4.1.</span> <span class="nav-text">如何让避免重复计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪码实现-1"><span class="nav-number">4.2.</span> <span class="nav-text">伪码实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将递归代码写成非递归代码"><span class="nav-number">5.</span> <span class="nav-text">将递归代码写成非递归代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考题"><span class="nav-number">6.</span> <span class="nav-text">思考题</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
