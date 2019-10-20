@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="二分查找底层依赖的是数组时随机访问的特性，所以只能用数组来实现，但是如果数据存储在链表中，要如何实现二分查找？ 12只需要对链表稍加修改，就可以支持类似“二分”的查找算法，把改造后的数据结构叫做“跳表”。跳表是一种动态数据结构，可以支持快速的插入、删除、查找操作，甚至可以替代红黑树。">
+<meta name="keywords" content="跳表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么Redis一定要用跳表来实现有序集合">
+<meta property="og:url" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="二分查找底层依赖的是数组时随机访问的特性，所以只能用数组来实现，但是如果数据存储在链表中，要如何实现二分查找？ 12只需要对链表稍加修改，就可以支持类似“二分”的查找算法，把改造后的数据结构叫做“跳表”。跳表是一种动态数据结构，可以支持快速的插入、删除、查找操作，甚至可以替代红黑树。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/11.png">
+<meta property="og:updated_time" content="2019-10-20T11:37:51.087Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为什么Redis一定要用跳表来实现有序集合">
+<meta name="twitter:description" content="二分查找底层依赖的是数组时随机访问的特性，所以只能用数组来实现，但是如果数据存储在链表中，要如何实现二分查找？ 12只需要对链表稍加修改，就可以支持类似“二分”的查找算法，把改造后的数据结构叫做“跳表”。跳表是一种动态数据结构，可以支持快速的插入、删除、查找操作，甚至可以替代红黑树。">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/19/数据结构与算法之跳表/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/19/数据结构与算法之跳表/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>为什么Redis一定要用跳表来实现有序集合 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">19</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">9</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">23</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/19/数据结构与算法之跳表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">为什么Redis一定要用跳表来实现有序集合
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-19 20:03:13" itemprop="dateCreated datePublished" datetime="2019-10-19T20:03:13+08:00">2019-10-19</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-20 19:37:51" itemprop="dateModified" datetime="2019-10-20T19:37:51+08:00">2019-10-20</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>二分查找底层依赖的是数组时随机访问的特性，所以只能用数组来实现，但是如果数据存储在链表中，要如何实现二分查找？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">只需要对链表稍加修改，就可以支持类似“二分”的查找算法，把改造后的数据结构叫做“跳表”。</span><br><span class="line">跳表是一种动态数据结构，可以支持快速的插入、删除、查找操作，甚至可以替代红黑树。</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>Redis中的有序集合就是用跳表来实现的，我们知道红黑树也可以实现快速的插入、删除和查找操作，为什么Redis选择跳表来实现有序集合,而不是用红黑树呢？</p>
+<h1 id="跳表的理解"><a href="#跳表的理解" class="headerlink" title="跳表的理解"></a>跳表的理解</h1><h2 id="跳表图示"><a href="#跳表图示" class="headerlink" title="跳表图示"></a>跳表图示</h2><p>对于单链表来讲，即使链表中存储的数据是有序的，如果想查找某个数据，也只能从头到尾遍历链表，时间复杂度为O(n)。</p>
+<p><img src="/2019/10/19/数据结构与算法之跳表/1.png" alt></p>
+<p>那么如何提高查找效率呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对链表建立一级“索引”，每两个结点提取一个节点到上一级，把抽出来的那一级叫做索引或索引层。down指针指向下一级节点。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/19/数据结构与算法之跳表/2.png" alt></p>
+<p>现在要查找结点16，可以先在索引层遍历，当遍历到索引中值为13的结点时，发现下一个结点时17，那么要查找的16肯定在这两个结点之间，通过索引层结点的down指针下降到原始链表，继续遍历。原来查找16，需要遍历10个结点，现在只需要遍历7个结点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">加一层索引之后，查找一个节点需要遍历的节点个数减少了，提高了查找效率。所以可以在第一级索引的基础上，再建立一层索引。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/19/数据结构与算法之跳表/3.png" alt></p>
+<p>新增一级索引后，再查找16，只需要遍历6次。</p>
+<p>给64个结点的链表，建立五级索引，如下图</p>
+<p><img src="/2019/10/19/数据结构与算法之跳表/4.png" alt></p>
+<p>没有索引时，查找62，需要遍历62个结点，现在只需要遍历11个结点。所以当链表的长度n比较大时，构建索引后，查找效率的提升会很明显。</p>
+<h2 id="跳表查询速度"><a href="#跳表查询速度" class="headerlink" title="跳表查询速度"></a>跳表查询速度</h2><h3 id="索引的级数"><a href="#索引的级数" class="headerlink" title="索引的级数"></a>索引的级数</h3><p>每两个结点抽出一个作为上一级索引的结点，那么第一级索引的结点个数大约为n/2，第二级索引的节点个数大约为n/4，第三级索引的节点个数大约时n/8，以此类推，第k级索引的节点个数为n/(2^k)。</p>
+<p>假设索引由h级，最高级的索引有2个结点，通过上面的公式可知n/(2^h)=2,从而 h=log2n - 1。如果包含原始链表层，整个跳表的高度就是log2n.</p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>如果每一层都要遍历m个结点，在跳表中查询一个数据的时间复杂度就为O(m*logn).</p>
+<p>那m值是多少呢？按照前面的索引结构，我们每一级索引最多只需要遍历3个结点，也就是说m=3.为什么呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">假设我们要找的数据是x，在k级索引中，遍历结点y后，发现x大于y，小于后面的结点z，所以通过y的down指针，从k级索引下降到k-1级索引。在k-1级索引中，y和z之间只有3个结点(包含y和z)，所以在k-1级最多只需要遍历3个结点，以此类推，每一级索引最多只需要遍历3个结点。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/19/数据结构与算法之跳表/5.png" alt></p>
+<p>通过分析，跳表中查询任意数据的时间复杂度是O(logn).和二分查找的时间复杂度相同。换句话说，我们是基于单链表实现了二分查找，这种效率的提升，前提是建立了很多级索引，也就是空间换时间的设计思路。</p>
+<h3 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h3><p>假设原始链表的大小为n，那么第一级索引大约有n/2个结点，第二级索引大约有n/4个结点，以此类推，每上升一级就减少一半，直到剩下2个结点</p>
+<p><img src="/2019/10/19/数据结构与算法之跳表/6.png" alt></p>
+<p>这几级索引的结点总和为n/2+n/4+……+4+2=n-2，所以跳表的空间复杂度为O(n).</p>
+<p>有没有办法可以降低索引占用的内存空间呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">之前我们是每两个节点抽一个结点到上一级索引，如果每三个或每五个结点抽一个节点到上一级索引，是不是就简化了索引结点个数。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/19/数据结构与算法之跳表/7.png" alt></p>
+<p><img src="/2019/10/19/数据结构与算法之跳表/8.png" alt></p>
+<p>通过等比数列求和，总的索引结点大约是n/2个，尽管空间复杂度仍是O(n)，但是比上面的索引构建方法减少了一半的索引节点存储空间。</p>
+<h1 id="跳表的操作"><a href="#跳表的操作" class="headerlink" title="跳表的操作"></a>跳表的操作</h1><p>上面是跳表的查找操作，时间复杂度为O(logn)。跳表还支持动态的插入和删除操作，而且插入和删除的时间复杂度也是O(logn)。</p>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>查找某个结点的时间复杂度是O(logn)，所以查找某个数据应该插入的位置，方法类似，时间复杂度也是O(logn)</p>
+<p><img src="/2019/10/19/数据结构与算法之跳表/9.png" alt></p>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>如果这个结点在索引中也出现了，除了要删除原始链表中的结点，还要删除索引中。单链表中的删除操作需要拿到要删除结点的前驱结点，通过指针操作完成删除。所以在查找要删除结点的时候，一定要获取前驱结点。</p>
+<h2 id="跳表索引动态更新"><a href="#跳表索引动态更新" class="headerlink" title="跳表索引动态更新"></a>跳表索引动态更新</h2><p>当我们不停的往跳表里插入数据时，如果不更新索引，可能出现某2个索引节点之间的数据非常多的情况。极端情况下，跳表还会退化成为单链表。</p>
+<p><img src="/2019/10/19/数据结构与算法之跳表/10.png" alt></p>
+<p>红黑树、AVL树这样的平衡二叉树，是通过左右旋的方式保持左右子树的大小平衡，跳表是通过随机函数来维护前面提到的“平衡性”。</p>
+<p>当我们往跳表里插入数据的时候，可以选择同时将这个数据插入到部分索引层中，通过一个随机函数，来决定将这个结点插入到那几级索引中。</p>
+<p>比如随机函数生了值K，那就将这个结点添加到第一级到第K级这K级索引中。</p>
+<p><img src="/2019/10/19/数据结构与算法之跳表/11.png" alt></p>
+<h1 id="跳表的实现"><a href="#跳表的实现" class="headerlink" title="跳表的实现"></a>跳表的实现</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> skiplist;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 跳表的一种实现方法。</span></span><br><span class="line"><span class="comment"> * 跳表中存储的是正整数，并且存储的是不重复的。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Author：ZHENG</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SkipList</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> SKIPLIST_P = <span class="number">0.5f</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_LEVEL = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> levelCount = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> Node head = <span class="keyword">new</span> Node();  <span class="comment">// 带头链表</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Node <span class="title">find</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">    Node p = head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = levelCount - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">      <span class="keyword">while</span> (p.forwards[i] != <span class="keyword">null</span> &amp;&amp; p.forwards[i].data &lt; value) &#123;</span><br><span class="line">        p = p.forwards[i];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (p.forwards[<span class="number">0</span>] != <span class="keyword">null</span> &amp;&amp; p.forwards[<span class="number">0</span>].data == value) &#123;</span><br><span class="line">      <span class="keyword">return</span> p.forwards[<span class="number">0</span>];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> level = randomLevel();</span><br><span class="line">    Node newNode = <span class="keyword">new</span> Node();</span><br><span class="line">    newNode.data = value;</span><br><span class="line">    newNode.maxLevel = level;</span><br><span class="line">    Node update[] = <span class="keyword">new</span> Node[level];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; level; ++i) &#123;</span><br><span class="line">      update[i] = head;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// record every level largest value which smaller than insert value in update[]</span></span><br><span class="line">    Node p = head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">      <span class="keyword">while</span> (p.forwards[i] != <span class="keyword">null</span> &amp;&amp; p.forwards[i].data &lt; value) &#123;</span><br><span class="line">        p = p.forwards[i];</span><br><span class="line">      &#125;</span><br><span class="line">      update[i] = p;<span class="comment">// use update save node in search path</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// in search path node next node become new node forwords(next)</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; level; ++i) &#123;</span><br><span class="line">      newNode.forwards[i] = update[i].forwards[i];</span><br><span class="line">      update[i].forwards[i] = newNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// update node hight</span></span><br><span class="line">    <span class="keyword">if</span> (levelCount &lt; level) levelCount = level;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">    Node[] update = <span class="keyword">new</span> Node[levelCount];</span><br><span class="line">    Node p = head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = levelCount - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">      <span class="keyword">while</span> (p.forwards[i] != <span class="keyword">null</span> &amp;&amp; p.forwards[i].data &lt; value) &#123;</span><br><span class="line">        p = p.forwards[i];</span><br><span class="line">      &#125;</span><br><span class="line">      update[i] = p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (p.forwards[<span class="number">0</span>] != <span class="keyword">null</span> &amp;&amp; p.forwards[<span class="number">0</span>].data == value) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = levelCount - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (update[i].forwards[i] != <span class="keyword">null</span> &amp;&amp; update[i].forwards[i].data == value) &#123;</span><br><span class="line">          update[i].forwards[i] = update[i].forwards[i].forwards[i];</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (levelCount&gt;<span class="number">1</span>&amp;&amp;head.forwards[levelCount]==<span class="keyword">null</span>)&#123;</span><br><span class="line">      levelCount--;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 理论来讲，一级索引中元素个数应该占原始数据的 50%，二级索引中元素个数占 25%，三级索引12.5% ，一直到最顶层。</span></span><br><span class="line">  <span class="comment">// 因为这里每一层的晋升概率是 50%。对于每一个新插入的节点，都需要调用 randomLevel 生成一个合理的层数。</span></span><br><span class="line">  <span class="comment">// 该 randomLevel 方法会随机生成 1~MAX_LEVEL 之间的数，且 ：</span></span><br><span class="line">  <span class="comment">//        50%的概率返回 1</span></span><br><span class="line">  <span class="comment">//        25%的概率返回 2</span></span><br><span class="line">  <span class="comment">//      12.5%的概率返回 3 ...</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">randomLevel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> level = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (Math.random() &lt; SKIPLIST_P &amp;&amp; level &lt; MAX_LEVEL)</span><br><span class="line">      level += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> level;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Node p = head;</span><br><span class="line">    <span class="keyword">while</span> (p.forwards[<span class="number">0</span>] != <span class="keyword">null</span>) &#123;</span><br><span class="line">      System.out.print(p.forwards[<span class="number">0</span>] + <span class="string">" "</span>);</span><br><span class="line">      p = p.forwards[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> data = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> Node forwards[] = <span class="keyword">new</span> Node[MAX_LEVEL];</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> maxLevel = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">      builder.append(<span class="string">"&#123; data: "</span>);</span><br><span class="line">      builder.append(data);</span><br><span class="line">      builder.append(<span class="string">"; levels: "</span>);</span><br><span class="line">      builder.append(maxLevel);</span><br><span class="line">      builder.append(<span class="string">" &#125;"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> builder.toString();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="为什么Redis使用跳表来实现有序集合"><a href="#为什么Redis使用跳表来实现有序集合" class="headerlink" title="为什么Redis使用跳表来实现有序集合"></a>为什么Redis使用跳表来实现有序集合</h1><p>Redis中的有序集合支持的核心操作主要有以下几个：</p>
+<ul>
+<li>插入一个数据</li>
+<li>删除一个数据</li>
+<li>查找一个数据</li>
+<li>按照区间查找数据</li>
+<li>迭代输出有序序列</li>
+</ul>
+<p>其中插入、删除、查找以及迭代输出有序序列，红黑树也可以完成，时间复杂度与跳表相同，但是按照区间查找数据这个操作，红黑树没有跳表效率高。</p>
+<p>按照去检查找数据这个操作，跳表可以以O(logn)的时间复杂度定位区间起点，然后在原始链表中顺序遍历就可以了。</p>
+<p>还有其他的原因，比如跳表更容易代码实现，更灵活。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/19/数据结构与算法之跳表/" title="为什么Redis一定要用跳表来实现有序集合">http://yoursite.com/2019/10/19/数据结构与算法之跳表/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/跳表/" rel="tag"># 跳表</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/18/进程/" rel="next" title="进程">
+                  <i class="fa fa-chevron-left"></i> 进程
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/20/数据结构与算法之散列表/" rel="prev" title="散列表">
+                  散列表 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#跳表的理解"><span class="nav-number">1.</span> <span class="nav-text">跳表的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#跳表图示"><span class="nav-number">1.1.</span> <span class="nav-text">跳表图示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳表查询速度"><span class="nav-number">1.2.</span> <span class="nav-text">跳表查询速度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引的级数"><span class="nav-number">1.2.1.</span> <span class="nav-text">索引的级数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度"><span class="nav-number">1.2.2.</span> <span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间复杂度"><span class="nav-number">1.2.3.</span> <span class="nav-text">空间复杂度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跳表的操作"><span class="nav-number">2.</span> <span class="nav-text">跳表的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入"><span class="nav-number">2.1.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除"><span class="nav-number">2.2.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳表索引动态更新"><span class="nav-number">2.3.</span> <span class="nav-text">跳表索引动态更新</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跳表的实现"><span class="nav-number">3.</span> <span class="nav-text">跳表的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么Redis使用跳表来实现有序集合"><span class="nav-number">4.</span> <span class="nav-text">为什么Redis使用跳表来实现有序集合</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

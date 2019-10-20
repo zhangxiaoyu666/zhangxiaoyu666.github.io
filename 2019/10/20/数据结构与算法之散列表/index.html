@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="散列思想散列表的英文叫“Hash Table”，平时也叫它“哈希表”。 1散列表用的是数组支持按照下标随机访问数据的特性，时间复杂度是O(1),所以散列表其实就是数组的一种扩展，由数组演化而来。">
+<meta name="keywords" content="散列表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="散列表">
+<meta property="og:url" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="散列思想散列表的英文叫“Hash Table”，平时也叫它“哈希表”。 1散列表用的是数组支持按照下标随机访问数据的特性，时间复杂度是O(1),所以散列表其实就是数组的一种扩展，由数组演化而来。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/4.png">
+<meta property="og:updated_time" content="2019-10-20T11:38:23.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="散列表">
+<meta name="twitter:description" content="散列思想散列表的英文叫“Hash Table”，平时也叫它“哈希表”。 1散列表用的是数组支持按照下标随机访问数据的特性，时间复杂度是O(1),所以散列表其实就是数组的一种扩展，由数组演化而来。">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/20/数据结构与算法之散列表/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>散列表 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">19</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">9</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">23</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/20/数据结构与算法之散列表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">散列表
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-20 15:31:48 / 修改时间：19:38:23" itemprop="dateCreated datePublished" datetime="2019-10-20T15:31:48+08:00">2019-10-20</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="散列思想"><a href="#散列思想" class="headerlink" title="散列思想"></a>散列思想</h1><p>散列表的英文叫“Hash Table”，平时也叫它“哈希表”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">散列表用的是数组支持按照下标随机访问数据的特性，时间复杂度是O(1),所以散列表其实就是数组的一种扩展，由数组演化而来。</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>我们通过散列函数把元素的键值映射为下标，然后将数据存储在数组中对应下标的位置，当按照键值查询元素时，用相同的散列函数，将键值转化为数组下标，从对应的数组下标的位置取数据。</p>
+<h2 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h2><p>顾名思义，它是一个函数，可以把它定义成hash(key)，其中key表示元素的键值，hash(key)的值表示经过散列函数计算得到的散列值。</p>
+<h3 id="散列函数设计的基本要求"><a href="#散列函数设计的基本要求" class="headerlink" title="散列函数设计的基本要求"></a>散列函数设计的基本要求</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.散列函数计算得到的散列值是一个非负整数；</span><br><span class="line">2.如果key1 = key2，那hash(key1) = hash(key2)</span><br><span class="line">3.如果key1 != key2，那hash(key1) != hash(key2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="散列冲突"><a href="#散列冲突" class="headerlink" title="散列冲突"></a>散列冲突</h3><p>常用的散列冲突解决方法有两类，开放寻址法和链表法。java中的LinkedHashMap采用链表法解决冲突。ThreadLocalMap通过线性探测的开放寻址法来解决冲突。</p>
+<h4 id="开放寻址法"><a href="#开放寻址法" class="headerlink" title="开放寻址法"></a>开放寻址法</h4><h5 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果出现了散列冲突，就重新探测一个空闲位置，将其插入。</span><br></pre></td></tr></table></figure>
+
+<h5 id="探测方法"><a href="#探测方法" class="headerlink" title="探测方法"></a>探测方法</h5><ul>
+<li>探测方法：线性探测</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果某个数据经过散列函数散列之后，存储位置已经被占用了，就从当前位置开始，依次往后查找，看是否有空闲位置，直到找到为止。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/20/数据结构与算法之散列表/1.png" alt></p>
+<p>线性探测存在很大的问题，当散列表中插入的数据越来越多时，散列冲突发生的可能性越来越大，空闲位置越来越少，线性探测的时间越来越久。极端情况下，需要探测整个散列表，所以最坏情况下时间复杂度为O(n)。同样，在删除和查找时，也有可能线性探测整张散列表，才能找到要查找和删除的数据。</p>
+<ul>
+<li>探测方法二：二次探测</li>
+</ul>
+<p>二次探测和线性探测很像，线性探测每次探测的步长是1，那它探测的下标序列为hash(key)+0,hash(key)+1,hash(key)+2,……</p>
+<p>而二次探测的探测步长变成原来的“二次方”，也就是说它的探测下标序列是hash(key)+0,hash(key)+1^2,hash(key)+2^2,……</p>
+<ul>
+<li>探测方法三：双重散列</li>
+</ul>
+<p>双重散列意思是不仅要使用一个散列函数。我们使用一组散列函数hash1(key),hash2(key),hash3(key)……先用第一个散列函数，如果计算得到的存储位置已经被占用，再用第二个散列函数，以此类推，直到找到空闲的存储位置。</p>
+<h5 id="开放寻址法优缺点"><a href="#开放寻址法优缺点" class="headerlink" title="开放寻址法优缺点"></a>开放寻址法优缺点</h5><ul>
+<li>优点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.散列表中的数据都存储在数组中，可以有效的利用CPU缓存加快查询速度。</span><br><span class="line">2.开放寻址法实现的散列表，序列化起来比较简单。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>缺点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.删除数据比较麻烦，需要特殊标记已经删除掉的数据</span><br><span class="line">2.所有的数据都存储在数组中，比起链表法，冲突的代价更高，所以导致使用开放寻址法解决冲突的散列表，装载因子的上限不能太大，这也导致这种方法更浪费内存空间。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>总结</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当数据量比较小、装载因子小的时候，适合采用开放寻址法。</span><br></pre></td></tr></table></figure>
+
+<h5 id="装载因子"><a href="#装载因子" class="headerlink" title="装载因子"></a>装载因子</h5><p>不管采用哪种探测方法，当散列表中空闲位置不多的时候，散列冲突的概率会大大提高。为了尽可能保证散列表的操作效率，一般情况下，尽可能保证散列表中有一定比例的空闲槽位。用装载因子来表示空位的多少。</p>
+<p>装载因子计算公式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">散列表的装载因子 = 填入表中的元素个数 / 散列表的长度</span><br></pre></td></tr></table></figure>
+
+<p>装载因子越大，说明空闲位置越少，冲突越多，散列表的性能会下降。</p>
+<h4 id="链表法"><a href="#链表法" class="headerlink" title="链表法"></a>链表法</h4><p>链表法是一种更加常见的散列冲突解决办法。链表法对内存的利用率比开放寻址法要高，因为链表节点可以在需要的时候在创建，不需要事先申请好。</p>
+<h5 id="核心思想-1"><a href="#核心思想-1" class="headerlink" title="核心思想"></a>核心思想</h5><p><img src="/2019/10/20/数据结构与算法之散列表/2.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">插入数据时，只需要通过散列函数计算出对应的散列槽位，将其插入到对应的链表中即可，所以插入的时间复杂度O(1).</span><br><span class="line">删除或查找一个元素时，同样通过散列函数计算出对应的槽，然后遍历链表查找或者删除。这两个操作的时间复杂度与链表的长度k成正比，也就是O(k).对于散列均匀的散列函数，理论上，k = n/m,其中n表示散列中数据的个数，m表示散列表中“槽”的个数。</span><br></pre></td></tr></table></figure>
+
+<h5 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h5><ul>
+<li>优点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.内存利用率高于开放寻址法。</span><br><span class="line">2.对大装载因子的容忍度要高。开放寻址法只能适用于装载因子小于1的情况，对于链表法来说，只要散列函数的值随机均匀，即使装载因子变成10，也就是链表的长度变长了而已。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>缺点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.对于比较小的对象的存储，链表法比较消耗内存，还有可能会让内存的消耗翻倍。</span><br><span class="line">2.因为链表中的结点是零散分布在内存中的，不是连续的，所以对CPU缓存是不友好的，对执行效率也有一定的影响。如果存储的是大对象，就是说存储的对象的大小远远大于一个指针的大小，那链表中指针的内存消耗在大对象面前就可以忽略了。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>总结</li>
+</ul>
+<p>可以对链表法稍加改进，可以实现一个更加高效的散列表，将链表法中的链表改造为其他高效的动态数据结构，比如跳表、红黑树等。</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/5.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">基于链表的散列冲突处理方法比较适合存储大对象、大数据量的散列表，而且比起开放寻址法，他更加灵活，支持更多的优化策略。</span><br></pre></td></tr></table></figure>
+
+<h1 id="word文档中单词拼写检查功能时如何实现的？"><a href="#word文档中单词拼写检查功能时如何实现的？" class="headerlink" title="word文档中单词拼写检查功能时如何实现的？"></a>word文档中单词拼写检查功能时如何实现的？</h1><p>常用的英文单词由20万个左右，假设单词的平均长度是10个字母，平均一个单词占用10个字节的内存空间，那这20万个英文单词大约占2MB的存储空间，就算放大10倍，也就是20MB，所以我们可以使用散列表来存储整个英文单词词典。</p>
+<p>当用户输入某个英文单词时，到散列表中查找，如果查找到，说明拼写正确，如果没有查找到，说明拼写可能有误，给予提示。</p>
+<h1 id="设计散列函数"><a href="#设计散列函数" class="headerlink" title="设计散列函数"></a>设计散列函数</h1><h2 id="散列函数的要求"><a href="#散列函数的要求" class="headerlink" title="散列函数的要求"></a>散列函数的要求</h2><p>散列函数的设计不能太复杂，过于复杂的散列函数，势必会消耗很多计算时间，简介影响散列表的性能；散列函数生成的值要尽可能随机且均匀分布没这样才能避免或者最小化散列冲突。</p>
+<p>所以综合考虑的关键因素有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键字的长度、特点、分布、散列表的大小</span><br></pre></td></tr></table></figure>
+
+<h2 id="常用散列函数的设计方法"><a href="#常用散列函数的设计方法" class="headerlink" title="常用散列函数的设计方法"></a>常用散列函数的设计方法</h2><ul>
+<li>数据分析法</li>
+</ul>
+<p>比如学生的编号，通过分析编号的特征，把编号中的后两位作为散列值，取手机号的后四位作为散列值等。</p>
+<ul>
+<li>ASCII码值“进位”相加，然后再跟散列表的大小求余、取模，作为散列值。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hash(&quot;nice&quot;)=((&quot;n&quot; - &quot;a&quot;) * 26*26*26 + (&quot;i&quot; - &quot;a&quot;)*26*26 + (&quot;c&quot; - &quot;a&quot;)*26+ (&quot;e&quot;-&quot;a&quot;)) / 78978</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直接寻址法</li>
+<li>平方取中法</li>
+<li>折叠法</li>
+<li>随机数法</li>
+</ul>
+<h1 id="装载因子取值"><a href="#装载因子取值" class="headerlink" title="装载因子取值"></a>装载因子取值</h1><p>装载因子过大时，可以动态扩容，重新申请一个更大的散列表，将数据搬移到新的散列表中。假设每次扩容都申请一个原来散列表大小两倍的空间，如果原来散列表的装载因子是0.8，那么经过扩容后，新散列表的装载因子就降为原来的一半，变成了0.4。</p>
+<p>针对数组的扩容，数据搬移操作比较简单，但是针对散列表的扩容，数据搬移操作要复杂很多。因为散列表的大小变了，数据存储位置可能也会改变，需要通过散列函数重新计算每个数据的存储位置。</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/3.png" alt></p>
+<p>插入一个数据，最好的情况下，不需要扩容，时间复杂度位O(1),最坏情况下，装载因子过大，启动扩容，需要重新申请内存空间，重新计算哈希值，并搬移数据，所以时间复杂度为O(n).用摊还分析法，均摊情况下，时间复杂度接近最好情况，为O(1)。</p>
+<p>对于动态散列表，除了扩容，还有缩容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">装载因子的设置要权衡时间、空间复杂度，如果内存空间不紧张，对执行效率要求很高，可以降低装载因子的阈值；相反如果内存空间很紧张，对执行效率要求又不高，可以增加负载因子的值，甚至可以大于1.</span><br></pre></td></tr></table></figure>
+
+<h1 id="解决低效扩容"><a href="#解决低效扩容" class="headerlink" title="解决低效扩容"></a>解决低效扩容</h1><p>插入一个数据，最好的情况下，不需要扩容，时间复杂度位O(1),最坏情况下，装载因子过大，启动扩容，需要重新申请内存空间，重新计算哈希值，并搬移数据，所以时间复杂度为O(n)。</p>
+<p>为了解决一次性扩容耗时过多的情况，将扩容操作穿插在插入操作的过程中，分批完成。当装载因子触达阈值之后，我们只申请新空间，但不将老的数据搬移到新散列表中。当有新数据插入时，将新数据插入到新散列表中，并从老的散列表中拿出一个数据放入到新散列表中。每次插入一个数据到新的散列表，就重复上面的过程。经过多次插入操作之后，旧的散列表中的数据就一点一点全部搬移到新散列表中了，没有集中一次性数据的搬移，插入操作都变得很快了。</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/4.png" alt></p>
+<p>这期间的查询操作，为了兼顾新、旧散列表中的数据，先从新散列表中查找，如果没有找到，再去旧的散列表中查找。</p>
+<p>通过这样的均摊方法，将一次性扩容的代价均摊到多次插入操作中，就避免了一次性扩容耗时过多的情况。这种实现方式，任何情况下，插入一个数据的时间复杂度都是O(1).</p>
+<h1 id="HashMap的应用"><a href="#HashMap的应用" class="headerlink" title="HashMap的应用"></a>HashMap的应用</h1><p>HashMap默认的初始化大小为16；</p>
+<p>最大的装载因子为0.75，当HashMap中元素个数超过0.75*capacity的时候，就会启动扩容，每次扩容为原来的2倍；</p>
+<p>HashMap底层采用链表法来解决冲突。在JDK8版本中，当链表长度太长，链表就转换为红黑树。（详细参考“集合章节”）</p>
+<p>HashMap的散列函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int hash(Object key) &#123;</span><br><span class="line">    int h = key.hashCode()；</span><br><span class="line">    return (h ^ (h &gt;&gt;&gt; 16)) &amp; (capitity -1); //capicity 表示散列表的大小</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>hashCode()返回的是Java对象的hash code</p>
+<p>String类型的对象的hashcode()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public int hashCode() &#123;</span><br><span class="line">  int var1 = this.hash;</span><br><span class="line">  if(var1 == 0 &amp;&amp; this.value.length &gt; 0) &#123;</span><br><span class="line">    char[] var2 = this.value;</span><br><span class="line">    for(int var3 = 0; var3 &lt; this.value.length; ++var3) &#123;</span><br><span class="line">      var1 = 31 * var1 + var2[var3];</span><br><span class="line">    &#125;</span><br><span class="line">    this.hash = var1;</span><br><span class="line">  &#125;</span><br><span class="line">  return var1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="工业级的散列表"><a href="#工业级的散列表" class="headerlink" title="工业级的散列表"></a>工业级的散列表</h1><h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
+<li>支持快速的查询、插入、删除操作</li>
+<li>内存占用合理，不能浪费过多内存空间</li>
+<li>性能稳定，极端情况下，散列表的性能也不会退化到无法接受的情况。</li>
+</ul>
+<h2 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h2><ul>
+<li>设计合适的散列函数</li>
+<li>定义装载因子的阈值，并设计动态扩容策略</li>
+<li>选择合适的散列冲突解决方法</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/20/数据结构与算法之散列表/" title="散列表">http://yoursite.com/2019/10/20/数据结构与算法之散列表/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/散列表/" rel="tag"># 散列表</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/19/数据结构与算法之跳表/" rel="next" title="为什么Redis一定要用跳表来实现有序集合">
+                  <i class="fa fa-chevron-left"></i> 为什么Redis一定要用跳表来实现有序集合
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#散列思想"><span class="nav-number">1.</span> <span class="nav-text">散列思想</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#散列函数"><span class="nav-number">1.1.</span> <span class="nav-text">散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列函数设计的基本要求"><span class="nav-number">1.1.1.</span> <span class="nav-text">散列函数设计的基本要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#散列冲突"><span class="nav-number">1.1.2.</span> <span class="nav-text">散列冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开放寻址法"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">开放寻址法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#核心思想"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#探测方法"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">探测方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#开放寻址法优缺点"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">开放寻址法优缺点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#装载因子"><span class="nav-number">1.1.2.1.4.</span> <span class="nav-text">装载因子</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链表法"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">链表法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#核心思想-1"><span class="nav-number">1.1.2.2.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优缺点"><span class="nav-number">1.1.2.2.2.</span> <span class="nav-text">优缺点</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word文档中单词拼写检查功能时如何实现的？"><span class="nav-number">2.</span> <span class="nav-text">word文档中单词拼写检查功能时如何实现的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计散列函数"><span class="nav-number">3.</span> <span class="nav-text">设计散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#散列函数的要求"><span class="nav-number">3.1.</span> <span class="nav-text">散列函数的要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用散列函数的设计方法"><span class="nav-number">3.2.</span> <span class="nav-text">常用散列函数的设计方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装载因子取值"><span class="nav-number">4.</span> <span class="nav-text">装载因子取值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决低效扩容"><span class="nav-number">5.</span> <span class="nav-text">解决低效扩容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashMap的应用"><span class="nav-number">6.</span> <span class="nav-text">HashMap的应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工业级的散列表"><span class="nav-number">7.</span> <span class="nav-text">工业级的散列表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">7.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">7.2.</span> <span class="nav-text">如何实现</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

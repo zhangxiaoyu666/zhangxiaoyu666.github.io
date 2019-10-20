@@ -66,7 +66,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之二分查找/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之二分查找/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/17/数据结构与算法之二分查找/3.png">
-<meta property="og:updated_time" content="2019-10-19T12:00:51.714Z">
+<meta property="og:updated_time" content="2019-10-19T12:39:41.648Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="二分查找">
 <meta name="twitter:description" content="二分查找二分查找思想二分查找针对的是一个有序的数据集合，查找思想类似分治思想，每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0.">
@@ -212,7 +212,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">17</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">19</span></a>
 
   </li>
       
@@ -256,7 +256,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">21</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">23</span></a>
 
   </li>
       
@@ -385,7 +385,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-19 20:00:51" itemprop="dateModified" datetime="2019-10-19T20:00:51+08:00">2019-10-19</time>
+                <time title="修改时间：2019-10-19 20:39:41" itemprop="dateModified" datetime="2019-10-19T20:39:41+08:00">2019-10-19</time>
               </span>
             
           
@@ -455,6 +455,8 @@
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>凡是能用二分查找解决的，我们应该更倾向于使用散列表或者二叉查找树。二叉查找树更适合用在“近似”查找问题，在这类问题上，二叉查找的优势更加明显。</p>
 <h1 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h1><p>在循环数组中，比如4，5，6，1，2，3，实现求“值等于给定值”的二分查找算法。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">循环数组存在一个性质：以数组中间点为分区，会将数组分成一个有序数组和一个循环数组。</span><br><span class="line">如果首元素小于mid，说明前半部分是有序的，后半部分是循环数组；</span><br><span class="line">如果首元素大于mid，说明后半部分是有序的，前半部分是循环有序数组；</span><br><span class="line">如果目标元素在有序数组中，使用二分查找；</span><br><span class="line">如果目标元素在循环有序数组中，设定数组边界后，使用上面的方法继续查找。</span><br><span class="line">时间复杂度为O(logn)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">search</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> low = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> high = nums.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(low &lt;= high)&#123;</span><br><span class="line">            <span class="keyword">int</span> mid = low + ((high - low ) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span>(nums[mid] == target)&#123;</span><br><span class="line">                <span class="keyword">return</span> mid;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums[low] &gt; nums[mid])&#123;</span><br><span class="line">                <span class="comment">//说明low~mid 是循环有序数组，mid+1~high为有序数组</span></span><br><span class="line">                <span class="comment">//有序数组使用二分查找</span></span><br><span class="line">                <span class="keyword">int</span> low1 = mid+<span class="number">1</span>;</span><br><span class="line">                <span class="keyword">int</span> high1 = high;</span><br><span class="line">                <span class="keyword">while</span>(low1 &lt;= high1)&#123;</span><br><span class="line">                    <span class="keyword">int</span> mid1 = low1 + ((high1 - low1) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span>(nums[mid1] == target)&#123;</span><br><span class="line">                        <span class="keyword">return</span> mid1;</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums[mid1] &gt; target)&#123;</span><br><span class="line">                        high1 = mid1-<span class="number">1</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        low1 = mid1 +<span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//循环有序数组</span></span><br><span class="line">                high = mid;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums[low] &lt; nums[mid])&#123;</span><br><span class="line">                <span class="comment">//说明前半部分是有序数组，后半部分是循环数组</span></span><br><span class="line">                <span class="keyword">int</span> low2 = low;</span><br><span class="line">                <span class="keyword">int</span> high2 = mid;</span><br><span class="line">                <span class="keyword">while</span>(low2 &lt;= high2)&#123;</span><br><span class="line">                    <span class="keyword">int</span> mid2 = low2 + ((high2 - low2) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span>(nums[mid2] == target)&#123;</span><br><span class="line">                        <span class="keyword">return</span> mid2;</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums[mid2] &gt; target)&#123;</span><br><span class="line">                        high2 = mid2 -<span class="number">1</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        low2 = mid2+<span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                low = mid+<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -575,7 +577,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -601,7 +603,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
