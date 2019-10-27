@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="树">
+<meta name="keywords" content="二叉树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构与算法之二叉树">
+<meta property="og:url" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="树">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/11.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/12.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/13.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/14.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/15.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/16.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/17.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/18.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/19.png">
+<meta property="og:updated_time" content="2019-10-27T05:41:38.968Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构与算法之二叉树">
+<meta name="twitter:description" content="树">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>数据结构与算法之二叉树 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">22</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">10</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">27</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">数据结构与算法之二叉树
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-23 15:13:44" itemprop="dateCreated datePublished" datetime="2019-10-23T15:13:44+08:00">2019-10-23</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-27 13:41:38" itemprop="dateModified" datetime="2019-10-27T13:41:38+08:00">2019-10-27</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p><img src="/2019/10/23/数据结构与算法之二叉树/1.png" alt></p>
+<a id="more"></a>
+
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><p><img src="/2019/10/23/数据结构与算法之二叉树/2.png" alt></p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/3.png" alt></p>
+<h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><p><img src="/2019/10/23/数据结构与算法之二叉树/4.png" alt></p>
+<p>完全二叉树还有一个特点是，除了最后一层，其他层的节点个数都要达到最大。</p>
+<h2 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a>完全二叉树</h2><p>存储一个二叉树的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.基于指针或者引用的二叉链式存储法</span><br><span class="line">2.基于数组的顺序存储法</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>链式存储法</li>
+</ul>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/5.png" alt></p>
+<ul>
+<li>顺序存储法</li>
+</ul>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/6.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">节点X存储在数组中下标为i的位置，</span><br><span class="line">则其左子节点存储的位置为2*i，</span><br><span class="line">右子节点的存储位置为2*i+1.</span><br><span class="line">反过来，下标为i/2的位置就是其父节点。</span><br><span class="line">通常，根节点会存储在下标为1的位置。</span><br></pre></td></tr></table></figure>
+
+<p>如果某棵二叉树是一颗完全二叉树，那用数组存储无疑是最节省存储的一种方式。</p>
+<h2 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h2><p>前序遍历：先打印这个节点，打印左子树，最后打印右子树</p>
+<p>中序遍历：先打印左子树，打印这个节点，最后打印右子树</p>
+<p>后序遍历：先打印左子树，打印右子树，最后打印这个节点</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/7.png" alt></p>
+<p>二叉树的前、中、后序遍历就是一个递归的过程</p>
+<p>首先确定递推公式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">前序遍历的递推公式：</span><br><span class="line">preOrder(r) = print r-&gt;preOrder(r-&gt;left)-&gt;preOrder(r-&gt;right)</span><br><span class="line"></span><br><span class="line">中序遍历的递推公式：</span><br><span class="line">inOrder(r) = inOrder(r-&gt;left)-&gt;print r-&gt;inOrder(r-&gt;right)</span><br><span class="line"></span><br><span class="line">后序遍历的递推公式：</span><br><span class="line">postOrder(r) = postOrder(r-&gt;left)-&gt;postOrder(r-&gt;right)-&gt;print r</span><br></pre></td></tr></table></figure>
+
+<p>实现代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void preOrder(Node* root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  print root // 此处为伪代码，表示打印 root 节点</span><br><span class="line">  preOrder(root-&gt;left);</span><br><span class="line">  preOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void inOrder(Node* root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  inOrder(root-&gt;left);</span><br><span class="line">  print root // 此处为伪代码，表示打印 root 节点</span><br><span class="line">  inOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void postOrder(Node* root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  postOrder(root-&gt;left);</span><br><span class="line">  postOrder(root-&gt;right);</span><br><span class="line">  print root // 此处为伪代码，表示打印 root 节点</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>时间复杂度：O(n)</p>
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><ol>
+<li>给定一组数据，比如1，3，5，6，9，10，算一算可以构建出多少种不同的二叉树？</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果构建的为完全二叉树，可以将数据放到数组中，就可以将问题简化为数组内的元素有多少种组合方式，这样的话就是n！种。</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>层遍历如何实现？</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用队列，首先根节点入队，如果根节点不空，取出头结点，若左孩子存在就入队，否则什么也不做，右孩子同理，直到队列为空，则表示树的层次遍历结束。</span><br></pre></td></tr></table></figure>
+
+<h1 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h1><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在树中的任意一个节点，其左子树中的每个结点的值都要小于这个节点的值，右子树节点的值都大于这个节点的值。</span><br><span class="line">中序遍历二叉查找树，可以输出有序的数据序列，时间复杂度O(n)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/23/数据结构与算法之二叉树/8.png" alt></p>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>先取根节点，如果根节点等于要查找的数据，就返回。如果要查找的数据比根节点的值小，那么就往左子树中递归查找；如果要查找的数据比根节点的值大，那么就往右子树中递归查找。</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/9.png" alt></p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearchTree</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> Node tree;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Node <span class="title">find</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">    Node p = tree;</span><br><span class="line">    <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (data &lt; p.data) p = p.left;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (data &gt; p.data) p = p.right;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> data;</span><br><span class="line">    <span class="keyword">private</span> Node left;</span><br><span class="line">    <span class="keyword">private</span> Node right;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><p>二叉查找树的插入过程类似于查找操作。新插入的数据一般都是在叶子节点上，所以需要从根节点开始，依次比较要插入的数据和节点大小关系。</p>
+<p>如果要插入的数据比节点的数据大，并且节点的右子树为空，就将新数据直接插入到右子节点的位置；如果不为空，就再遍历右子树，查找插入位置。</p>
+<p>同理，如果要插入的数据比节点的数据小并且节点的左子树为空，就将新数据直接插入到左子节点的位置；如果不为空，就再遍历左子树，查找插入位置。</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/10.png" alt></p>
+<h4 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (tree == <span class="keyword">null</span>) &#123;</span><br><span class="line">    tree = <span class="keyword">new</span> Node(data);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Node p = tree;</span><br><span class="line">  <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (data &gt; p.data) &#123;</span><br><span class="line">      <span class="keyword">if</span> (p.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">        p.right = <span class="keyword">new</span> Node(data);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      p = p.right;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// data &lt; p.data</span></span><br><span class="line">      <span class="keyword">if</span> (p.left == <span class="keyword">null</span>) &#123;</span><br><span class="line">        p.left = <span class="keyword">new</span> Node(data);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      p = p.left;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><h4 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h4><p>删除操作比较复杂，针对要删除节点的子节点的个数不同，需要发三种情况来处理。</p>
+<ol>
+<li>如果要删除的节点没有子节点，直接将父节点中，指向要删除节点的指针位置为null</li>
+<li>如果要删除的节点只有一个子节点（只有左子节点或者只有右子节点），更新父结点中，指向要删除节点的指针，让它指向要删除节点的子节点就可以</li>
+<li>要删除的节点有两个子节点，需要找到这个节点的右子树中的最小节点，把他替换到要删除的节点上。然后再删除这个最小节点。</li>
+</ol>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/11.png" alt></p>
+<h4 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">  Node p = tree; <span class="comment">// p 指向要删除的节点，初始化指向根节点</span></span><br><span class="line">  Node pp = <span class="keyword">null</span>; <span class="comment">// pp 记录的是 p 的父节点</span></span><br><span class="line">  <span class="keyword">while</span> (p != <span class="keyword">null</span> &amp;&amp; p.data != data) &#123;</span><br><span class="line">    pp = p;</span><br><span class="line">    <span class="keyword">if</span> (data &gt; p.data) p = p.right;</span><br><span class="line">    <span class="keyword">else</span> p = p.left;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (p == <span class="keyword">null</span>) <span class="keyword">return</span>; <span class="comment">// 没有找到</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 要删除的节点有两个子节点</span></span><br><span class="line">  <span class="keyword">if</span> (p.left != <span class="keyword">null</span> &amp;&amp; p.right != <span class="keyword">null</span>) &#123; <span class="comment">// 查找右子树中最小节点</span></span><br><span class="line">    Node minP = p.right;</span><br><span class="line">    Node minPP = p; <span class="comment">// minPP 表示 minP 的父节点</span></span><br><span class="line">    <span class="keyword">while</span> (minP.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">      minPP = minP;</span><br><span class="line">      minP = minP.left;</span><br><span class="line">    &#125;</span><br><span class="line">    p.data = minP.data; <span class="comment">// 将 minP 的数据替换到 p 中</span></span><br><span class="line">    p = minP; <span class="comment">// 下面就变成了删除 minP 了</span></span><br><span class="line">    pp = minPP;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 删除节点是叶子节点或者仅有一个子节点</span></span><br><span class="line">  Node child; <span class="comment">// p 的子节点</span></span><br><span class="line">  <span class="keyword">if</span> (p.left != <span class="keyword">null</span>) child = p.left;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (p.right != <span class="keyword">null</span>) child = p.right;</span><br><span class="line">  <span class="keyword">else</span> child = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (pp == <span class="keyword">null</span>) tree = child; <span class="comment">// 删除的是根节点</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (pp.left == p) pp.left = child;</span><br><span class="line">  <span class="keyword">else</span> pp.right = child;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>删除操作还有一个非常简单、取巧的方法，就是单纯将要删除的节点标记为“已删除”，但不是真正从树中将这个节点删掉。</p>
+<h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><p>查找最大节点、最小节点】前驱结点、后继结点</p>
+<h2 id="支持重复数据的二叉查找树"><a href="#支持重复数据的二叉查找树" class="headerlink" title="支持重复数据的二叉查找树"></a>支持重复数据的二叉查找树</h2><p>实际软件开发中，在二叉查找树中存储的是一个包含很多字段的对象。利用对象的某个字段作为key来构建二叉查找树，将对象中的其他字段叫做卫星数据。</p>
+<p>如果存储的两个对象键值相同怎么办？</p>
+<p>方法一可以通过链表和支持动态扩容的数组等数据结构，把值相同的数据都存储在同一个节点上。</p>
+<p>方法二，每个结点仍然只存储一个数据，在查找插入位置的过程中，如果碰到一个节点的值，与要插入数据的值相同，就将这个要插入的数据放到这个节点的右子树，也就是说，把这个新插入的数据当作大于这个节点的值来处理。</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/12.png" alt></p>
+<p>当要查找数据的时候，遇到值相同的节点，并不停止查找，而是继续在右子树中查找，直到遇到叶子节点，才停止。这样就可以把键值等于要查找值的所有节点都找出来。</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/13.png" alt></p>
+<p>对于删除操作，需要先查找到每个要删除的节点，然后再按前面讲的删除操作的方法，依次删除。</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/14.png" alt></p>
+<h1 id="二叉查找树的时间复杂度分析"><a href="#二叉查找树的时间复杂度分析" class="headerlink" title="二叉查找树的时间复杂度分析"></a>二叉查找树的时间复杂度分析</h1><p>无论是插入、删除还是查找，时间复杂度都是跟树的高度成正比，也就是O(height).所以问题就转变成了，如何求一棵包含n个结点的完全二叉树的高度？</p>
+<p>书的高度等于最大层数-1，方便计算，转换成层来表示。</p>
+<p>包含n个结点的完全二叉树中，第一层包含1个结点，第二层包含两个节点，第三层包含4个结点，以此类推，下面一层的节点个数是上一层的2倍，第k层包含的节点个数就是2^(k-1).</p>
+<p>对于完全二叉树，最后一层的节点个数不遵守上面的规律。它包含的节点个数在1个到2^(L-1)个之间（假设最大层数是L）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">n &gt;= 1+2+4+8+...+2^(L-2)+1</span><br><span class="line">n &lt;= 1+2+4+8+...+2^(L-2)+2^(L-1)</span><br></pre></td></tr></table></figure>
+
+<p>借助等比数列求和公式，可以计算出L的范围是[log2(n+1),log2n+1],也就是说完全二叉树的高度小于等于log2n。</p>
+<h1 id="散列表vs二叉查找树"><a href="#散列表vs二叉查找树" class="headerlink" title="散列表vs二叉查找树"></a>散列表vs二叉查找树</h1><p>散列表的插入、删除和查找操作的时间复杂度可以做到O(1),二叉查找树在比较平衡的情况下，插入、删除、查找操作的时间复杂度才是O(logn),相对散列表，好像并没有什么优势。为什么还要使用二叉查找树呢？</p>
+<ul>
+<li>散列表中的数据是无序存储的，要输出有序数据，需要先进行排序。二叉查找树，只需要中序遍历，就可以在O(n)的时间复杂度内输出有序数据。</li>
+<li>散列表扩容耗时严重，而且遇到散列冲突时，性能不稳定。二叉查找树的时间复杂度稳定在O(logn).</li>
+<li>尽管散列表的查找等操作时间复杂度是常量级的，但是因为哈希冲突，这个常量并不一定比logn小，所以实际查找到的速度不一定比O(logn)快，加上哈希函数的耗时，也不一定比平衡二叉查找树的效率高。</li>
+<li>散列表的构造要比二叉查找树复杂。对于散列表的构造需要考虑散列函数的设计、冲突解决的办法、扩容、缩容等。平衡二叉树的构造只需要考虑平衡性。</li>
+<li>·为了避免过多的散列冲突，散列表的装载因子不能太大，特别是基于开放寻址法解决散列冲突的散列表。</li>
+</ul>
+<h1 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h1><p>平衡二叉树：二叉树中任意一个节点的左右子树的高度相差不能大于1.</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/15.png" alt></p>
+<h1 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h1><h2 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h2><p>红黑树是一种不严格的平衡二叉查找树。</p>
+<p>红黑树：树中的节点一类被标记为黑色，一类被标记为红色。</p>
+<ul>
+<li>根节点是黑色的</li>
+<li>每个叶子节点都是黑色的空节点，也就是说，叶子节点不存储数据</li>
+<li>任何相邻的节点都不能同时为红色，也就是说，红色节点是被黑色节点隔开的</li>
+<li>每个结点，从该节点到达其可达叶子节点的所有路径，都包含相同数目的黑色节点</li>
+</ul>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/16.png" alt></p>
+<h2 id="红黑树高度"><a href="#红黑树高度" class="headerlink" title="红黑树高度"></a>红黑树高度</h2><p>一棵及其平衡的二叉树的高度大概是log2n，所以证明红黑树是近似平衡的，需要分析红黑树的高度是否比较稳定的接近log2n。</p>
+<p>首先，如果将红色节点从红黑树中去掉，那单纯包含黑色节点的红黑树的高度为多少？</p>
+<p>红色节点删除之后，有些节点就没有父节点了，会直接把这些节点的祖父节点作为父节点，所以之前的二叉树就变成了四叉树。</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/17.png" alt></p>
+<p>红黑树的定义有一条：从任意节点到可达的叶子节点的每个路径包含相同数据的黑色节点。从四叉树中取某些节点，放到叶节点位置，四叉树就变成了完全二叉树。所以仅包含黑色节点的四叉树的高度，比包含相同节点个数的完全二叉树的高度要小。</p>
+<p>已知完全二叉树的高度近似log2n，所以去掉红色节点的“黑树”的高度也不会超过log2n。</p>
+<p>将红色节点加回去，已知红色节点不能相邻，也就是说有一个红色节点至少有一个黑色节点，红黑树中包含最多黑色节点的路径不会超过log2n，所以加入红色节点之后，最长路径不会超过2log2n，也就是说，红黑树的高度近似2log2n。</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/18.png" alt></p>
+<h2 id="红黑树的实现"><a href="#红黑树的实现" class="headerlink" title="红黑树的实现"></a>红黑树的实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">遇到什么样的节点排布，就对应怎么去调整</span><br></pre></td></tr></table></figure>
+
+<p>红黑树满足条件</p>
+<p><img src="/2019/10/23/数据结构与算法之二叉树/19.png" alt></p>
+<p>插入、删除节点的过程中，第三四点要求可能会被破坏，需要“平衡调整”把被破坏的三四点恢复过来。</p>
+<ul>
+<li><p>左旋    围绕某个节点的左旋</p>
+</li>
+<li><p>右旋    围绕某个节点的右旋</p>
+</li>
+</ul>
+<h1 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h1>
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/23/数据结构与算法之二叉树/" title="数据结构与算法之二叉树">http://yoursite.com/2019/10/23/数据结构与算法之二叉树/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/二叉树/" rel="tag"># 二叉树</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/23/产品之解构产品经理/" rel="next" title="产品之解构产品经理">
+                  <i class="fa fa-chevron-left"></i> 产品之解构产品经理
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#树"><span class="nav-number">1.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关概念"><span class="nav-number">1.1.</span> <span class="nav-text">相关概念</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉树"><span class="nav-number">2.</span> <span class="nav-text">二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#完全二叉树"><span class="nav-number">2.1.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树的遍历"><span class="nav-number">2.2.</span> <span class="nav-text">二叉树的遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考题"><span class="nav-number">2.3.</span> <span class="nav-text">思考题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉查找树"><span class="nav-number">3.</span> <span class="nav-text">二叉查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">3.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作"><span class="nav-number">3.2.</span> <span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">3.2.1.</span> <span class="nav-text">查找</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">3.2.2.</span> <span class="nav-text">插入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理-1"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现-1"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">3.2.3.</span> <span class="nav-text">删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理-2"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现-2"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他操作"><span class="nav-number">3.2.4.</span> <span class="nav-text">其他操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持重复数据的二叉查找树"><span class="nav-number">3.3.</span> <span class="nav-text">支持重复数据的二叉查找树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉查找树的时间复杂度分析"><span class="nav-number">4.</span> <span class="nav-text">二叉查找树的时间复杂度分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#散列表vs二叉查找树"><span class="nav-number">5.</span> <span class="nav-text">散列表vs二叉查找树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#平衡二叉树"><span class="nav-number">6.</span> <span class="nav-text">平衡二叉树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树"><span class="nav-number">7.</span> <span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点-1"><span class="nav-number">7.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树高度"><span class="nav-number">7.2.</span> <span class="nav-text">红黑树高度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树的实现"><span class="nav-number">7.3.</span> <span class="nav-text">红黑树的实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递归树"><span class="nav-number">8.</span> <span class="nav-text">递归树</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

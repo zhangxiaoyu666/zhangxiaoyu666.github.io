@@ -68,7 +68,12 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/5.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/3.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/4.png">
-<meta property="og:updated_time" content="2019-10-20T11:38:23.419Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/数据结构与算法之散列表/10.png">
+<meta property="og:updated_time" content="2019-10-23T07:12:48.203Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="散列表">
 <meta name="twitter:description" content="散列思想散列表的英文叫“Hash Table”，平时也叫它“哈希表”。 1散列表用的是数组支持按照下标随机访问数据的特性，时间复杂度是O(1),所以散列表其实就是数组的一种扩展，由数组演化而来。">
@@ -214,7 +219,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">19</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">22</span></a>
 
   </li>
       
@@ -236,7 +241,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">9</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">10</span></a>
 
   </li>
       
@@ -258,7 +263,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">23</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">27</span></a>
 
   </li>
       
@@ -376,11 +381,19 @@
                 
               
 
-              <time title="创建时间：2019-10-20 15:31:48 / 修改时间：19:38:23" itemprop="dateCreated datePublished" datetime="2019-10-20T15:31:48+08:00">2019-10-20</time>
+              <time title="创建时间：2019-10-20 15:31:48" itemprop="dateCreated datePublished" datetime="2019-10-20T15:31:48+08:00">2019-10-20</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-23 15:12:48" itemprop="dateModified" datetime="2019-10-23T15:12:48+08:00">2019-10-23</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -530,6 +543,52 @@
 <li>定义装载因子的阈值，并设计动态扩容策略</li>
 <li>选择合适的散列冲突解决方法</li>
 </ul>
+<h1 id="散列表与链表结合使用"><a href="#散列表与链表结合使用" class="headerlink" title="散列表与链表结合使用"></a>散列表与链表结合使用</h1><h2 id="LRU缓存淘汰算法"><a href="#LRU缓存淘汰算法" class="headerlink" title="LRU缓存淘汰算法"></a>LRU缓存淘汰算法</h2><p>LRU缓存淘汰算法使用链表实现，时间复杂度为O(n),借助散列表，可以将时间复杂度降为O(1).</p>
+<p>链表实现LRU缓存淘汰算法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">淘汰：</span><br><span class="line">维护一个按照访问时间从大到小有序排列的链表结构。因为缓存大小有限，当缓存空间不够，需要淘汰一个数据的时候，直接将链表头部的节点删除。</span><br><span class="line">缓存：</span><br><span class="line">现在链表中查找这个数据，如果没有找到，则直接将这个数据放到链表的尾部，如果找到了，就把它移动到链表的尾部。</span><br></pre></td></tr></table></figure>
+
+<p>一个缓存系统主要包含以下几个操作：</p>
+<ul>
+<li>往缓存中添加一个数据</li>
+<li>从缓存中删除一个数据</li>
+<li>从缓存中查找一个数据</li>
+</ul>
+<p>以上操作使用链表实现，时间复杂度都是O(n),如果将散列表和链表组合使用，可以将三个操作的时间复杂度降低到O(1).</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/6.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data:存储数据</span><br><span class="line">prev:前驱指针</span><br><span class="line">next:后继指针</span><br><span class="line">hnext:将结点串在散列表的拉链中。</span><br><span class="line">散列表通过链表法解决散列冲突的，所以每个结点会在两条链中。一个链是双向链表，另一个链是散列表中的拉链。前驱和后继指针是为了将节点串在双向链表中，hnext是将结点串在散列表的拉链中。</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找数据"><a href="#查找数据" class="headerlink" title="查找数据"></a>查找数据</h3><p>散列表中查找数据的时间复杂度接近O(1),所以通过散列表可以快速的在缓存中找到一个数据，当找到数据后，将它移动到双向链表的尾部。</p>
+<h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><p>借助散列表，在O(1)的时间复杂度里找到要删除的结点。因为是双向链表，可以通过前驱指针O(1)时间复杂度获取前驱结点</p>
+<h3 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h3><p>首先看这个数据是否已经在缓存中，如果已经在其中，需要将其移动到双向链表的尾部；如果不在其中，看缓存有没有满，如果满了，将双向链表头部的结点删除，然后再将数据放到链表的尾部；如果没有满，直接将数据放到链表的尾部。</p>
+<p>整个过程涉及到的查找操作都可以通过散列表来完成，其他操作，如删除头结点，链表尾部插入数据，时间复杂度为O(1).</p>
+<h2 id="Redis有序集合"><a href="#Redis有序集合" class="headerlink" title="Redis有序集合"></a>Redis有序集合</h2><p>有序集合中，每个成员对象有两个重要的属性，key(键值)和score(分值)，可以通过score来查找数据，也可以通过key来查找数据。</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/7.png" alt></p>
+<p>细化Redis有序集合的操作：</p>
+<ul>
+<li>添加一个成员对象</li>
+<li>按照键值来删除一个成员对象</li>
+<li>按照键值来查找一个成员对象</li>
+<li>按照分值区间查找数据，比如查找积分在[100，356]之间的成员对象</li>
+<li>按照分值从小到大排序成员变量</li>
+</ul>
+<p>仅仅按照分值将成员对象组织成跳表的结构，那么按照键值来删除、查询成员对象就会很慢。我们可以按照键值构建一个散列表，这样按照key来删除、查找一个成员对象的时间复杂度就变成了O(1).</p>
+<h2 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h2><p>HashMap底层是通过散列表这种数据结构实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;Integer, Integer&gt; m = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">m.put(<span class="number">3</span>, <span class="number">11</span>);</span><br><span class="line">m.put(<span class="number">1</span>, <span class="number">12</span>);</span><br><span class="line">m.put(<span class="number">5</span>, <span class="number">23</span>);</span><br><span class="line">m.put(<span class="number">2</span>, <span class="number">22</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (Map.Entry e : m.entrySet()) &#123;</span><br><span class="line">  System.out.println(e.getKey());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：11 12 23 22</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 10 是初始大小，0.75 是装载因子，true 是表示按照访问时间排序</span></span><br><span class="line">HashMap&lt;Integer, Integer&gt; m = <span class="keyword">new</span> LinkedHashMap&lt;&gt;(<span class="number">10</span>, <span class="number">0.75f</span>, <span class="keyword">true</span>);</span><br><span class="line">m.put(<span class="number">3</span>, <span class="number">11</span>);</span><br><span class="line">m.put(<span class="number">1</span>, <span class="number">12</span>);</span><br><span class="line">m.put(<span class="number">5</span>, <span class="number">23</span>);</span><br><span class="line">m.put(<span class="number">2</span>, <span class="number">22</span>);</span><br><span class="line"></span><br><span class="line">m.put(<span class="number">3</span>, <span class="number">26</span>);</span><br><span class="line">m.get(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (Map.Entry e : m.entrySet()) &#123;</span><br><span class="line">  System.out.println(e.getKey());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：12 22 26 23</p>
+<p>根据上面的两段代码，可知LinkedHashMap是通过散列表和链表组合在一起实现的。支持按照插入顺序遍历数据，支持按照访问顺序来遍历数据。</p>
+<p>每次调用put(),往LinkedHashMap中添加数据的时候，都会将数据添加到链表的尾部</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/8.png" alt></p>
+<p>再次将键值为3的数据放入到LinkedHashMap的时候，会先查找这个键值是否已经存在，将已存在的(3,11)删除，将(3,26)放入到链表的尾部</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/9.png" alt></p>
+<p>访问到key为5的数据的时候，将访问的数据移动到链表的尾部</p>
+<p><img src="/2019/10/20/数据结构与算法之散列表/10.png" alt></p>
+<p>所以最后打印出来的数据是12 22  26 23</p>
+<p>LinkedHashMap是通过双向链表和散列表这两种数据结构组合实现的。LinkedHashMap中的“Linked”实际上指的是双向链表，并非指用链表法解决散列冲突。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>散列表中的数据都是通过散列函数打乱之后无规律存储，也就是说他无法支持按照某种顺序快速的遍历数据，如果希望按照顺序遍历散列表中的数据，就需要将散列表中的数据拷贝到数组中，排序后再遍历。因为散列表是动态数据结构，不停的有数据的插入、删除，所以每当我们希望按照顺序遍历散列表中的数据时，都要先排序，为了提高效率，将散列表和链表结合在一起。</p>
 
     </div>
 
@@ -581,6 +640,10 @@
 
             <div class="post-nav-prev post-nav-item">
               
+                <a href="/2019/10/20/JVM之体系结构/" rel="prev" title="JVN之体系结构">
+                  JVN之体系结构 <i class="fa fa-chevron-right"></i>
+                </a>
+              
             </div>
           </div>
         
@@ -626,7 +689,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#散列思想"><span class="nav-number">1.</span> <span class="nav-text">散列思想</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#散列函数"><span class="nav-number">1.1.</span> <span class="nav-text">散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列函数设计的基本要求"><span class="nav-number">1.1.1.</span> <span class="nav-text">散列函数设计的基本要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#散列冲突"><span class="nav-number">1.1.2.</span> <span class="nav-text">散列冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开放寻址法"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">开放寻址法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#核心思想"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#探测方法"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">探测方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#开放寻址法优缺点"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">开放寻址法优缺点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#装载因子"><span class="nav-number">1.1.2.1.4.</span> <span class="nav-text">装载因子</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链表法"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">链表法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#核心思想-1"><span class="nav-number">1.1.2.2.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优缺点"><span class="nav-number">1.1.2.2.2.</span> <span class="nav-text">优缺点</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word文档中单词拼写检查功能时如何实现的？"><span class="nav-number">2.</span> <span class="nav-text">word文档中单词拼写检查功能时如何实现的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计散列函数"><span class="nav-number">3.</span> <span class="nav-text">设计散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#散列函数的要求"><span class="nav-number">3.1.</span> <span class="nav-text">散列函数的要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用散列函数的设计方法"><span class="nav-number">3.2.</span> <span class="nav-text">常用散列函数的设计方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装载因子取值"><span class="nav-number">4.</span> <span class="nav-text">装载因子取值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决低效扩容"><span class="nav-number">5.</span> <span class="nav-text">解决低效扩容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashMap的应用"><span class="nav-number">6.</span> <span class="nav-text">HashMap的应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工业级的散列表"><span class="nav-number">7.</span> <span class="nav-text">工业级的散列表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">7.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">7.2.</span> <span class="nav-text">如何实现</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#散列思想"><span class="nav-number">1.</span> <span class="nav-text">散列思想</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#散列函数"><span class="nav-number">1.1.</span> <span class="nav-text">散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列函数设计的基本要求"><span class="nav-number">1.1.1.</span> <span class="nav-text">散列函数设计的基本要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#散列冲突"><span class="nav-number">1.1.2.</span> <span class="nav-text">散列冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开放寻址法"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">开放寻址法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#核心思想"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#探测方法"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">探测方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#开放寻址法优缺点"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">开放寻址法优缺点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#装载因子"><span class="nav-number">1.1.2.1.4.</span> <span class="nav-text">装载因子</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链表法"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">链表法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#核心思想-1"><span class="nav-number">1.1.2.2.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优缺点"><span class="nav-number">1.1.2.2.2.</span> <span class="nav-text">优缺点</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word文档中单词拼写检查功能时如何实现的？"><span class="nav-number">2.</span> <span class="nav-text">word文档中单词拼写检查功能时如何实现的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计散列函数"><span class="nav-number">3.</span> <span class="nav-text">设计散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#散列函数的要求"><span class="nav-number">3.1.</span> <span class="nav-text">散列函数的要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用散列函数的设计方法"><span class="nav-number">3.2.</span> <span class="nav-text">常用散列函数的设计方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装载因子取值"><span class="nav-number">4.</span> <span class="nav-text">装载因子取值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决低效扩容"><span class="nav-number">5.</span> <span class="nav-text">解决低效扩容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashMap的应用"><span class="nav-number">6.</span> <span class="nav-text">HashMap的应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工业级的散列表"><span class="nav-number">7.</span> <span class="nav-text">工业级的散列表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">7.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">7.2.</span> <span class="nav-text">如何实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#散列表与链表结合使用"><span class="nav-number">8.</span> <span class="nav-text">散列表与链表结合使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LRU缓存淘汰算法"><span class="nav-number">8.1.</span> <span class="nav-text">LRU缓存淘汰算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找数据"><span class="nav-number">8.1.1.</span> <span class="nav-text">查找数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数据"><span class="nav-number">8.1.2.</span> <span class="nav-text">删除数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加数据"><span class="nav-number">8.1.3.</span> <span class="nav-text">添加数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis有序集合"><span class="nav-number">8.2.</span> <span class="nav-text">Redis有序集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedHashMap"><span class="nav-number">8.3.</span> <span class="nav-text">LinkedHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -645,7 +708,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -658,7 +721,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -671,7 +734,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

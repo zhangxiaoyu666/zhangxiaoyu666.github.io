@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="原型图作用 描述互联网产品设计的文档 部门之间沟通需求的工具（研发、设计） 敏捷开发中，简化版的需求文档（PRD,MRD）  种类 线框图：制作快速，低成本描述方案，给设计更多空间 高保真原图：制作耗时，还原度高，保证设计效果 需求文档(PRD/MRD)：更多逻辑与业务说明，指导研发  线框图  高保真图  需求文档  Axure 界面构成 案例：绘制微信朋友圈作业用Axure绘制线框图  目标产">
+<meta name="keywords" content="Axure">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Axure基础线框图">
+<meta property="og:url" content="http://yoursite.com/2019/10/21/Axure基础线框图/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="原型图作用 描述互联网产品设计的文档 部门之间沟通需求的工具（研发、设计） 敏捷开发中，简化版的需求文档（PRD,MRD）  种类 线框图：制作快速，低成本描述方案，给设计更多空间 高保真原图：制作耗时，还原度高，保证设计效果 需求文档(PRD/MRD)：更多逻辑与业务说明，指导研发  线框图  高保真图  需求文档  Axure 界面构成 案例：绘制微信朋友圈作业用Axure绘制线框图  目标产">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/%E7%BD%91%E6%98%93%E4%BA%91%E9%A6%96%E9%A1%B5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/%E5%85%A8%E9%83%A8%E5%88%86%E7%B1%BB%E7%BD%91%E6%98%93%E4%BA%91.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/9.png">
+<meta property="og:updated_time" content="2019-10-23T13:36:21.544Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Axure基础线框图">
+<meta name="twitter:description" content="原型图作用 描述互联网产品设计的文档 部门之间沟通需求的工具（研发、设计） 敏捷开发中，简化版的需求文档（PRD,MRD）  种类 线框图：制作快速，低成本描述方案，给设计更多空间 高保真原图：制作耗时，还原度高，保证设计效果 需求文档(PRD/MRD)：更多逻辑与业务说明，指导研发  线框图  高保真图  需求文档  Axure 界面构成 案例：绘制微信朋友圈作业用Axure绘制线框图  目标产">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/21/Axure基础线框图/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/21/Axure基础线框图/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Axure基础线框图 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">22</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">10</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">27</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/Axure基础线框图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Axure基础线框图
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-21 20:02:35" itemprop="dateCreated datePublished" datetime="2019-10-21T20:02:35+08:00">2019-10-21</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-23 21:36:21" itemprop="dateModified" datetime="2019-10-23T21:36:21+08:00">2019-10-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Axure/" itemprop="url" rel="index"><span itemprop="name">Axure</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原型图"><a href="#原型图" class="headerlink" title="原型图"></a>原型图</h1><h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ol>
+<li>描述互联网产品设计的文档</li>
+<li>部门之间沟通需求的工具（研发、设计）</li>
+<li>敏捷开发中，简化版的需求文档（PRD,MRD）</li>
+</ol>
+<h2 id="种类"><a href="#种类" class="headerlink" title="种类"></a>种类</h2><ol>
+<li>线框图：制作快速，低成本描述方案，给设计更多空间</li>
+<li>高保真原图：制作耗时，还原度高，保证设计效果</li>
+<li>需求文档(PRD/MRD)：更多逻辑与业务说明，指导研发</li>
+</ol>
+<p>线框图</p>
+<p><img src="/2019/10/21/Axure基础线框图/1.png" alt></p>
+<p>高保真图</p>
+<p><img src="/2019/10/21/Axure基础线框图/2.png" alt></p>
+<p>需求文档</p>
+<p><img src="/2019/10/21/Axure基础线框图/3.png" alt></p>
+<h1 id="Axure-界面构成"><a href="#Axure-界面构成" class="headerlink" title="Axure 界面构成"></a>Axure 界面构成</h1><p><img src="/2019/10/21/Axure基础线框图/4.png" alt></p>
+<h1 id="案例：绘制微信朋友圈"><a href="#案例：绘制微信朋友圈" class="headerlink" title="案例：绘制微信朋友圈"></a>案例：绘制微信朋友圈</h1><h1 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h1><p>用Axure绘制线框图</p>
+<ul>
+<li><p>目标产品：网易云音乐App</p>
+</li>
+<li><p>目标页面：播放页</p>
+</li>
+</ul>
+<p><img src="/2019/10/21/Axure基础线框图/5.png" alt></p>
+<h1 id="高保真原型图"><a href="#高保真原型图" class="headerlink" title="高保真原型图"></a>高保真原型图</h1><h2 id="高保证原型图的要素"><a href="#高保证原型图的要素" class="headerlink" title="高保证原型图的要素"></a>高保证原型图的要素</h2><ul>
+<li>形状、尺寸：严格按照截图比例，参考线</li>
+<li>色彩：使用吸取颜色，注意渐变色</li>
+<li>贴图：寻找参考物，复制图片，截取，覆盖等</li>
+</ul>
+<h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><ul>
+<li>会截图，选取合适的参考物进行切割，不要重新造轮子</li>
+<li>使用搜索引擎 <a href="https://www.iconfont.cn/" target="_blank" rel="noopener">https://www.iconfont.cn/</a></li>
+</ul>
+<h2 id="操作案例"><a href="#操作案例" class="headerlink" title="操作案例"></a>操作案例</h2><p>网易云音乐App，首页添加“分类选歌”功能</p>
+<p>2个页面：</p>
+<ol>
+<li>App首页（增加【分类选歌】入口）</li>
+<li>分类页（增加歌曲分类页面，参考QQ音乐分类）</li>
+</ol>
+<p><img src="/2019/10/21/Axure基础线框图/%E7%BD%91%E6%98%93%E4%BA%91%E9%A6%96%E9%A1%B5.png" alt></p>
+<p><img src="/2019/10/21/Axure基础线框图/%E5%85%A8%E9%83%A8%E5%88%86%E7%B1%BB%E7%BD%91%E6%98%93%E4%BA%91.png" alt></p>
+<h1 id="原型图文档制作"><a href="#原型图文档制作" class="headerlink" title="原型图文档制作"></a>原型图文档制作</h1><h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ol>
+<li>图片分割后会模糊</li>
+</ol>
+<p>要切割原图，500*500以上</p>
+<ol start="2">
+<li>非规则图形的值作</li>
+</ol>
+<p>iconfont网站、图形叠加</p>
+<h2 id="误区"><a href="#误区" class="headerlink" title="误区"></a>误区</h2><ol>
+<li>图片都需要自己去画 ——尽可能借鉴已有图片</li>
+<li>创造新交互，尽可能的创建新样式 —-初学者尽量使用老交互</li>
+<li>原型图的保真度越高越好—-以效率和认知为基础</li>
+</ol>
+<h2 id="如何制作"><a href="#如何制作" class="headerlink" title="如何制作"></a>如何制作</h2><h3 id="包含内容"><a href="#包含内容" class="headerlink" title="包含内容"></a>包含内容</h3><ol>
+<li>文档标题，项目背景，项目目标：纯文字描述，说明项目基础信息</li>
+<li>每个页面的标题：每个页面都要有标题</li>
+<li>页面间的交互指引：通过箭头、矩形、文字等方式，说明交互动作</li>
+</ol>
+<p><img src="/2019/10/21/Axure基础线框图/6.png" alt></p>
+<h2 id="操作案例-1"><a href="#操作案例-1" class="headerlink" title="操作案例"></a>操作案例</h2><p><img src="/2019/10/21/Axure基础线框图/7.png" alt></p>
+<p><img src="/2019/10/21/Axure基础线框图/8.png" alt></p>
+<h2 id="作业-1"><a href="#作业-1" class="headerlink" title="作业"></a>作业</h2><p><img src="/2019/10/21/Axure基础线框图/9.png" alt></p>
+<h1 id="让原型图动起来"><a href="#让原型图动起来" class="headerlink" title="让原型图动起来"></a>让原型图动起来</h1>
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/21/Axure基础线框图/" title="Axure基础线框图">http://yoursite.com/2019/10/21/Axure基础线框图/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Axure/" rel="tag"># Axure</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/20/JVM之体系结构/" rel="next" title="JVN之体系结构">
+                  <i class="fa fa-chevron-left"></i> JVN之体系结构
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/23/产品之解构产品经理/" rel="prev" title="产品之解构产品经理">
+                  产品之解构产品经理 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原型图"><span class="nav-number">1.</span> <span class="nav-text">原型图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用"><span class="nav-number">1.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#种类"><span class="nav-number">1.2.</span> <span class="nav-text">种类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Axure-界面构成"><span class="nav-number">2.</span> <span class="nav-text">Axure 界面构成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例：绘制微信朋友圈"><span class="nav-number">3.</span> <span class="nav-text">案例：绘制微信朋友圈</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#作业"><span class="nav-number">4.</span> <span class="nav-text">作业</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高保真原型图"><span class="nav-number">5.</span> <span class="nav-text">高保真原型图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#高保证原型图的要素"><span class="nav-number">5.1.</span> <span class="nav-text">高保证原型图的要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技巧"><span class="nav-number">5.2.</span> <span class="nav-text">技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作案例"><span class="nav-number">5.3.</span> <span class="nav-text">操作案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原型图文档制作"><span class="nav-number">6.</span> <span class="nav-text">原型图文档制作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">6.1.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误区"><span class="nav-number">6.2.</span> <span class="nav-text">误区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何制作"><span class="nav-number">6.3.</span> <span class="nav-text">如何制作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#包含内容"><span class="nav-number">6.3.1.</span> <span class="nav-text">包含内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作案例-1"><span class="nav-number">6.4.</span> <span class="nav-text">操作案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作业-1"><span class="nav-number">6.5.</span> <span class="nav-text">作业</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#让原型图动起来"><span class="nav-number">7.</span> <span class="nav-text">让原型图动起来</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
