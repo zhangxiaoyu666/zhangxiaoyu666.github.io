@@ -64,7 +64,14 @@
 <meta property="og:description" content="递归树与时间复杂度分析递归树递归的思想就是将大问题分解为小问题来求解，然后再将小问题分解为小小问题。这样一层一层的分解，直到问题的规模被分解的足够小，不用再继续递归为止。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/1.png">
-<meta property="og:updated_time" content="2019-10-30T15:20:03.337Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/30/数据结构与算法之递归树/8.png">
+<meta property="og:updated_time" content="2019-10-31T02:09:18.774Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何借助树来求解递归算法的时间复杂度">
 <meta name="twitter:description" content="递归树与时间复杂度分析递归树递归的思想就是将大问题分解为小问题来求解，然后再将小问题分解为小小问题。这样一层一层的分解，直到问题的规模被分解的足够小，不用再继续递归为止。">
@@ -210,7 +217,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">26</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">27</span></a>
 
   </li>
       
@@ -254,7 +261,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">32</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">33</span></a>
 
   </li>
       
@@ -372,11 +379,19 @@
                 
               
 
-              <time title="创建时间：2019-10-30 23:08:06 / 修改时间：23:20:03" itemprop="dateCreated datePublished" datetime="2019-10-30T23:08:06+08:00">2019-10-30</time>
+              <time title="创建时间：2019-10-30 23:08:06" itemprop="dateCreated datePublished" datetime="2019-10-30T23:08:06+08:00">2019-10-30</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 10:09:18" itemprop="dateModified" datetime="2019-10-31T10:09:18+08:00">2019-10-31</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -406,7 +421,68 @@
       
         <h1 id="递归树与时间复杂度分析"><a href="#递归树与时间复杂度分析" class="headerlink" title="递归树与时间复杂度分析"></a>递归树与时间复杂度分析</h1><h2 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h2><p>递归的思想就是将大问题分解为小问题来求解，然后再将小问题分解为小小问题。这样一层一层的分解，直到问题的规模被分解的足够小，不用再继续递归为止。<a id="more"></a>如果把一层一层的分解过程画成图，就是递归树。</p>
 <p><img src="/2019/10/30/数据结构与算法之递归树/1.png" alt></p>
-<h2 id="使用递归树求解时间复杂度"><a href="#使用递归树求解时间复杂度" class="headerlink" title="使用递归树求解时间复杂度"></a>使用递归树求解时间复杂度</h2>
+<h2 id="使用递归树求解时间复杂度"><a href="#使用递归树求解时间复杂度" class="headerlink" title="使用递归树求解时间复杂度"></a>使用递归树求解时间复杂度</h2><p>借助归并排序来看看如何使用递归树来 分析递归代码的时间复杂度。</p>
+<p><img src="/2019/10/30/数据结构与算法之递归树/2.png" alt></p>
+<h3 id="消耗时间"><a href="#消耗时间" class="headerlink" title="消耗时间"></a>消耗时间</h3><p>分解是一分为二，所以代价很低，把时间上的消耗记作常量1.归并算法中比较耗时的是归并操作，从图中可以看出，每一层归并操作消耗的时间总和都是一样的，与要排序的数据规模有关。将每一层归并操作消耗的时间记作n。</p>
+<h3 id="归并树的高度"><a href="#归并树的高度" class="headerlink" title="归并树的高度"></a>归并树的高度</h3><p>归并排序树是一颗满二叉树。满二叉树的高度大概是log2n。</p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>时间复杂度等于树的高度乘以每一层消耗的时间</p>
+<p>所以归并排序递归实现的时间复杂度就是O(nlogn)。</p>
+<h1 id="递归复杂度分析实战"><a href="#递归复杂度分析实战" class="headerlink" title="递归复杂度分析实战"></a>递归复杂度分析实战</h1><h2 id="实战一：分析快速排序的时间复杂度"><a href="#实战一：分析快速排序的时间复杂度" class="headerlink" title="实战一：分析快速排序的时间复杂度"></a>实战一：分析快速排序的时间复杂度</h2><p>快速排序在最好的情况下，每次分区都能一分为二，这时用归推公式T(n)=2T(n/2)+n,很容易推导出时间复杂度是O(nlogn).</p>
+<p>假设平均情况下，每次分区后，两个分区的大小比例为1：k，当k=9时，用递推公式来推导时间复杂度，递推公式为T(n) = T(n/10)+T(9n/10)+n.</p>
+<p>同样取k=9，将递归分解过程画成递归树</p>
+<p><img src="/2019/10/30/数据结构与算法之递归树/3.png" alt></p>
+<ul>
+<li>每一层分区操作所遍历的数据的个数之和为n</li>
+<li>快速排序结束的条件为待排序的小分区大小为1，也就是说递归树中的叶子节点的数据规模是1.从根节点n到叶子节点1，递归树中最短的一个路径每次都乘以1/10，最长的一个路径每次都乘以9/10.通过计算可以得到，从根节点到叶子节点的最短路径是log10n，最长路径是log10/9n。</li>
+</ul>
+<p><img src="/2019/10/30/数据结构与算法之递归树/4.png" alt></p>
+<p>所以遍历的数据总数就介于nlog10n和nlog10/9n。所以当分区大小比例为1：9时，快速排序的时间复杂度仍为O(nlogn).</p>
+<h2 id="实战二：分析斐波那契数列的时间复杂度"><a href="#实战二：分析斐波那契数列的时间复杂度" class="headerlink" title="实战二：分析斐波那契数列的时间复杂度"></a>实战二：分析斐波那契数列的时间复杂度</h2><p>跨台阶的例子，实际上就是一个斐波那契数列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int f(int n) &#123;</span><br><span class="line">  if (n == 1) return 1;</span><br><span class="line">  if (n == 2) return 2;</span><br><span class="line">  return f(n-1) + f(n-2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将递归代码画成递归树</p>
+<p><img src="/2019/10/30/数据结构与算法之递归树/5.png" alt></p>
+<ul>
+<li><p>将f(n)分解为f(n-1)和f(n-2),每次数据规模都是-1和-2，叶子节点的数据规模是1或者2.所以从根节点走到叶子节点，如果每次都是-1，最长路径大约为n；如果每次都是-2，最短路径大约为n/2.</p>
+</li>
+<li><p>每次分解之后的合并操作只需要一次加法操作，把加法运算的时间消耗记作1，所以，从上往下，第一层的总时间消耗为1，第二层的总时间消耗为2，第三层时间消耗为2^2,以此类推，第k层的时间消耗就时2^(k-1)</p>
+</li>
+<li><p>总的时间消耗就是每一层时间消耗之和。</p>
+<ul>
+<li>如果路径长度都是n，那么总和就是2^n-1</li>
+</ul>
+<p><img src="/2019/10/30/数据结构与算法之递归树/6.png" alt></p>
+<ul>
+<li>如果路径长度为n/2，那么总和就是2^(n/2)-1</li>
+</ul>
+<p><img src="/2019/10/30/数据结构与算法之递归树/7.png" alt></p>
+</li>
+</ul>
+<p>所以时间复杂度就介于这两者之间，虽然结果不够精确，只是一个范围，但是我们也基本知道上面的算法是指数级别的，非常高。</p>
+<h2 id="实战三：分析全排列的时间复杂度"><a href="#实战三：分析全排列的时间复杂度" class="headerlink" title="实战三：分析全排列的时间复杂度"></a>实战三：分析全排列的时间复杂度</h2><p>全排列组合：将n个数据的所有排列都找出来。</p>
+<p>比如1，2，3这样三个数据,它们的全排列组合如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1, 2, 3</span><br><span class="line">1, 3, 2</span><br><span class="line">2, 1, 3</span><br><span class="line">2, 3, 1</span><br><span class="line">3, 1, 2</span><br><span class="line">3, 2, 1</span><br></pre></td></tr></table></figure>
+
+<p>如果确定了最后一位数，就变成了求解剩下n-1个数据的排列问题。最后一个数据可以是n个数中的任意一个，因此他的取值有n种情况。所以“n个数据的排列”问题就可以分解成n个“n-1”个数据的排列的子问题。</p>
+<p>递推公式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">假设数组中存储的是 1，2， 3...n。</span><br><span class="line">        </span><br><span class="line">f(1,2,...n) = &#123;最后一位是 1, f(n-1)&#125; + &#123;最后一位是 2, f(n-1)&#125; +...+&#123;最后一位是 n, f(n-1)&#125;。</span><br></pre></td></tr></table></figure>
+
+<p>代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 调用方式：</span><br><span class="line">// int[]a = a=&#123;1, 2, 3, 4&#125;; printPermutations(a, 4, 4);</span><br><span class="line">// k 表示要处理的子数组的数据个数</span><br><span class="line">public void printPermutations(int[] data, int n, int k) &#123;</span><br><span class="line">  if (k == 1) &#123;</span><br><span class="line">    for (int i = 0; i &lt; n; ++i) &#123;</span><br><span class="line">      System.out.print(data[i] + &quot; &quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  for (int i = 0; i &lt; k; ++i) &#123;</span><br><span class="line">    int tmp = data[i];</span><br><span class="line">    data[i] = data[k-1];</span><br><span class="line">    data[k-1] = tmp;</span><br><span class="line"></span><br><span class="line">    printPermutations(data, n, k - 1);</span><br><span class="line"></span><br><span class="line">    tmp = data[i];</span><br><span class="line">    data[i] = data[k-1];</span><br><span class="line">    data[k-1] = tmp;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将上面的递归代码画成递归树</p>
+<p><img src="/2019/10/30/数据结构与算法之递归树/8.png" alt></p>
+<p>总的交换次数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n + n*(n-1) + n*(n-1)*(n-2) +... + n*(n-1)*(n-2)*...*2*1</span><br></pre></td></tr></table></figure>
+
+<p>最后一个树等于n！，前面n-1个数都小于最后一个数，所以总和肯定小于n<em>n!，也就是说，全排列的递归算法的时间复杂度大于O(n!)小于O(n</em>n!)。</p>
+<h1 id="递归代码的时间复杂度分析方法"><a href="#递归代码的时间复杂度分析方法" class="headerlink" title="递归代码的时间复杂度分析方法"></a>递归代码的时间复杂度分析方法</h1><ul>
+<li>递推公式的时间复杂度分析方法</li>
+<li>递归树的时间复杂度分析方法</li>
+</ul>
+<p>递推公式分析：归并排序时间复杂度、快排最好情况时间复杂度</p>
+<p>递归树分析：快排的平均时间复杂度</p>
+
     </div>
 
     
@@ -457,6 +533,10 @@
 
             <div class="post-nav-prev post-nav-item">
               
+                <a href="/2019/10/31/java之多线程编程1/" rel="prev" title="java之多线程编程1">
+                  java之多线程编程1 <i class="fa fa-chevron-right"></i>
+                </a>
+              
             </div>
           </div>
         
@@ -502,7 +582,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#递归树与时间复杂度分析"><span class="nav-number">1.</span> <span class="nav-text">递归树与时间复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#递归树"><span class="nav-number">1.1.</span> <span class="nav-text">递归树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用递归树求解时间复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">使用递归树求解时间复杂度</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#递归树与时间复杂度分析"><span class="nav-number">1.</span> <span class="nav-text">递归树与时间复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#递归树"><span class="nav-number">1.1.</span> <span class="nav-text">递归树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用递归树求解时间复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">使用递归树求解时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#消耗时间"><span class="nav-number">1.2.1.</span> <span class="nav-text">消耗时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归并树的高度"><span class="nav-number">1.2.2.</span> <span class="nav-text">归并树的高度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度"><span class="nav-number">1.2.3.</span> <span class="nav-text">时间复杂度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递归复杂度分析实战"><span class="nav-number">2.</span> <span class="nav-text">递归复杂度分析实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实战一：分析快速排序的时间复杂度"><span class="nav-number">2.1.</span> <span class="nav-text">实战一：分析快速排序的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战二：分析斐波那契数列的时间复杂度"><span class="nav-number">2.2.</span> <span class="nav-text">实战二：分析斐波那契数列的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战三：分析全排列的时间复杂度"><span class="nav-number">2.3.</span> <span class="nav-text">实战三：分析全排列的时间复杂度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递归代码的时间复杂度分析方法"><span class="nav-number">3.</span> <span class="nav-text">递归代码的时间复杂度分析方法</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -521,7 +601,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -547,7 +627,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
