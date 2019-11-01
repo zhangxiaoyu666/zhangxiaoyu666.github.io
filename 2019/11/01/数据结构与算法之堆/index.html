@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="堆排序是一种原地的，时间复杂度为O(nlogn)的排序算法 堆什么是堆堆是一种特殊的树。  堆是一个完全二叉树 堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值。  12完全二叉树：除了最后一层，其他层的节点的个数都是满的，最后一层记得节点都靠在左排列。大顶堆、小顶堆   从上图可以看出，对于同一组数据，我们可以构建不同形态的堆。 堆实现如何存储一个堆完全二叉树比较适合用数组来">
+<meta name="keywords" content="堆和堆排序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么说堆排序没有快排快？">
+<meta property="og:url" content="http://yoursite.com/2019/11/01/数据结构与算法之堆/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="堆排序是一种原地的，时间复杂度为O(nlogn)的排序算法 堆什么是堆堆是一种特殊的树。  堆是一个完全二叉树 堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值。  12完全二叉树：除了最后一层，其他层的节点的个数都是满的，最后一层记得节点都靠在左排列。大顶堆、小顶堆   从上图可以看出，对于同一组数据，我们可以构建不同形态的堆。 堆实现如何存储一个堆完全二叉树比较适合用数组来">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/11/01/数据结构与算法之堆/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/01/数据结构与算法之堆/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/01/数据结构与算法之堆/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/01/数据结构与算法之堆/4.png">
+<meta property="og:updated_time" content="2019-11-01T02:01:27.741Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为什么说堆排序没有快排快？">
+<meta name="twitter:description" content="堆排序是一种原地的，时间复杂度为O(nlogn)的排序算法 堆什么是堆堆是一种特殊的树。  堆是一个完全二叉树 堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值。  12完全二叉树：除了最后一层，其他层的节点的个数都是满的，最后一层记得节点都靠在左排列。大顶堆、小顶堆   从上图可以看出，对于同一组数据，我们可以构建不同形态的堆。 堆实现如何存储一个堆完全二叉树比较适合用数组来">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/01/数据结构与算法之堆/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/11/01/数据结构与算法之堆/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>为什么说堆排序没有快排快？ | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">28</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">8</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">34</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/01/数据结构与算法之堆/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">为什么说堆排序没有快排快？
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-01 09:31:28 / 修改时间：10:01:27" itemprop="dateCreated datePublished" datetime="2019-11-01T09:31:28+08:00">2019-11-01</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>堆排序是一种原地的，时间复杂度为O(nlogn)的排序算法</p>
+<h1 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h1><h2 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h2><p>堆是一种特殊的树。</p>
+<ul>
+<li>堆是一个完全二叉树</li>
+<li>堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">完全二叉树：除了最后一层，其他层的节点的个数都是满的，最后一层记得节点都靠在左排列。</span><br><span class="line">大顶堆、小顶堆</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/11/01/数据结构与算法之堆/1.png" alt></p>
+<p>从上图可以看出，对于同一组数据，我们可以构建不同形态的堆。</p>
+<h2 id="堆实现"><a href="#堆实现" class="headerlink" title="堆实现"></a>堆实现</h2><h3 id="如何存储一个堆"><a href="#如何存储一个堆" class="headerlink" title="如何存储一个堆"></a>如何存储一个堆</h3><p>完全二叉树比较适合用数组来存储，比较节省存储空间。</p>
+<p><img src="/2019/11/01/数据结构与算法之堆/2.png" alt></p>
+<p>数组下标为i的节点的左子节点就是下标为2<em>i的节点，右子节点就是下标为2</em>i+1的节点，父节点就是下标为i/2的节点。</p>
+<h3 id="堆支持哪些操作"><a href="#堆支持哪些操作" class="headerlink" title="堆支持哪些操作"></a>堆支持哪些操作</h3><h4 id="插入一个元素"><a href="#插入一个元素" class="headerlink" title="插入一个元素"></a>插入一个元素</h4><h5 id="堆化"><a href="#堆化" class="headerlink" title="堆化"></a>堆化</h5><p>往堆中插入一个元素后，需要继续满足堆的两个特性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">堆化：调整堆，让其满足堆特性的过程。</span><br><span class="line">堆化有两种，从下往上和从上往下</span><br></pre></td></tr></table></figure>
+
+<p>向堆中插入数据22</p>
+<p><img src="/2019/11/01/数据结构与算法之堆/3.png" alt></p>
+<p>堆化：从下往上。顺着节点所在的路径，向上对比，交换。</p>
+<p><img src="/2019/11/01/数据结构与算法之堆/4.png" alt></p>
+<h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Heap</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span>[] a; <span class="comment">// 数组，从下标1开始存储数据</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> n;  <span class="comment">// 堆可以存储的最大数据个数</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> count; <span class="comment">// 堆中已经存储的数据个数</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Heap</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">    a = <span class="keyword">new</span> <span class="keyword">int</span>[capacity + <span class="number">1</span>];</span><br><span class="line">    n = capacity;</span><br><span class="line">    count = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (count &gt;= n) <span class="keyword">return</span>; <span class="comment">// 堆满了</span></span><br><span class="line">    ++count;</span><br><span class="line">    a[count] = data;</span><br><span class="line">    <span class="keyword">int</span> i = count;</span><br><span class="line">    <span class="keyword">while</span> (i/<span class="number">2</span> &gt; <span class="number">0</span> &amp;&amp; a[i] &gt; a[i/<span class="number">2</span>]) &#123; <span class="comment">// 自下往上堆化</span></span><br><span class="line">      swap(a, i, i/<span class="number">2</span>); <span class="comment">// swap()函数作用：交换下标为i和i/2的两个元素</span></span><br><span class="line">      i = i/<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除堆顶元素"><a href="#删除堆顶元素" class="headerlink" title="删除堆顶元素"></a>删除堆顶元素</h4><p>从堆的定义的第二条，任何节点的值都大于等于(或小于等于)子树节点的值，可以发现，堆顶元素存储的就是堆中数据的最大值或者最小值。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/11/01/数据结构与算法之堆/" title="为什么说堆排序没有快排快？">http://yoursite.com/2019/11/01/数据结构与算法之堆/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/堆和堆排序/" rel="tag"># 堆和堆排序</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/31/java之多线程编程1/" rel="next" title="java之多线程编程1">
+                  <i class="fa fa-chevron-left"></i> java之多线程编程1
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#堆"><span class="nav-number">1.</span> <span class="nav-text">堆</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是堆"><span class="nav-number">1.1.</span> <span class="nav-text">什么是堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆实现"><span class="nav-number">1.2.</span> <span class="nav-text">堆实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何存储一个堆"><span class="nav-number">1.2.1.</span> <span class="nav-text">如何存储一个堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆支持哪些操作"><span class="nav-number">1.2.2.</span> <span class="nav-text">堆支持哪些操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入一个元素"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">插入一个元素</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#堆化"><span class="nav-number">1.2.2.1.1.</span> <span class="nav-text">堆化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实现"><span class="nav-number">1.2.2.1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除堆顶元素"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">删除堆顶元素</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  
+  <script color='0,0,0' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
