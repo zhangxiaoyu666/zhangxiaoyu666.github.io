@@ -55,18 +55,25 @@
   };
 </script>
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="图基本概念 树中的元素我们成为节点，图中的元素称为顶点。">
+<meta name="keywords" content="图">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2019/10/03/hello-world/index.html">
+<meta property="og:title" content="图的表示:如何存储微博、微信等社交网络中好友关系？">
+<meta property="og:url" content="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/index.html">
 <meta property="og:site_name" content="一只鱼的博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="图基本概念 树中的元素我们成为节点，图中的元素称为顶点。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-03T00:28:04.625Z">
+<meta property="og:image" content="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/5.png">
+<meta property="og:updated_time" content="2019-11-06T13:42:30.477Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
-  <link rel="canonical" href="http://yoursite.com/2019/10/03/hello-world/">
+<meta name="twitter:title" content="图的表示:如何存储微博、微信等社交网络中好友关系？">
+<meta name="twitter:description" content="图基本概念 树中的元素我们成为节点，图中的元素称为顶点。">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/1.png">
+  <link rel="canonical" href="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/">
 
 
 <script id="page-configurations">
@@ -80,7 +87,7 @@
   };
 </script>
 
-  <title>Hello World | 一只鱼的博客</title>
+  <title>图的表示:如何存储微博、微信等社交网络中好友关系？ | 一只鱼的博客</title>
   
 
 
@@ -341,7 +348,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/03/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="小鱼儿">
@@ -353,7 +360,7 @@
       <meta itemprop="name" content="一只鱼的博客">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Hello World
+        <h1 class="post-title" itemprop="name headline">图的表示:如何存储微博、微信等社交网络中好友关系？
 
           
         </h1>
@@ -369,7 +376,24 @@
                 
               
 
-              <time title="创建时间：2019-10-03 08:28:04" itemprop="dateCreated datePublished" datetime="2019-10-03T08:28:04+08:00">2019-10-03</time>
+              <time title="创建时间：2019-11-06 21:08:24 / 修改时间：21:42:30" itemprop="dateCreated datePublished" datetime="2019-11-06T21:08:24+08:00">2019-11-06</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
+
+                
+                
+              
             </span>
           
 
@@ -384,19 +408,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+        <h1 id="图基本概念"><a href="#图基本概念" class="headerlink" title="图基本概念"></a>图基本概念</h1><ul>
+<li>树中的元素我们成为节点，图中的元素称为顶点。</li>
+</ul>
+<a id="more"></a>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<ul>
+<li>图中的一个顶点可以与任意其他顶点建立连接关系，这种连接关系叫做边。</li>
+</ul>
+<p><img src="/2019/11/06/数据结构与算法之图的表示/1.png" alt="1573045955613"></p>
+<p>社交网络就是一个非常典型的图结构。</p>
+<ul>
+<li>顶点的度：跟顶点相连接的变得条数。—–&gt;微信好友关系</li>
+<li>有向图：边有方向</li>
+<li>无向图：边没有方向——&gt;微博好友关系</li>
+</ul>
+<p><img src="/2019/11/06/数据结构与算法之图的表示/2.png" alt="1573046114506"></p>
+<ul>
+<li>入度：有多少条边指向这个顶点——&gt;有多少粉丝</li>
+<li>出度：有多少条边是以该顶点为起点指向其他顶点。——-&gt;关注了多少人</li>
+<li>带权图：每条边都有一个权重——&gt;QQ好友间的亲密度</li>
+</ul>
+<p><img src="/2019/11/06/数据结构与算法之图的表示/3.png" alt="1573046340618"></p>
+<h1 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h1><h2 id="邻接矩阵存储方法（最直观）"><a href="#邻接矩阵存储方法（最直观）" class="headerlink" title="邻接矩阵存储方法（最直观）"></a>邻接矩阵存储方法（最直观）</h2><p>邻接矩阵的底层依赖一个二维数组。</p>
+<p>对于无向图来说，如果顶点i与顶点j之间有边，就将A[i][j]和A[j][i]标记为1；</p>
+<p>对于有向图来说，如果顶点i与顶点j之间有一条箭头从顶点i指向顶点j的边，就将A[i][j]标记为1.同理，如果有一条箭头从顶点j指向顶点i的边，就将A[j][i]标记为1.对于带权图，数组中就存储相应的权重。</p>
+<p><img src="/2019/11/06/数据结构与算法之图的表示/4.png" alt="1573046701924"></p>
+<p>使用邻接矩阵表示一个图，虽然简单直观，但是比较浪费存储空间。</p>
+<p>对于无向图来说，如果A[i][j]=1那么A[j][i]肯定等于1，实际上只需要存储一个就可以了。也就是说，无向图中的二维数组中，如果我们将其用对角线划分为上下两部分，只需要利用上面的一半空间就足够了。</p>
+<p>如果存储的是稀疏图，使用邻接矩阵的存储方法更加浪费空间。</p>
+<h2 id="邻接表存储方法"><a href="#邻接表存储方法" class="headerlink" title="邻接表存储方法"></a>邻接表存储方法</h2><p>每个顶点对应一条链表，链表中存储的是与这个顶点相连接的其他顶点。</p>
+<p><img src="/2019/11/06/数据结构与算法之图的表示/5.png" alt="1573047048119"></p>
+<p>这里就体现了时间、空间复杂度互换的设计思想，邻接矩阵浪费空间，使用节省时间。相反，邻接表存储节省空间，使用耗时间。</p>
+<ul>
+<li>改进升级</li>
+</ul>
+<p>在基于链表法解决冲突的散列表中，如果链过长，为了提高查找效率，可以将链表换成其他更高效的数据结构，比如平衡二叉查找树等。</p>
+<p>可以将邻接表中的链表改成平衡二叉查找树，在实际开发中可以选择红黑树，这样就可以快速的查找两个顶点之间是否存在边了。</p>
+<p>除此之外，还可以将链表改成有序动态数组，可以通过二分查找的方法来定位两个顶点之间是否存在边。</p>
+<h1 id="如何存储好友"><a href="#如何存储好友" class="headerlink" title="如何存储好友"></a>如何存储好友</h1><p>根据前面的分析，我们了解到微博是有向图，微信是无向图。所以两者的解决思路差不多。</p>
+<p>以微博为例，针对微博用户关系，我们设计的数据结构要支持下面的几个操作。</p>
+<ul>
+<li>判断用户A是否关注了用户B</li>
+<li>判断用户A是否是用户B的粉丝</li>
+<li>用户A关注用户B</li>
+<li>用户A取消关注用户B</li>
+<li>根据用户名称的首字母排序，分页获取用户的粉丝列表</li>
+<li>根据用户名称的首字母排序，分页获取用户的关注列表</li>
+</ul>
+<p>图的存储有两种方法，由于社交网络是一张稀疏图，使用邻接矩阵存储比较浪费空间，所以采用邻接表来存储。</p>
 
     </div>
 
@@ -413,7 +473,7 @@
     <strong>本文作者： </strong>小鱼儿</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/03/hello-world/" title="Hello World">http://yoursite.com/2019/10/03/hello-world/</a>
+    <a href="http://yoursite.com/2019/11/06/数据结构与算法之图的表示/" title="图的表示:如何存储微博、微信等社交网络中好友关系？">http://yoursite.com/2019/11/06/数据结构与算法之图的表示/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -423,21 +483,30 @@
       
 
       <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/图/" rel="tag"># 图</a>
+            
+          </div>
+        
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
+                <a href="/2019/11/06/MySQL之存储过程和函数/" rel="next" title="MySQL之存储过程和函数">
+                  <i class="fa fa-chevron-left"></i> MySQL之存储过程和函数
+                </a>
+              
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/10/03/My-New-Post/" rel="prev" title="My New Post">
-                  My New Post <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -484,7 +553,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#图基本概念"><span class="nav-number">1.</span> <span class="nav-text">图基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图的存储"><span class="nav-number">2.</span> <span class="nav-text">图的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接矩阵存储方法（最直观）"><span class="nav-number">2.1.</span> <span class="nav-text">邻接矩阵存储方法（最直观）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接表存储方法"><span class="nav-number">2.2.</span> <span class="nav-text">邻接表存储方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何存储好友"><span class="nav-number">3.</span> <span class="nav-text">如何存储好友</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
