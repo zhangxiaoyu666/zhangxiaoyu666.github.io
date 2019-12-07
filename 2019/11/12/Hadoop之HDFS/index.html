@@ -63,14 +63,20 @@
 <meta property="og:site_name" content="一只鱼的博客">
 <meta property="og:description" content="HDFS概述定义分布式文件系统，适合一次写入，多次读出的场景，不支持文件的修改，适合用来做数据分析，不适合做网盘应用。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/4.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/3.png">
-<meta property="og:updated_time" content="2019-11-14T01:33:27.941Z">
+<meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/9.png">
+<meta property="og:updated_time" content="2019-12-04T05:54:25.912Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop之HDFS">
 <meta name="twitter:description" content="HDFS概述定义分布式文件系统，适合一次写入，多次读出的场景，不支持文件的修改，适合用来做数据分析，不适合做网盘应用。">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/12/Hadoop之HDFS/4.png">
   <link rel="canonical" href="http://yoursite.com/2019/11/12/Hadoop之HDFS/">
 
 
@@ -212,7 +218,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">35</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">39</span></a>
 
   </li>
       
@@ -256,7 +262,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">42</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">46</span></a>
 
   </li>
       
@@ -385,7 +391,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-14 09:33:27" itemprop="dateModified" datetime="2019-11-14T09:33:27+08:00">2019-11-14</time>
+                <time title="修改时间：2019-12-04 13:54:25" itemprop="dateModified" datetime="2019-12-04T13:54:25+08:00">2019-12-04</time>
               </span>
             
           
@@ -414,11 +420,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="HDFS概述"><a href="#HDFS概述" class="headerlink" title="HDFS概述"></a>HDFS概述</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>分布式文件系统，适合一次写入，多次读出的场景，不支持文件的修改，适合用来做数据分析，不适合做网盘应用。<a id="more"></a></p>
+        <h1 id="HDFS概述"><a href="#HDFS概述" class="headerlink" title="HDFS概述"></a>HDFS概述</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><strong>分布式文件系统</strong>，适合一次写入，多次读出的场景，不支持文件的修改，适合用来做数据分析，不适合做网盘应用。<a id="more"></a></p>
+<p>分布式文件系统的理解：其实就是一堆服务器，凑成一个大的服务器</p>
 <h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol>
 <li>高容错性：数据自动保存多个副本，通过增加副本的形式，提高容错性</li>
-<li>适合处理大数据：数据规模达到GB、TB、PB、文件规模百万以上</li>
-<li>构建在廉价机器上，通过多副本机制，提高可靠性</li>
+</ol>
+<p><img src="/2019/11/12/Hadoop之HDFS/4.png" alt="1575008266361"></p>
+<ol start="2">
+<li><p>适合处理大数据：数据规模达到GB、TB、PB、文件规模百万以上</p>
+</li>
+<li><p>构建在廉价机器上，通过多副本机制，提高可靠性</p>
+</li>
 </ol>
 <h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
 <li><p>不适合低延时数据访问，比如毫秒级的存储数据</p>
@@ -432,6 +444,16 @@
 <p>(2)一个文件只能一个写，不允许多个线程同时写</p>
 </li>
 </ol>
+<ul>
+<li>HDFS存储大量小文件好不好？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不好，小文件会占用大量的namenode内存</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>HDFS小文件治理方式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">第一种方案：上传之前进行合并，会出现文件内容的混淆</span><br><span class="line">第二种方案：har文档和sequencefile文件</span><br></pre></td></tr></table></figure>
+
 <h2 id="组成架构"><a href="#组成架构" class="headerlink" title="组成架构"></a>组成架构</h2><p><img src="/2019/11/12/Hadoop之HDFS/1.png" alt="1573558912264"></p>
 <p><img src="/2019/11/12/Hadoop之HDFS/2.png" alt="1573559011882"></p>
 <h2 id="HDFS文件块大小"><a href="#HDFS文件块大小" class="headerlink" title="HDFS文件块大小"></a>HDFS文件块大小</h2><p><img src="/2019/11/12/Hadoop之HDFS/3.png" alt="1573559156298"></p>
@@ -440,6 +462,19 @@
 </ul>
 <p>(1)如果设置太小，会增加寻址时间</p>
 <p>(2)如果设置太大，程序处理会变慢</p>
+<p>数据存储是以block为单位，有以下这些文件</p>
+<p>①300M—&gt;128+128+44 —–&gt;3个block块来存储</p>
+<p>②100M—&gt;一个block块存储—-&gt;占用磁盘空间多大？</p>
+<p>③1M—–&gt;一个block块存储—–&gt;占用磁盘空间多大？</p>
+<p>④1KB—-&gt;一个block块存储—–&gt;占用磁盘空间多大？</p>
+<ul>
+<li>占用磁盘空间究竟是文件大小还是block块的大小？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">占用的磁盘空间一定是文件大小。</span><br><span class="line">一个block块最大存储文件大小是128M，但是实际上存多少就占用多少磁盘空间。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不同的文件不能存储到同一个block块中</li>
+</ul>
 <h1 id="HDFS的Shell操作"><a href="#HDFS的Shell操作" class="headerlink" title="HDFS的Shell操作"></a>HDFS的Shell操作</h1><h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/hadoop fs 具体命令  </span><br><span class="line">bin/hdfs dfs 具体命令</span><br></pre></td></tr></table></figure>
 
 <h2 id="命令大全"><a href="#命令大全" class="headerlink" title="命令大全"></a>命令大全</h2><ul>
@@ -460,7 +495,7 @@
 <ul>
 <li>HDFS–&gt;HDFS</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cp</span><br><span class="line">mv</span><br><span class="line">rm</span><br><span class="line">chown</span><br><span class="line">chgrp</span><br><span class="line">chmod</span><br><span class="line">mkdir</span><br><span class="line">du</span><br><span class="line">df</span><br><span class="line">cat</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cp</span><br><span class="line">mv</span><br><span class="line">rm -r 递归删除</span><br><span class="line">chown</span><br><span class="line">chgrp</span><br><span class="line">chmod</span><br><span class="line">mkdir/touch</span><br><span class="line">du</span><br><span class="line">df</span><br><span class="line">cat</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>HFDS–&gt;本地  (下载)</li>
@@ -482,7 +517,419 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -mkdir -p 路径</span><br><span class="line">-p  Do not fail if the directory already exists</span><br></pre></td></tr></table></figure>
 
-<h1 id="HDFS客户端操作"><a href="#HDFS客户端操作" class="headerlink" title="HDFS客户端操作"></a>HDFS客户端操作</h1><h1 id="HDFS的数据流"><a href="#HDFS的数据流" class="headerlink" title="HDFS的数据流"></a>HDFS的数据流</h1><h1 id="NameNode和SecondaryNameNode"><a href="#NameNode和SecondaryNameNode" class="headerlink" title="NameNode和SecondaryNameNode"></a>NameNode和SecondaryNameNode</h1><h2 id><a href="#" class="headerlink" title></a></h2>
+<h1 id="HDFS客户端操作"><a href="#HDFS客户端操作" class="headerlink" title="HDFS客户端操作"></a>HDFS客户端操作</h1><h1 id="HDFS的数据流"><a href="#HDFS的数据流" class="headerlink" title="HDFS的数据流"></a>HDFS的数据流</h1><h2 id="HDFS写数据流程"><a href="#HDFS写数据流程" class="headerlink" title="HDFS写数据流程"></a>HDFS写数据流程</h2><p><img src="/2019/11/12/Hadoop之HDFS/5.png" alt="1575437373702"></p>
+<p>1）客户端通过Distributed FileSystem模块向NameNode请求上传文件，NameNode检查目标文件是否已存在，父目录是否存在。</p>
+<p>2）NameNode返回是否可以上传。</p>
+<p>3）客户端请求第一个 Block上传到哪几个DataNode服务器上。</p>
+<p>4）NameNode返回3个DataNode节点，分别为dn1、dn2、dn3。</p>
+<p>5）客户端通过FSDataOutputStream模块请求dn1上传数据，dn1收到请求会继续调用dn2，然后dn2调用dn3，将这个通信管道建立完成。</p>
+<p>6）dn1、dn2、dn3逐级应答客户端。</p>
+<p>7）客户端开始往dn1上传第一个Block（先从磁盘读取数据放到一个本地内存缓存），以Packet为单位，每个packet是64KB，dn1收到一个Packet就会传给dn2，dn2传给dn3；dn1每传一个packet会放入一个应答队列等待应答。</p>
+<p>8）当一个Block传输完成之后，客户端再次请求NameNode上传第二个Block的服务器。（重复执行3-7步）。</p>
+<p>为防止丢包，使用CRC校验，校验文件的完整性</p>
+<ul>
+<li><p>Datanode选择：负载均衡</p>
+</li>
+<li><p>写入考虑因素：</p>
+</li>
+</ul>
+<p>①离客户端网络拓扑图最近，减少网络拷贝，跨交换机最少的</p>
+<p>②datanode心跳比较鲜活：最近心跳的节点</p>
+<p>③datanode磁盘比较充足</p>
+<h2 id="HDFS读数据流程"><a href="#HDFS读数据流程" class="headerlink" title="HDFS读数据流程"></a>HDFS读数据流程</h2><p><img src="/2019/11/12/Hadoop之HDFS/6.png" alt="1575437441080"></p>
+<p>1）客户端通过Distributed FileSystem向NameNode请求下载文件，NameNode通过查询元数据，找到文件块所在的DataNode地址。</p>
+<p>2）挑选一台DataNode（就近原则，然后随机）服务器，请求读取数据。</p>
+<p>3）DataNode开始传输数据给客户端（从磁盘里面读取数据输入流，以Packet为单位来做校验）。</p>
+<p>4）客户端以Packet为单位接收，先在本地缓存，然后写入目标文件。</p>
+<h1 id="NameNode和SecondaryNameNode功能剖析"><a href="#NameNode和SecondaryNameNode功能剖析" class="headerlink" title="NameNode和SecondaryNameNode功能剖析"></a>NameNode和SecondaryNameNode功能剖析</h1><h2 id="namenode与secondaryName解析"><a href="#namenode与secondaryName解析" class="headerlink" title="namenode与secondaryName解析"></a>namenode与secondaryName解析</h2><p>NameNode主要负责集群当中的元数据信息管理，而且元数据信息需要经常随机访问，因为元数据信息必须高效的检索，那么如何保证namenode快速检索呢？？元数据信息保存在哪里能够快速检索呢？？如何保证元数据的持久安全呢？？ </p>
+<p>为了保证元数据信息的快速检索，那么我们就必须将元数据存放在内存当中，因为在内存当中元数据信息能够最快速的检索，那么随着元数据信息的增多（每个block块大概占用150字节的元数据信息），内存的消耗也会越来越多。</p>
+<p>如果所有的元数据信息都存放内存，服务器断电，内存当中所有数据都消失，为了保证元数据的安全持久，元数据信息必须做可靠的持久化，在hadoop当中为了持久化存储元数据信息，将所有的元数据信息保存在了FSImage文件当中，那么FSImage随着时间推移，必然越来越膨胀，FSImage的操作变得越来越难，为了解决元数据信息的增删改，hadoop当中还引入了元数据操作日志edits文件，edits文件记录了客户端操作元数据的信息，随着时间的推移，edits信息也会越来越大，为了解决edits文件膨胀的问题，hadoop当中引入了secondaryNamenode来专门做fsimage与edits文件的合并</p>
+<h3 id="namenode工作机制"><a href="#namenode工作机制" class="headerlink" title="namenode工作机制"></a>namenode工作机制</h3><p>（1）第一次启动namenode格式化后，创建fsimage和edits文件。如果不是第一次启动，直接加载编辑日志和镜像文件到内存。</p>
+<p>（2）客户端对元数据进行增删改的请求</p>
+<p>（3）namenode记录操作日志，更新滚动日志。</p>
+<p>（4）namenode在内存中对数据进行增删改查</p>
+<h3 id="Secondary-NameNode工作"><a href="#Secondary-NameNode工作" class="headerlink" title="Secondary NameNode工作"></a>Secondary NameNode工作</h3><p>（1）Secondary NameNode询问namenode是否需要checkpoint。直接带回namenode是否检查结果。</p>
+<p>​       （2）Secondary NameNode请求执行checkpoint。</p>
+<p>​       （3）namenode滚动正在写的edits日志</p>
+<p>​       （4）将滚动前的编辑日志和镜像文件拷贝到Secondary NameNode</p>
+<p>​       （5）Secondary NameNode加载编辑日志和镜像文件到内存，并合并。</p>
+<p>​       （6）生成新的镜像文件fsimage.chkpoint</p>
+<p>（7）    拷贝fsimage.chkpoint到namenode</p>
+<p>（8）namenode将fsimage.chkpoint重新命名成fsimage</p>
+<h2 id="FSImage与edits详解"><a href="#FSImage与edits详解" class="headerlink" title="FSImage与edits详解"></a>FSImage与edits详解</h2><p>所有的元数据信息都保存在了FsImage与Eidts文件当中，这两个文件就记录了所有的数据的元数据信息，元数据信息的保存目录配置在了hdfs-site.xml当中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/namenodeDatas&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">   &lt;name&gt;dfs.namenode.edits.dir&lt;/name&gt;</span><br><span class="line">   &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/nn/edits&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>客户端对hdfs进行写文件时会首先被记录在edits文件中。</p>
+<p>edits修改时元数据也会更新。</p>
+<p>每次hdfs更新时edits先更新后客户端才会看到最新信息。</p>
+<p>fsimage:是namenode中关于元数据的镜像，一般称为检查点。</p>
+<p>一般开始时对namenode的操作都放在edits中，为什么不放在fsimage中呢？</p>
+<p>因为fsimage是namenode的完整的镜像，内容很大，如果每次都加载到内存的话生成树状拓扑结构，这是非常耗内存和CPU。</p>
+<p>fsimage内容包含了namenode管理下的所有datanode中文件及文件block及block所在的datanode的元数据信息。随着edits内容增大，就需要在一定时间点和fsimage合并。</p>
+<h3 id="FSimage文件当中的文件信息查看"><a href="#FSimage文件当中的文件信息查看" class="headerlink" title="FSimage文件当中的文件信息查看"></a>FSimage文件当中的文件信息查看</h3><p>官方查看文档</p>
+<p><a href="http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.0/hadoop-project-dist/hadoop-hdfs/HdfsImageViewer.html" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.2/hadoop-project-dist/hadoop-hdfs/HdfsImageViewer.html</a></p>
+<ul>
+<li>使用命令 hdfs  oiv </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd  /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/namenodeDatas/current</span><br><span class="line"></span><br><span class="line">hdfs oiv -i fsimage_0000000000000000864 -p XML -o hello.xml</span><br></pre></td></tr></table></figure>
+
+<h3 id="edits当中的文件信息查看"><a href="#edits当中的文件信息查看" class="headerlink" title="edits当中的文件信息查看"></a>edits当中的文件信息查看</h3><p>官方查看文档</p>
+<p><a href="http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.0/hadoop-project-dist/hadoop-hdfs/HdfsEditsViewer.html" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.2/hadoop-project-dist/hadoop-hdfs/HdfsEditsViewer.html</a></p>
+<ul>
+<li>查看命令 hdfs  oev</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd  /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/nn/edits</span><br><span class="line"></span><br><span class="line">hdfs oev -i  edits_0000000000000000865-0000000000000000866[[a1\]](#_msocom_1)  -o myedit.xml -p XML</span><br></pre></td></tr></table></figure>
+
+<h2 id="secondarynameNode如何辅助管理FSImage与Edits文件"><a href="#secondarynameNode如何辅助管理FSImage与Edits文件" class="headerlink" title="secondarynameNode如何辅助管理FSImage与Edits文件"></a>secondarynameNode如何辅助管理FSImage与Edits文件</h2><p>①：secnonaryNN通知NameNode切换editlog</p>
+<p>②：secondaryNN从NameNode中获得FSImage和editlog(通过http方式)</p>
+<p>③：secondaryNN将FSImage载入内存，然后开始合并editlog，合并之后成为新的fsimage</p>
+<p>④：secondaryNN将新的fsimage发回给NameNode</p>
+<p>⑤：NameNode用新的fsimage替换旧的fsimage</p>
+<p>   <img src="/2019/11/12/Hadoop之HDFS/7.png" alt="1575437772367"></p>
+<p>完成合并的是secondarynamenode，会请求namenode停止使用edits,暂时将新写操作放入一个新的文件中（edits.new)。secondarynamenode从namenode中通过http get获得edits，因为要和fsimage合并，所以也是通过http get 的方式把fsimage加载到内存，然后逐一执行具体对文件系统的操作，与fsimage合并，生成新的fsimage，然后把fsimage发送给namenode，通过http post的方式。namenode从secondarynamenode获得了fsimage后会把原有的fsimage替换为新的fsimage,把edits.new变成edits。同时会更新fstime。</p>
+<p>hadoop进入安全模式时需要管理员使用dfsadmin的save namespace来创建新的检查点。</p>
+<p>secondarynamenode在合并edits和fsimage时需要消耗的内存和namenode差不多，所以一般把namenode和secondarynamenode放在不同的机器上。</p>
+<p>fsimage与edits的合并时机取决于两个参数:</p>
+<p>第一个参数：时间达到一个小时fsimage与edits就会进行合并</p>
+<table>
+<thead>
+<tr>
+<th>dfs.namenode.checkpoint.period</th>
+<th>3600</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>第二个参数：hdfs操作达到1000000次也会进行合并</p>
+<table>
+<thead>
+<tr>
+<th>dfs.namenode.checkpoint.txns</th>
+<th>1000000</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>还有一个参数是每隔多长时间检查一次hdfs的操作次数</p>
+<table>
+<thead>
+<tr>
+<th>dfs.namenode.checkpoint.check.period</th>
+<th>60</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="namenode元数据信息多目录配置"><a href="#namenode元数据信息多目录配置" class="headerlink" title="namenode元数据信息多目录配置"></a>namenode元数据信息多目录配置</h2><p>为了保证元数据的安全性，我们一般都是先确定好我们的磁盘挂载目录，将元数据的磁盘做RAID1</p>
+<p>namenode的本地目录可以配置成多个，且每个目录存放内容相同，增加了可靠性。</p>
+<p>2）具体配置如下：</p>
+<p>​       hdfs-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">   &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">   &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/namenodeDatas&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="namenode故障恢复"><a href="#namenode故障恢复" class="headerlink" title="namenode故障恢复"></a>namenode故障恢复</h2><p>在我们的secondaryNamenode对namenode当中的fsimage和edits进行合并的时候，每次都会先将namenode的fsimage与edits文件拷贝一份过来，所以fsimage与edits文件在secondarNamendoe当中也会保存有一份，如果namenode的fsimage与edits文件损坏，那么我们可以将secondaryNamenode当中的fsimage与edits拷贝过去给namenode继续使用，只不过有可能会丢失一部分数据。这里涉及到几个配置选项</p>
+<p>namenode保存fsimage的配置路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">   &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">   &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/namenodeDatas&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>namenode保存edits文件的配置路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.edits.dir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/nn/edits&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>secondaryNamenode保存fsimage文件的配置路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">   &lt;name&gt;dfs.namenode.checkpoint.dir&lt;/name&gt;</span><br><span class="line">   &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/snn/name&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>secondaryNamenode保存edits文件的配置路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.namenode.checkpoint.edits.dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/nn/snn/edits&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果namenode当中的fsimage文件损坏或者丢失，我们可以从secondaryNamenode当中拷贝过去放到对应的路径下即可</p>
+<ul>
+<li>第一步：杀死namenode进程</li>
+</ul>
+<p>使用jps查看namenode进程号，然后直接使用kill  -9  进程号杀死namenode进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 servers]#jps</span><br><span class="line"></span><br><span class="line">127156 QuorumPeerMain</span><br><span class="line"></span><br><span class="line">127785 ResourceManager</span><br><span class="line"></span><br><span class="line">17688 NameNode</span><br><span class="line"></span><br><span class="line">127544 SecondaryNameNode</span><br><span class="line"></span><br><span class="line">127418 DataNode</span><br><span class="line"></span><br><span class="line">128365 JobHistoryServer</span><br><span class="line"></span><br><span class="line">19036 Jps</span><br><span class="line"></span><br><span class="line">127886 NodeManager</span><br><span class="line"></span><br><span class="line">[hadoop@node01 servers]# kill -9 17688</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第二步：删除namenode的fsimage与edits文件</li>
+</ul>
+<p>namenode所在机器执行以下命令，删除fsimage与edits文件</p>
+<p>删除fsimage与edits文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/namenodeDatas/*</span><br><span class="line"></span><br><span class="line">rm -rf /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/nn/edits/*</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第三步：拷贝secondaryNamenode的fsimage与edits文件到namenode的fsimage与edits文件夹下面去</li>
+</ul>
+<p>将secondaryNameNode所在机器的fsimage与edits文件拷贝到namenode所在的fsimage与edits文件夹下面去</p>
+<p>由于我的secondaryNameNode与namenode安装在同一台机器，都在node01上面，node01执行以下命令进行拷贝</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -r /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/snn/name/* /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/namenodeDatas/</span><br><span class="line"></span><br><span class="line">cp -r /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/nn/snn/edits/* /kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/dfs/nn/edits</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第四步：启动namenode</li>
+</ul>
+<p>node01服务器执行以下命令启动namenode</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd hadoop-2.6.0-cdh5.14.2/</span><br><span class="line"></span><br><span class="line">sbin/hadoop-daemon.sh start namenode</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第五步：浏览器页面正常访问</li>
+</ul>
+<p><a href="http://node01:50070/explorer.html#/" target="_blank" rel="noopener">http://node01:50070/explorer.html#/</a></p>
+<h1 id="datanode工作机制以及数据存储"><a href="#datanode工作机制以及数据存储" class="headerlink" title="datanode工作机制以及数据存储"></a>datanode工作机制以及数据存储</h1><h2 id="datanode工作机制"><a href="#datanode工作机制" class="headerlink" title="datanode工作机制"></a>datanode工作机制</h2><p>1）一个数据块在datanode上以文件形式存储在磁盘上，包括两个文件，一个是数据本身，一个是元数据包括数据块的长度，块数据的校验和，以及时间戳。</p>
+<p>2）DataNode启动后向namenode注册，通过后，周期性（1小时）的向namenode上报所有的块信息。</p>
+<p>3）心跳是每3秒一次，心跳返回结果带有namenode给该datanode的命令如复制块数据到另一台机器，或删除某个数据块。如果超过10分钟没有收到某个datanode的心跳，则认为该节点不可用。</p>
+<p>4）集群运行中可以安全加入和退出一些机器</p>
+<h2 id="数据完整性"><a href="#数据完整性" class="headerlink" title="数据完整性"></a>数据完整性</h2><p>1）当DataNode读取block的时候，它会计算checksum</p>
+<p>2）如果计算后的checksum，与block创建时值不一样，说明block已经损坏。</p>
+<p>3）client读取其他DataNode上的block.</p>
+<p>4）datanode在其文件创建后周期验证checksum</p>
+<h2 id="掉线时限参数设置"><a href="#掉线时限参数设置" class="headerlink" title="掉线时限参数设置"></a>掉线时限参数设置</h2><p>datanode进程死亡或者网络故障造成datanode无法与namenode通信，namenode不会立即把该节点判定为死亡，要经过一段时间，这段时间暂称作超时时长。HDFS默认的超时时长为10分钟+30秒。如果定义超时时间为timeout，则超时时长的计算公式为：</p>
+<p>​       timeout  = 2 * dfs.namenode.heartbeat.recheck-interval + 10 * dfs.heartbeat.interval。</p>
+<p>​       而默认的dfs.namenode.heartbeat.recheck-interval 大小为5分钟，dfs.heartbeat.interval默认为3秒。</p>
+<p>​       需要注意的是hdfs-site.xml 配置文件中的heartbeat.recheck.interval的单位为毫秒，dfs.heartbeat.interval的单位为秒。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.namenode.heartbeat.recheck-interval&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;300000&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt; dfs.heartbeat.interval &lt;/name&gt;</span><br><span class="line">    &lt;value&gt;3&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="DataNode的目录结构"><a href="#DataNode的目录结构" class="headerlink" title="DataNode的目录结构"></a>DataNode的目录结构</h2><p>和namenode不同的是，datanode的存储目录是初始阶段自动创建的，不需要额外格式化。</p>
+<p>在<strong>/kkb/install/hadoop-2.6.0-cdh5.14.2</strong>/hadoopDatas/datanodeDatas/current这个目录下查看版本号</p>
+<p>[root@node01 current]<em># cat VERSION</em> </p>
+<p><em>#Thu Mar 14 07:58:46 CST 2019</em></p>
+<p>storageID=DS-47bcc6d5-c9b7-4c88-9cc8-6154b8a2bf39</p>
+<p>clusterID=CID-dac2e9fa-65d2-4963-a7b5-bb4d0280d3f4</p>
+<p>cTime=0</p>
+<p>datanodeUuid=c44514a0-9ed6-4642-b3a8-5af79f03d7a4</p>
+<p>storageType=DATA_NODE</p>
+<p>layoutVersion=-56</p>
+<p>具体解释</p>
+<p>（1）storageID：存储id号</p>
+<p>（2）clusterID集群id，全局唯一</p>
+<p>（3）cTime属性标记了datanode存储系统的创建时间，对于刚刚格式化的存储系统，这个属性为0；但是在文件系统升级之后，该值会更新到新的时间戳。</p>
+<p>（4）datanodeUuid：datanode的唯一识别码</p>
+<p>（5）storageType：存储类型</p>
+<p>（6）layoutVersion是一个负整数。通常只有HDFS增加新特性时才会更新这个版本号。</p>
+<p>Block块位置：</p>
+<h2 id="Datanode多目录配置"><a href="#Datanode多目录配置" class="headerlink" title="Datanode多目录配置"></a>Datanode多目录配置</h2><p>datanode也可以配置成多个目录，每个目录存储的数据不一样。即：数据不是副本。具体配置如下：</p>
+<p>cd /kkb/install/hadoop-2.6.0-cdh5.14.2/etc/hadoop</p>
+<p>vim hdfs-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--  定义dataNode数据存储的节点位置，实际工作中，一般先确定磁盘的挂载目录，然后多个目录用，进行分割  --&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">   &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line"></span><br><span class="line">   &lt;value&gt;file:///kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/datanodeDatas&lt;/value&gt;</span><br><span class="line"></span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="hdfs的小文件治理"><a href="#hdfs的小文件治理" class="headerlink" title="hdfs的小文件治理"></a>hdfs的小文件治理</h1><h2 id="有没有问题"><a href="#有没有问题" class="headerlink" title="有没有问题"></a>有没有问题</h2><p>NameNode存储着文件系统的元数据，每个文件、目录、块大概有150字节的元数据；因此文件数量的限制也由NN内存大小决定，如果小文件过多则会造成NN的压力过大,且HDFS能存储的数据总量也会变小</p>
+<h2 id="HAR文件方案"><a href="#HAR文件方案" class="headerlink" title="HAR文件方案"></a>HAR文件方案</h2><p>本质启动mr程序，所以需要启动yarn</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用法：archive -archiveName &lt;NAME&gt;.har -p &lt;parent path&gt; [-r &lt;replication factor&gt;]&lt;src&gt;* &lt;dest&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第一步：创建归档文件</li>
+</ul>
+<p>注意：归档文件一定要保证yarn集群启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hadoop-2.6.0-cdh5.14.2</span><br><span class="line"></span><br><span class="line">bin/hadoop archive -archiveName myhar.har -p /user/hadoop /user</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第二步：查看归档文件内容</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -lsr /user/myhar.har</span><br><span class="line"></span><br><span class="line">hdfs dfs -lsr har:///user/myhar.har</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第三步：解压归档文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -mkdir -p /user/har</span><br><span class="line"></span><br><span class="line">hdfs dfs -cp har:///user/myhar.har/* /user/har/</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将小文件进行合并，但是能够区分开每个小文件</li>
+</ul>
+<h2 id="Sequence-Files方案"><a href="#Sequence-Files方案" class="headerlink" title="Sequence Files方案"></a>Sequence Files方案</h2><p>SequenceFile是二进制的文件，主要由一条条record记录组成；每个record是键值对形式的</p>
+<p>SequenceFile文件可以作为小文件的存储容器；</p>
+<p>o    每条record保存一个小文件的内容</p>
+<p>o    小文件名作为当前record的键；</p>
+<p>o    小文件的内容作为当前record的值；</p>
+<p>o    如10000个100KB的小文件，可以编写程序将这些文件放到一个SequenceFile文件。</p>
+<p> 一个SequenceFile是可分割的，所以MapReduce可将文件切分成块，每一块独立操作。</p>
+<p>具体结构（如下图）：</p>
+<p>o    一个SequenceFile首先有一个4字节的header（文件版本号）</p>
+<p>o    接着是若干record记录</p>
+<p>o    记录间会随机的插入一些同步点sync marker，用于方便定位到记录边界</p>
+<p>不像HAR，SequenceFile支持压缩。记录的结构取决于是否启动压缩</p>
+<p>o    支持两类压缩：</p>
+<p>§  不压缩NONE，如下图</p>
+<p>§  压缩RECORD，如下图</p>
+<p>§  压缩BLOCK，①一次性压缩多条记录；②每一个新块Block开始处都需要插入同步点；如下图</p>
+<p>o    在大多数情况下，以block（注意：指的是SequenceFile中的block）为单位进行压缩是最好的选择</p>
+<p>o    因为一个block包含多条记录，利用record间的相似性进行压缩，压缩效率更高</p>
+<p>o    把已有的数据转存为SequenceFile比较慢。比起先写小文件，再将小文件写入SequenceFile，一个更好的选择是直接将数据写入一个SequenceFile文件，省去小文件作为中间媒介.</p>
+<p>   <img src="/2019/11/12/Hadoop之HDFS/8.png" alt="1575438351838"></p>
+<p>   <img src="/2019/11/12/Hadoop之HDFS/9.png" alt="1575438374025"></p>
+<p>o    向SequenceFile写入数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package com.kaikeba.hadoop.sequencefile;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.conf.Configuration;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.fs.FileSystem;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.fs.Path;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.IOUtils;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.IntWritable;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.SequenceFile;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.Text;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.compress.BZip2Codec;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> import java.io.IOException;</span><br><span class="line"></span><br><span class="line"> import java.net.URI;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> public class SequenceFileWriteNewVersion &#123;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">     //模拟数据源</span><br><span class="line"></span><br><span class="line">     private static final String[] DATA = &#123;</span><br><span class="line"></span><br><span class="line">             &quot;The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models.&quot;,</span><br><span class="line"></span><br><span class="line">             &quot;It is designed to scale up from single servers to thousands of machines, each offering local computation and storage.&quot;,</span><br><span class="line"></span><br><span class="line">             &quot;Rather than rely on hardware to deliver high-availability, the library itself is designed to detect and handle failures at the application layer&quot;,</span><br><span class="line"></span><br><span class="line">             &quot;o delivering a highly-available service on top of a cluster of computers, each of which may be prone to failures.&quot;,</span><br><span class="line"></span><br><span class="line">             &quot;Hadoop Common: The common utilities that support the other Hadoop modules.&quot;</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">     public static void main(String[] args) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">         //输出路径：要生成的SequenceFile文件名</span><br><span class="line"></span><br><span class="line">         String uri = &quot;hdfs://node01:8020/writeSequenceFile&quot;;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">         Configuration conf = new Configuration();</span><br><span class="line"></span><br><span class="line">         FileSystem fs = FileSystem.get(URI.create(uri), conf);</span><br><span class="line"></span><br><span class="line">         //向HDFS上的此SequenceFile文件写数据</span><br><span class="line"></span><br><span class="line">         Path path = new Path(uri);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">         //因为SequenceFile每个record是键值对的</span><br><span class="line"></span><br><span class="line">         //指定key类型</span><br><span class="line"></span><br><span class="line">         IntWritable key = new IntWritable();</span><br><span class="line"></span><br><span class="line">         //指定value类型</span><br><span class="line"></span><br><span class="line">         Text value = new Text();</span><br><span class="line"></span><br><span class="line"> //</span><br><span class="line"></span><br><span class="line"> //           FileContext fileContext = FileContext.getFileContext(URI.create(uri));</span><br><span class="line"></span><br><span class="line"> //           Class&lt;?&gt; codecClass = Class.forName(&quot;org.apache.hadoop.io.compress.SnappyCodec&quot;);</span><br><span class="line"></span><br><span class="line"> //           CompressionCodec SnappyCodec = (CompressionCodec)ReflectionUtils.newInstance(codecClass, conf);</span><br><span class="line"></span><br><span class="line"> //           SequenceFile.Metadata metadata = new SequenceFile.Metadata();</span><br><span class="line"></span><br><span class="line"> //           //writer = SequenceFile.createWriter(fs, conf, path, key.getClass(), value.getClass());</span><br><span class="line"></span><br><span class="line"> //           writer = SequenceFile.createWriter(conf, SequenceFile.Writer.file(path), SequenceFile.Writer.keyClass(IntWritable.class),</span><br><span class="line"></span><br><span class="line"> //                                       SequenceFile.Writer.valueClass(Text.class));</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">         //创建向SequenceFile文件写入数据时的一些选项</span><br><span class="line"></span><br><span class="line">         //要写入的SequenceFile的路径</span><br><span class="line"></span><br><span class="line">         SequenceFile.Writer.Option pathOption       = SequenceFile.Writer.file(path);</span><br><span class="line"></span><br><span class="line">         //record的key类型选项</span><br><span class="line"></span><br><span class="line">         SequenceFile.Writer.Option keyOption        = SequenceFile.Writer.keyClass(IntWritable.class);</span><br><span class="line"></span><br><span class="line">         //record的value类型选项</span><br><span class="line"></span><br><span class="line">         SequenceFile.Writer.Option valueOption      = SequenceFile.Writer.valueClass(Text.class);</span><br><span class="line"></span><br><span class="line">         //SequenceFile压缩方式：NONE | RECORD | BLOCK三选一</span><br><span class="line"></span><br><span class="line">         //方案一：RECORD、不指定压缩算法</span><br><span class="line"></span><br><span class="line">         SequenceFile.Writer.Option compressOption   = SequenceFile.Writer.compression(SequenceFile.CompressionType.RECORD);</span><br><span class="line"></span><br><span class="line">         SequenceFile.Writer writer = SequenceFile.createWriter(conf, pathOption, keyOption, valueOption, compressOption);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">         //方案二：BLOCK、不指定压缩算法</span><br><span class="line"></span><br><span class="line"> //       SequenceFile.Writer.Option compressOption   = SequenceFile.Writer.compression(SequenceFile.CompressionType.BLOCK);</span><br><span class="line"></span><br><span class="line"> //       SequenceFile.Writer writer = SequenceFile.createWriter(conf, pathOption, keyOption, valueOption, compressOption);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">         //方案三：使用BLOCK、压缩算法BZip2Codec；压缩耗时间</span><br><span class="line"></span><br><span class="line">         //再加压缩算法</span><br><span class="line"></span><br><span class="line"> //       BZip2Codec codec = new BZip2Codec();</span><br><span class="line"></span><br><span class="line"> //       codec.setConf(conf);</span><br><span class="line"></span><br><span class="line"> //       SequenceFile.Writer.Option compressAlgorithm = SequenceFile.Writer.compression(SequenceFile.CompressionType.RECORD, codec);</span><br><span class="line"></span><br><span class="line"> //       //创建写数据的Writer实例</span><br><span class="line"></span><br><span class="line"> //       SequenceFile.Writer writer = SequenceFile.createWriter(conf, pathOption, keyOption, valueOption, compressAlgorithm);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">         for (int i = 0; i &lt; 100000; i++) &#123;</span><br><span class="line"></span><br><span class="line">             //分别设置key、value值</span><br><span class="line"></span><br><span class="line">             key.set(100 - i);</span><br><span class="line"></span><br><span class="line">             value.set(DATA[i % DATA.length]);</span><br><span class="line"></span><br><span class="line">             System.out.printf(&quot;[%s]\t%s\t%s\n&quot;, writer.getLength(), key, value);</span><br><span class="line"></span><br><span class="line">             //在SequenceFile末尾追加内容</span><br><span class="line"></span><br><span class="line">             writer.append(key, value);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">         //关闭流</span><br><span class="line"></span><br><span class="line">         IOUtils.closeStream(writer);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>package com.kaikeba.hadoop.sequencefile;</p>
+<p> import org.apache.hadoop.conf.Configuration;</p>
+<p> import org.apache.hadoop.fs.FileSystem;</p>
+<p> import org.apache.hadoop.fs.Path;</p>
+<p> import org.apache.hadoop.io.IOUtils;</p>
+<p> import org.apache.hadoop.io.IntWritable;</p>
+<p> import org.apache.hadoop.io.SequenceFile;</p>
+<p> import org.apache.hadoop.io.Text;</p>
+<p> import org.apache.hadoop.io.compress.BZip2Codec;</p>
+<p> import java.io.IOException;</p>
+<p> import java.net.URI;</p>
+<p> public class SequenceFileWriteNewVersion {</p>
+<p>​     //模拟数据源</p>
+<p>​     private static final String[] DATA = {</p>
+<p>​             “The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models.”,</p>
+<p>​             “It is designed to scale up from single servers to thousands of machines, each offering local computation and storage.”,</p>
+<p>​             “Rather than rely on hardware to deliver high-availability, the library itself is designed to detect and handle failures at the application layer”,</p>
+<p>​             “o delivering a highly-available service on top of a cluster of computers, each of which may be prone to failures.”,</p>
+<p>​             “Hadoop Common: The common utilities that support the other Hadoop modules.”</p>
+<p>​    };</p>
+<p>​     public static void main(String[] args) throws IOException {</p>
+<p>​         //输出路径：要生成的SequenceFile文件名</p>
+<p>​         String uri = “hdfs://node01:8020/writeSequenceFile”;</p>
+<p>​         Configuration conf = new Configuration();</p>
+<p>​         FileSystem fs = FileSystem.get(URI.create(uri), conf);</p>
+<p>​         //向HDFS上的此SequenceFile文件写数据</p>
+<p>​         Path path = new Path(uri);</p>
+<p>​         //因为SequenceFile每个record是键值对的</p>
+<p>​         //指定key类型</p>
+<p>​         IntWritable key = new IntWritable();</p>
+<p>​         //指定value类型</p>
+<p>​         Text value = new Text();</p>
+<p> //</p>
+<p> //           FileContext fileContext = FileContext.getFileContext(URI.create(uri));</p>
+<p> //           Class&lt;?&gt; codecClass = Class.forName(“org.apache.hadoop.io.compress.SnappyCodec”);</p>
+<p> //           CompressionCodec SnappyCodec = (CompressionCodec)ReflectionUtils.newInstance(codecClass, conf);</p>
+<p> //           SequenceFile.Metadata metadata = new SequenceFile.Metadata();</p>
+<p> //           //writer = SequenceFile.createWriter(fs, conf, path, key.getClass(), value.getClass());</p>
+<p> //           writer = SequenceFile.createWriter(conf, SequenceFile.Writer.file(path), SequenceFile.Writer.keyClass(IntWritable.class),</p>
+<p> //                                       SequenceFile.Writer.valueClass(Text.class));</p>
+<p>​         //创建向SequenceFile文件写入数据时的一些选项</p>
+<p>​         //要写入的SequenceFile的路径</p>
+<p>​         SequenceFile.Writer.Option pathOption       = SequenceFile.Writer.file(path);</p>
+<p>​         //record的key类型选项</p>
+<p>​         SequenceFile.Writer.Option keyOption        = SequenceFile.Writer.keyClass(IntWritable.class);</p>
+<p>​         //record的value类型选项</p>
+<p>​         SequenceFile.Writer.Option valueOption      = SequenceFile.Writer.valueClass(Text.class);</p>
+<p>​         //SequenceFile压缩方式：NONE | RECORD | BLOCK三选一</p>
+<p>​         //方案一：RECORD、不指定压缩算法</p>
+<p>​         SequenceFile.Writer.Option compressOption   = SequenceFile.Writer.compression(SequenceFile.CompressionType.RECORD);</p>
+<p>​         SequenceFile.Writer writer = SequenceFile.createWriter(conf, pathOption, keyOption, valueOption, compressOption);</p>
+<p>​         //方案二：BLOCK、不指定压缩算法</p>
+<p> //       SequenceFile.Writer.Option compressOption   = SequenceFile.Writer.compression(SequenceFile.CompressionType.BLOCK);</p>
+<p> //       SequenceFile.Writer writer = SequenceFile.createWriter(conf, pathOption, keyOption, valueOption, compressOption);</p>
+<p>​         //方案三：使用BLOCK、压缩算法BZip2Codec；压缩耗时间</p>
+<p>​         //再加压缩算法</p>
+<p> //       BZip2Codec codec = new BZip2Codec();</p>
+<p> //       codec.setConf(conf);</p>
+<p> //       SequenceFile.Writer.Option compressAlgorithm = SequenceFile.Writer.compression(SequenceFile.CompressionType.RECORD, codec);</p>
+<p> //       //创建写数据的Writer实例</p>
+<p> //       SequenceFile.Writer writer = SequenceFile.createWriter(conf, pathOption, keyOption, valueOption, compressAlgorithm);</p>
+<p>​         for (int i = 0; i &lt; 100000; i++) {</p>
+<p>​             //分别设置key、value值</p>
+<p>​             key.set(100 - i);</p>
+<p>​             value.set(DATA[i % DATA.length]);</p>
+<p>​             System.out.printf(“[%s]\t%s\t%s\n”, writer.getLength(), key, value);</p>
+<p>​             //在SequenceFile末尾追加内容</p>
+<p>​             writer.append(key, value);</p>
+<p>​        }</p>
+<p>​         //关闭流</p>
+<p>​         IOUtils.closeStream(writer);</p>
+<p>​    }</p>
+<p> }</p>
+<p>o    命令查看SequenceFile内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -text /writeSequenceFile</span><br></pre></td></tr></table></figure>
+
+<p>o    读取SequenceFile文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">package com.kaikeba.hadoop.sequencefile;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.conf.Configuration;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.fs.Path;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.IOUtils;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.SequenceFile;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.io.Writable;</span><br><span class="line"></span><br><span class="line"> import org.apache.hadoop.util.ReflectionUtils;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> import java.io.IOException;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> public class SequenceFileReadNewVersion &#123;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​     public static void main(String[] args) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">​         //要读的SequenceFile</span><br><span class="line"></span><br><span class="line">​         String uri = &quot;hdfs://node01:8020/writeSequenceFile&quot;;</span><br><span class="line"></span><br><span class="line">​         Configuration conf = new Configuration();</span><br><span class="line"></span><br><span class="line">​         Path path = new Path(uri);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​         //Reader对象</span><br><span class="line"></span><br><span class="line">​         SequenceFile.Reader reader = null;</span><br><span class="line"></span><br><span class="line">​         try &#123;</span><br><span class="line"></span><br><span class="line">​             //读取SequenceFile的Reader的路径选项</span><br><span class="line"></span><br><span class="line">​             SequenceFile.Reader.Option pathOption = SequenceFile.Reader.file(path);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​             //实例化Reader对象</span><br><span class="line"></span><br><span class="line">​             reader = new SequenceFile.Reader(conf, pathOption);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​             //根据反射，求出key类型</span><br><span class="line"></span><br><span class="line">​             Writable key = (Writable)</span><br><span class="line"></span><br><span class="line">​                     ReflectionUtils.newInstance(reader.getKeyClass(), conf);</span><br><span class="line"></span><br><span class="line">​             //根据反射，求出value类型</span><br><span class="line"></span><br><span class="line">​             Writable value = (Writable)</span><br><span class="line"></span><br><span class="line">​                     ReflectionUtils.newInstance(reader.getValueClass(), conf);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​             long position = reader.getPosition();</span><br><span class="line"></span><br><span class="line">​             System.out.println(position);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​             while (reader.next(key, value)) &#123;</span><br><span class="line"></span><br><span class="line">​                 String syncSeen = reader.syncSeen() ? &quot;*&quot; : &quot;&quot;;</span><br><span class="line"></span><br><span class="line">​                 System.out.printf(&quot;[%s%s]\t%s\t%s\n&quot;, position, syncSeen, key, value);</span><br><span class="line"></span><br><span class="line">​                 position = reader.getPosition(); // beginning of next record</span><br><span class="line"></span><br><span class="line">​            &#125;</span><br><span class="line"></span><br><span class="line">​        &#125; finally &#123;</span><br><span class="line"></span><br><span class="line">​             IOUtils.closeStream(reader);</span><br><span class="line"></span><br><span class="line">​        &#125;</span><br><span class="line"></span><br><span class="line">​    &#125;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="hdfs的其他功能介绍"><a href="#hdfs的其他功能介绍" class="headerlink" title="hdfs的其他功能介绍"></a>hdfs的其他功能介绍</h1><h2 id="多个集群之间的数据拷贝"><a href="#多个集群之间的数据拷贝" class="headerlink" title="多个集群之间的数据拷贝"></a>多个集群之间的数据拷贝</h2><p>在我们实际工作当中，极有可能会遇到将测试集群的数据拷贝到生产环境集群，或者将生产环境集群的数据拷贝到测试集群，那么就需要我们在多个集群之间进行数据的远程拷贝，hadoop自带也有命令可以帮我们实现这个功能</p>
+<p>1、本地文件拷贝scp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/soft</span><br><span class="line"></span><br><span class="line">scp -r jdk-8u141-linux-x64.tar.gz hadoop@node02:/kkb/soft</span><br></pre></td></tr></table></figure>
+
+<p>2、集群之间的数据拷贝distcp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hadoop-2.6.0-cdh5.14.2/</span><br><span class="line"></span><br><span class="line">bin/hadoop distcp hdfs://node01:8020/jdk-8u141-linux-x64.tar.gz hdfs://cluster2:8020/</span><br></pre></td></tr></table></figure>
+
+<h2 id="hdfs快照snapShot管理"><a href="#hdfs快照snapShot管理" class="headerlink" title="hdfs快照snapShot管理"></a>hdfs快照snapShot管理</h2><p>快照顾名思义，就是相当于对我们的hdfs文件系统做一个备份，我们可以通过快照对我们指定的文件夹设置备份，但是添加快照之后，并不会立即复制所有文件，而是指向同一个文件。当写入发生时，才会产生新文件</p>
+<h3 id="快照使用基本语法"><a href="#快照使用基本语法" class="headerlink" title="快照使用基本语法"></a>快照使用基本语法</h3><p> 1、开启指定目录的快照功能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -allowSnapshot 路径</span><br></pre></td></tr></table></figure>
+
+<p> 2、禁用指定目录的快照功能（默认就是禁用状态）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -disallowSnapshot 路径</span><br></pre></td></tr></table></figure>
+
+<p> 3、给某个路径创建快照snapshot</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -createSnapshot 路径</span><br></pre></td></tr></table></figure>
+
+<p> 4、指定快照名称进行创建快照snapshot</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -createSanpshot 路径 名称</span><br></pre></td></tr></table></figure>
+
+<p> 5、给快照重新命名</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -renameSnapshot 路径 旧名称 新名称</span><br></pre></td></tr></table></figure>
+
+<p> 6、列出当前用户所有可快照目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs lsSnapshottableDir</span><br></pre></td></tr></table></figure>
+
+<p> 7、比较两个快照的目录不同之处</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs snapshotDiff 路径1 路径2</span><br></pre></td></tr></table></figure>
+
+<p> 8、删除快照snapshot</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -deleteSnapshot &lt;path&gt; &lt;snapshotName&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="快照操作实际案例"><a href="#快照操作实际案例" class="headerlink" title="快照操作实际案例"></a>快照操作实际案例</h3><p>1、开启与禁用指定目录的快照</p>
+<ul>
+<li>开启快照</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 hadoop-2.6.0-cdh5.14.2]*# hdfs dfsadmin -allowSnapshot /user*</span><br><span class="line"></span><br><span class="line">Allowing snaphot on /user succeeded</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>禁用快照</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 hadoop-2.6.0-cdh5.14.2]*# hdfs dfsadmin -disallowSnapshot /user*</span><br><span class="line"></span><br><span class="line">Disallowing snaphot on /user succeeded</span><br></pre></td></tr></table></figure>
+
+<p>2、对指定目录创建快照</p>
+<p>注意：创建快照之前，先要允许该目录创建快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 hadoop-2.6.0-cdh5.14.2]*# hdfs dfsadmin -allowSnapshot /user*</span><br><span class="line"></span><br><span class="line">Allowing snaphot on /user succeeded</span><br><span class="line"></span><br><span class="line">[hadoop@node01 hadoop-2.6.0-cdh5.14.2]*# hdfs dfs -createSnapshot /user*    </span><br><span class="line"></span><br><span class="line">Created snapshot /user/.snapshot/s20190317-210906.549</span><br></pre></td></tr></table></figure>
+
+<p> 通过web浏览器访问快照</p>
+<p> <a href="http://node01:50070/explorer.html#/user/.snapshot/s20190317-210906.549" target="_blank" rel="noopener">http://node01:50070/explorer.html#/user/.snapshot/s20190317-210906.549</a></p>
+<p>3、指定名称创建快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@node01 hadoop-2.6.0-cdh5.14.2]*# hdfs dfs -createSnapshot /user mysnap1*</span><br><span class="line"></span><br><span class="line">Created snapshot /user/.snapshot/mysnap1</span><br></pre></td></tr></table></figure>
+
+<p>4、重命名快照</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs -renameSnapshot /user mysnap1 mysnap2</span><br></pre></td></tr></table></figure>
+
+<p>5、列出当前用户所有可以快照的目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs lsSnapshottableDir</span><br></pre></td></tr></table></figure>
+
+<p>6、比较两个快照不同之处</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -createSnapshot /user snap1</span><br><span class="line"></span><br><span class="line">hdfs dfs -createSnapshot /user snap2</span><br><span class="line"></span><br><span class="line">hdfs snapshotDiff snap1 snap2</span><br></pre></td></tr></table></figure>
+
+<p>7、删除快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -deleteSnapshot /user snap1</span><br></pre></td></tr></table></figure>
+
+<h2 id="hdfs回收站"><a href="#hdfs回收站" class="headerlink" title="hdfs回收站"></a>hdfs回收站</h2><p>任何一个文件系统，基本上都会有垃圾桶机制，也就是删除的文件，不会直接彻底清掉，我们一把都是将文件放置到垃圾桶当中去，过一段时间之后，自动清空垃圾桶当中的文件，这样对于文件的安全删除比较有保证，避免我们一些误操作，导致误删除文件或者数据</p>
+<p>1、回收站配置两个参数</p>
+<p> 默认值fs.trash.interval=0，0表示禁用回收站，可以设置删除文件的存活时间。</p>
+<p> 默认值fs.trash.checkpoint.interval=0，检查回收站的间隔时间。</p>
+<p> 要求fs.trash.checkpoint.interval &lt;=fs.trash.interval。</p>
+<p>2、启用回收站</p>
+<p>修改所有服务器的core-site.xml配置文件 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 开启hdfs的垃圾桶机制，删除掉的数据可以从垃圾桶中回收，单位分钟 --&gt;</span><br><span class="line"></span><br><span class="line">  &lt;property&gt;</span><br><span class="line"></span><br><span class="line">  &lt;name&gt;fs.trash.interval&lt;/name&gt;</span><br><span class="line"></span><br><span class="line">  &lt;value&gt;10080&lt;/value&gt;</span><br><span class="line"></span><br><span class="line"> &lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>3、查看回收站</p>
+<p>回收站在集群的</p>
+<p>/user/hadoop/.Trash/ 这个路径下</p>
+<p>4、通过javaAPI删除的数据，不会进入回收站，需要调用moveToTrash()才会进入回收站</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Trash trash = New Trash(conf);</span><br><span class="line"></span><br><span class="line">trash.moveToTrash(path);</span><br></pre></td></tr></table></figure>
+
+<p>5、恢复回收站数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -mv trashFileDir   hdfsdir</span><br></pre></td></tr></table></figure>
+
+<p> trashFileDir ：回收站的文件路径</p>
+<p> hdfsdir   ：将文件移动到hdfs的哪个路径下</p>
+<p>6、清空回收站</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -expunge</span><br></pre></td></tr></table></figure>
+
+
     </div>
 
     
@@ -582,7 +1029,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS概述"><span class="nav-number">1.</span> <span class="nav-text">HDFS概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优缺点"><span class="nav-number">1.2.</span> <span class="nav-text">优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组成架构"><span class="nav-number">1.3.</span> <span class="nav-text">组成架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS文件块大小"><span class="nav-number">1.4.</span> <span class="nav-text">HDFS文件块大小</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS的Shell操作"><span class="nav-number">2.</span> <span class="nav-text">HDFS的Shell操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法"><span class="nav-number">2.1.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令大全"><span class="nav-number">2.2.</span> <span class="nav-text">命令大全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令分类"><span class="nav-number">2.2.1.</span> <span class="nav-text">命令分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令实操"><span class="nav-number">2.2.2.</span> <span class="nav-text">命令实操</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS客户端操作"><span class="nav-number">3.</span> <span class="nav-text">HDFS客户端操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS的数据流"><span class="nav-number">4.</span> <span class="nav-text">HDFS的数据流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NameNode和SecondaryNameNode"><span class="nav-number">5.</span> <span class="nav-text">NameNode和SecondaryNameNode</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">5.1.</span> <span class="nav-text"></span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS概述"><span class="nav-number">1.</span> <span class="nav-text">HDFS概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优缺点"><span class="nav-number">1.2.</span> <span class="nav-text">优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组成架构"><span class="nav-number">1.3.</span> <span class="nav-text">组成架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS文件块大小"><span class="nav-number">1.4.</span> <span class="nav-text">HDFS文件块大小</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS的Shell操作"><span class="nav-number">2.</span> <span class="nav-text">HDFS的Shell操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法"><span class="nav-number">2.1.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令大全"><span class="nav-number">2.2.</span> <span class="nav-text">命令大全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令分类"><span class="nav-number">2.2.1.</span> <span class="nav-text">命令分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令实操"><span class="nav-number">2.2.2.</span> <span class="nav-text">命令实操</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS客户端操作"><span class="nav-number">3.</span> <span class="nav-text">HDFS客户端操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS的数据流"><span class="nav-number">4.</span> <span class="nav-text">HDFS的数据流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS写数据流程"><span class="nav-number">4.1.</span> <span class="nav-text">HDFS写数据流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS读数据流程"><span class="nav-number">4.2.</span> <span class="nav-text">HDFS读数据流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NameNode和SecondaryNameNode功能剖析"><span class="nav-number">5.</span> <span class="nav-text">NameNode和SecondaryNameNode功能剖析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#namenode与secondaryName解析"><span class="nav-number">5.1.</span> <span class="nav-text">namenode与secondaryName解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namenode工作机制"><span class="nav-number">5.1.1.</span> <span class="nav-text">namenode工作机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Secondary-NameNode工作"><span class="nav-number">5.1.2.</span> <span class="nav-text">Secondary NameNode工作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FSImage与edits详解"><span class="nav-number">5.2.</span> <span class="nav-text">FSImage与edits详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FSimage文件当中的文件信息查看"><span class="nav-number">5.2.1.</span> <span class="nav-text">FSimage文件当中的文件信息查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#edits当中的文件信息查看"><span class="nav-number">5.2.2.</span> <span class="nav-text">edits当中的文件信息查看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#secondarynameNode如何辅助管理FSImage与Edits文件"><span class="nav-number">5.3.</span> <span class="nav-text">secondarynameNode如何辅助管理FSImage与Edits文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#namenode元数据信息多目录配置"><span class="nav-number">5.4.</span> <span class="nav-text">namenode元数据信息多目录配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#namenode故障恢复"><span class="nav-number">5.5.</span> <span class="nav-text">namenode故障恢复</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#datanode工作机制以及数据存储"><span class="nav-number">6.</span> <span class="nav-text">datanode工作机制以及数据存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#datanode工作机制"><span class="nav-number">6.1.</span> <span class="nav-text">datanode工作机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据完整性"><span class="nav-number">6.2.</span> <span class="nav-text">数据完整性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#掉线时限参数设置"><span class="nav-number">6.3.</span> <span class="nav-text">掉线时限参数设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DataNode的目录结构"><span class="nav-number">6.4.</span> <span class="nav-text">DataNode的目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datanode多目录配置"><span class="nav-number">6.5.</span> <span class="nav-text">Datanode多目录配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hdfs的小文件治理"><span class="nav-number">7.</span> <span class="nav-text">hdfs的小文件治理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#有没有问题"><span class="nav-number">7.1.</span> <span class="nav-text">有没有问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HAR文件方案"><span class="nav-number">7.2.</span> <span class="nav-text">HAR文件方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequence-Files方案"><span class="nav-number">7.3.</span> <span class="nav-text">Sequence Files方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hdfs的其他功能介绍"><span class="nav-number">8.</span> <span class="nav-text">hdfs的其他功能介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多个集群之间的数据拷贝"><span class="nav-number">8.1.</span> <span class="nav-text">多个集群之间的数据拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hdfs快照snapShot管理"><span class="nav-number">8.2.</span> <span class="nav-text">hdfs快照snapShot管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#快照使用基本语法"><span class="nav-number">8.2.1.</span> <span class="nav-text">快照使用基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快照操作实际案例"><span class="nav-number">8.2.2.</span> <span class="nav-text">快照操作实际案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hdfs回收站"><span class="nav-number">8.3.</span> <span class="nav-text">hdfs回收站</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -601,7 +1048,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -627,7 +1074,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

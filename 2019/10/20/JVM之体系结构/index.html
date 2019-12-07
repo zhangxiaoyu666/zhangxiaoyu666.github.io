@@ -87,7 +87,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/20/JVM之体系结构/23.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/20/JVM之体系结构/24.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/20/JVM之体系结构/25.png">
-<meta property="og:updated_time" content="2019-10-31T12:43:58.533Z">
+<meta property="og:updated_time" content="2019-11-15T05:59:35.620Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM体系结构">
 <meta name="twitter:description" content="JVM位置">
@@ -233,7 +233,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">35</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">39</span></a>
 
   </li>
       
@@ -277,7 +277,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">42</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">46</span></a>
 
   </li>
       
@@ -406,7 +406,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-31 20:43:58" itemprop="dateModified" datetime="2019-10-31T20:43:58+08:00">2019-10-31</time>
+                <time title="修改时间：2019-11-15 13:59:35" itemprop="dateModified" datetime="2019-11-15T13:59:35+08:00">2019-11-15</time>
               </span>
             
           
@@ -514,7 +514,7 @@
 <ol>
 <li>eden、SurvivorFrom 复制到 SurvivorTo，年龄+1 </li>
 </ol>
-<p>首先，当Eden区满的时候会触发第一次GC,把还活着的对象拷贝到SurvivorFrom区，当Eden区再次触发GC的时候会扫描Eden区和From区域,对这两个区域进行垃圾回收，经过这次回收后还存活的对象,则直接复制到To区域（如果有对象的年龄已经达到了老年的标准，则赋值到老年代区），同时把这些对象的年龄+1</p>
+<p>首先，当Eden区满的时候会触发第一次GC,把还活着的对象拷贝到SurvivorFrom区，当Eden区再次触发GC的时候会扫描Eden区和From区域,对这两个区域进行垃圾回收，经过这次回收后还存活的对象,则直接复制到To区域（如果有对象的年龄已经达到了老年的标准，则赋值到老年代区 ），同时把这些对象的年龄+1</p>
 <ol start="2">
 <li>清空 eden、SurvivorFrom </li>
 </ol>
@@ -677,7 +677,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -703,7 +703,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
