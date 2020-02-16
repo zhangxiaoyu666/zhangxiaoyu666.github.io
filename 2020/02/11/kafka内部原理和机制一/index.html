@@ -55,17 +55,40 @@
   };
 </script>
 
-  <meta name="description" content="肩膀有点痒，可能在长小翅膀">
+  <meta name="description" content="1.  kafka分区策略1kafka的分区策略决定了producer生产者产生的一条消息最后会写入到topic的哪一个分区中   1、指定具体的分区号  12//1、给定具体的分区号，数据就会写入到指定的分区中producer.send(new ProducerRecord&amp;lt;String, String&amp;gt;(&quot;test&quot;, 0,Integer.toString(i), &quot;hello-k">
+<meta name="keywords" content="kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kafka内部原理和机制一">
 <meta property="og:url" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/index.html">
 <meta property="og:site_name" content="一只鱼的博客">
-<meta property="og:description" content="肩膀有点痒，可能在长小翅膀">
+<meta property="og:description" content="1.  kafka分区策略1kafka的分区策略决定了producer生产者产生的一条消息最后会写入到topic的哪一个分区中   1、指定具体的分区号  12//1、给定具体的分区号，数据就会写入到指定的分区中producer.send(new ProducerRecord&amp;lt;String, String&amp;gt;(&quot;test&quot;, 0,Integer.toString(i), &quot;hello-k">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-11T09:14:14.738Z">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577523762699.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577524051165.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/kafka.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/20170107212325100.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/%E4%BC%A0%E7%BB%9FIO.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/sendfile.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577687862577.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/%E9%9B%B6%E6%8B%B7%E8%B4%9D.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577433769349.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577433916851.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577433957837.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577434031844.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577435232773.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577435264270.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577436432903.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577436484277.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577436652696.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577436743101.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577436683550.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577436838605.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577436895495.png">
+<meta property="og:updated_time" content="2020-02-16T08:59:00.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka内部原理和机制一">
-<meta name="twitter:description" content="肩膀有点痒，可能在长小翅膀">
+<meta name="twitter:description" content="1.  kafka分区策略1kafka的分区策略决定了producer生产者产生的一条消息最后会写入到topic的哪一个分区中   1、指定具体的分区号  12//1、给定具体的分区号，数据就会写入到指定的分区中producer.send(new ProducerRecord&amp;lt;String, String&amp;gt;(&quot;test&quot;, 0,Integer.toString(i), &quot;hello-k">
+<meta name="twitter:image" content="http://yoursite.com/2020/02/11/kafka内部原理和机制一/1577523762699.png">
   <link rel="canonical" href="http://yoursite.com/2020/02/11/kafka内部原理和机制一/">
 
 
@@ -251,7 +274,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">49</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">50</span></a>
 
   </li>
       
@@ -369,12 +392,33 @@
                 
               
 
-              <time title="创建时间：2020-02-11 15:51:43 / 修改时间：17:14:14" itemprop="dateCreated datePublished" datetime="2020-02-11T15:51:43+08:00">2020-02-11</time>
+              <time title="创建时间：2020-02-11 15:51:43" itemprop="dateCreated datePublished" datetime="2020-02-11T15:51:43+08:00">2020-02-11</time>
             </span>
           
             
 
             
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-16 16:59:00" itemprop="dateModified" datetime="2020-02-16T16:59:00+08:00">2020-02-16</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据开发/" itemprop="url" rel="index"><span itemprop="name">大数据开发</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -388,7 +432,328 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h3 id="1-kafka分区策略"><a href="#1-kafka分区策略" class="headerlink" title="1.  kafka分区策略"></a>1.  kafka分区策略</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka的分区策略决定了producer生产者产生的一条消息最后会写入到topic的哪一个分区中</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>1、指定具体的分区号</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1、给定具体的分区号，数据就会写入到指定的分区中</span></span><br><span class="line">producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(<span class="string">"test"</span>, <span class="number">0</span>,Integer.toString(i), <span class="string">"hello-kafka-"</span>+i));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>2、不给定具体的分区号，给定key的值（key不断变化）</li>
+</ul>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//2、不给定具体的分区号，给定一个key值, 这里使用key的 hashcode%分区数=分区号</span></span><br><span class="line">producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(<span class="string">"test"</span>, Integer.toString(i), <span class="string">"hello-kafka-"</span>+i));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3、不给定具体的分区号，也不给对应的key</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//3、不给定具体的分区号，也不给定对应的key ,这个它会进行轮训的方式把数据写入到不同分区中</span></span><br><span class="line">producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(<span class="string">"test"</span>, <span class="string">"hello-kafka-"</span>+i));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>4、自定义分区</p>
+<ul>
+<li>定义一个类实现接口Partitioner</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kaikeba.partitioner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.Partitioner;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.Cluster;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">//todo:需求：自定义kafka的分区函数</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyPartitioner</span> <span class="keyword">implements</span> <span class="title">Partitioner</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 通过这个方法来实现消息要去哪一个分区中</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> topic</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> bytes</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> bytes1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> cluster</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(String topic, Object key, <span class="keyword">byte</span>[] bytes, Object value, <span class="keyword">byte</span>[] bytes1, Cluster cluster)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//获取topic分区数</span></span><br><span class="line">        <span class="keyword">int</span> partitions = cluster.partitionsForTopic(topic).size();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//key.hashCode()可能会出现负数 -1 -2 0 1 2</span></span><br><span class="line">        <span class="comment">//Math.abs 取绝对值</span></span><br><span class="line">        <span class="keyword">return</span> Math.abs(key.hashCode()% partitions);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Map&lt;String, ?&gt; map)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置自定义分区类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在Properties对象中添加自定义分区类</span></span><br><span class="line">props.put(<span class="string">"partitioner.class"</span>,<span class="string">"com.kaikeba.partitioner.MyPartitioner"</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="2-kafka的文件存储机制"><a href="#2-kafka的文件存储机制" class="headerlink" title="2. kafka的文件存储机制"></a>2. kafka的文件存储机制</h3><h4 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">同一个topic下有多个不同的partition，每个partition为一个目录，partition命名的规则是topic的名称加上一个序号，序号从0开始。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577523762699.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">每一个partition目录下的文件被平均切割成大小相等（默认一个文件是1G，可以手动去设置）的数据文件，每一个数据文件都被称为一个段（segment file），但每个段消息数量不一定相等，这种特性能够使得老的segment可以被快速清除。默认保留7天的数据。</span><br><span class="line">每次满1G后，在写入到一个新的文件中。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577524051165.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">	另外每个partition只需要支持顺序读写就可以。如上图所示：</span><br><span class="line">首先00000000000000000000.log是最早产生的文件，该文件达到1G后又产生了新的00000000000002025849.log文件，新的数据会写入到这个新的文件里面。</span><br><span class="line">	这个文件到达1G后，数据又会写入到下一个文件中。也就是说它只会往文件的末尾追加数据，这就是顺序写的过程，生产者只会对每一个partition做数据的追加（写操作）。</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-数据消费问题讨论"><a href="#2-2-数据消费问题讨论" class="headerlink" title="2.2  数据消费问题讨论"></a>2.2  数据消费问题讨论</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">问题：如何保证消息消费的有序性呢？比如说生产者生产了0到100个商品，那么消费者在消费的时候按照0到100这个从小到大的顺序消费？</span><br><span class="line"></span><br><span class="line">*** 那么kafka如何保证这种有序性呢？***</span><br><span class="line">难度就在于，生产者生产出0到100这100条数据之后，通过一定的分组策略存储到broker的partition中的时候，</span><br><span class="line">比如0到10这10条消息被存到了这个partition中，10到20这10条消息被存到了那个partition中，这样的话，消息在分组存到partition中的时候就已经被分组策略搞得无序了。</span><br><span class="line"></span><br><span class="line">那么能否做到消费者在消费消息的时候全局有序呢？</span><br><span class="line">遇到这个问题，我们可以回答，在大多数情况下是做不到全局有序的。但在某些情况下是可以做到的。比如我的partition只有一个，这种情况下是可以全局有序的。</span><br><span class="line"></span><br><span class="line">那么可能有人又要问了，只有一个partition的话，哪里来的分布式呢？哪里来的负载均衡呢？</span><br><span class="line">所以说，全局有序是一个伪命题！全局有序根本没有办法在kafka要实现的大数据的场景来做到。但是我们只能保证当前这个partition内部消息消费的有序性。</span><br><span class="line"></span><br><span class="line">结论：一个partition中的数据是有序的吗？回答：间隔有序，不连续。</span><br><span class="line"></span><br><span class="line">针对一个topic里面的数据，只能做到partition内部有序，不能做到全局有序。特别是加入消费者的场景后，如何保证消费者的消费的消息的全局有序性，</span><br><span class="line">这是一个伪命题，只有在一种情况下才能保证消费的消息的全局有序性，那就是只有一个partition。</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-Segment文件"><a href="#2-3-Segment文件" class="headerlink" title="2.3 Segment文件"></a>2.3 Segment文件</h4><ul>
+<li>Segment file是什么</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">生产者生产的消息按照一定的分区策略被发送到topic中partition中，partition在磁盘上就是一个目录，该目录名是topic的名称加上一个序号，在这个partition目录下，有两类文件，一类是以log为后缀的文件，一类是以index为后缀的文件，每一个log文件和一个index文件相对应，这一对文件就是一个segment file，也就是一个段。</span><br><span class="line">其中的log文件就是数据文件，里面存放的就是消息，而index文件是索引文件，索引文件记录了元数据信息。log文件达到1个G后滚动重新生成新的log文件</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Segment文件特点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    segment文件命名的规则：partition全局的第一个segment从0（20个0）开始，后续的每一个segment文件名是上一个segment文件中最后一条消息的offset值。</span><br><span class="line"></span><br><span class="line">那么这样命令有什么好处呢？</span><br><span class="line">假如我们有一个消费者已经消费到了368776（offset值为368776），那么现在我们要继续消费的话，怎么做呢？</span><br><span class="line"></span><br><span class="line">看下图，分2个步骤;</span><br><span class="line">	第1步是从所有文件log文件的的文件名中找到对应的log文件，第368776条数据位于上图中的“00000000000000368769.log”这个文件中，</span><br><span class="line">这一步涉及到一个常用的算法叫做“二分查找法”（假如我现在给你一个offset值让你去找，你首先是将所有的log的文件名进行排序，然后通过二分查找法进行查找，</span><br><span class="line">很快就能定位到某一个文件，紧接着拿着这个offset值到其索引文件中找这条数据究竟存在哪里）；</span><br><span class="line">第2步是到index文件中去找第368776条数据所在的位置。</span><br><span class="line"></span><br><span class="line">索引文件（index文件）中存储这大量的元数据，而数据文件（log文件）中存储这大量的消息。</span><br><span class="line"></span><br><span class="line">索引文件（index文件）中的元数据指向对应的数据文件（log文件）中消息的物理偏移地址。</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-4-kafka如何快速查询数据"><a href="#2-4-kafka如何快速查询数据" class="headerlink" title="2.4  kafka如何快速查询数据"></a>2.4  kafka如何快速查询数据</h4><p><img src="/2020/02/11/kafka内部原理和机制一/kafka.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">	上图的左半部分是索引文件，里面存储的是一对一对的key-value，其中key是消息在数据文件（对应的log文件）中的编号，比如“1,3,6,8……”，</span><br><span class="line">	分别表示在log文件中的第1条消息、第3条消息、第6条消息、第8条消息……，那么为什么在index文件中这些编号不是连续的呢？</span><br><span class="line">	这是因为index文件中并没有为数据文件中的每条消息都建立索引，而是采用了稀疏存储的方式，每隔一定字节的数据建立一条索引。</span><br><span class="line">	这样避免了索引文件占用过多的空间，从而可以将索引文件保留在内存中。</span><br><span class="line">但缺点是没有建立索引的Message也不能一次定位到其在数据文件的位置，从而需要做一次顺序扫描，但是这次顺序扫描的范围就很小了。</span><br><span class="line"></span><br><span class="line">	其中以索引文件中元数据8,1686为例，其中8代表在右边log数据文件中从上到下第8个消息(在全局partiton表示第368777个消息)，其中1686表示该消息的物理偏移地址（位置）为1686。</span><br><span class="line">	</span><br><span class="line">	要是读取offset=368777的消息，从00000000000000368769.log文件中的1325的位置进行读取，那么怎么知道何时读完本条消息，否则就读到下一条消息的内容了？</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/11/kafka内部原理和机制一/20170107212325100.png" alt></p>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>解释说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8 byte offset</td>
+<td>在parition(分区)内的每条消息都有一个有序的id号，这个id号被称为偏移(offset),它可以唯一确定每条消息在parition(分区)内的位置。即offset表示partiion的第多少message</td>
+</tr>
+<tr>
+<td>4 byte message size</td>
+<td>message大小</td>
+</tr>
+<tr>
+<td>4 byte CRC32</td>
+<td>用crc32校验message</td>
+</tr>
+<tr>
+<td>1 byte “magic”</td>
+<td>表示本次发布Kafka服务程序协议版本号</td>
+</tr>
+<tr>
+<td>1 byte “attributes”</td>
+<td>表示为独立版本、或标识压缩类型、或编码类型。</td>
+</tr>
+<tr>
+<td>4 byte key length</td>
+<td>表示key的长度,当key为-1时，K byte key字段不填</td>
+</tr>
+<tr>
+<td>K byte key</td>
+<td>可选</td>
+</tr>
+<tr>
+<td>value bytes payload</td>
+<td>表示实际消息数据。</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这个就需要涉及到消息的物理结构了，消息都具有固定的物理结构，包括：offset（8 Bytes）、消息体的大小（4 Bytes）、crc32（4 Bytes）、magic（1 Byte）、attributes（1 Byte）、key length（4 Bytes）、key（K Bytes）、payload(N Bytes)等等字段，可以确定一条消息的大小，即读取到哪里截止。</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-5-kafka高效文件存储设计特点"><a href="#2-5-kafka高效文件存储设计特点" class="headerlink" title="2.5 kafka高效文件存储设计特点"></a>2.5 kafka高效文件存储设计特点</h4><ul>
+<li>Kafka把topic中一个parition大文件分成多个小文件段，通过多个小文件段，就容易定期清除或删除已经消费完文件，减少磁盘占用。</li>
+<li>通过索引信息可以快速定位message</li>
+<li>通过index元数据全部映射到memory，可以避免segment file的IO磁盘操作。</li>
+<li>通过索引文件稀疏存储，可以大幅降低index文件元数据占用空间大小。</li>
+</ul>
+<h3 id="3-为什么Kafka速度那么快"><a href="#3-为什么Kafka速度那么快" class="headerlink" title="3. 为什么Kafka速度那么快"></a>3. 为什么Kafka速度那么快</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Kafka是大数据领域无处不在的消息中间件，目前广泛使用在企业内部的实时数据管道，并帮助企业构建自己的流计算应用程序。</span><br><span class="line">Kafka虽然是基于磁盘做的数据存储，但却具有高性能、高吞吐、低延时的特点，其吞吐量动辄几万、几十上百万，这其中的原由值得我们一探究竟。</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-顺序读写"><a href="#3-1-顺序读写" class="headerlink" title="3.1 顺序读写"></a>3.1 顺序读写</h4><ul>
+<li>磁盘顺序读写性能要高于内存的随机读写</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">众所周知Kafka是将消息记录持久化到本地磁盘中的，一般人会认为磁盘读写性能差，可能会对Kafka性能如何保证提出质疑。实际上不管是内存还是磁盘，快或慢关键在于寻址的方式，磁盘分为顺序读写与随机读写，内存也一样分为顺序读写与随机读写。基于磁盘的随机读写确实很慢，但磁盘的顺序读写性能却很高，一般而言要高出磁盘随机读写三个数量级，一些情况下磁盘顺序读写性能甚至要高于内存随机读写。</span><br><span class="line">磁盘的顺序读写是磁盘使用模式中最有规律的，并且操作系统也对这种模式做了大量优化，Kafka就是使用了磁盘顺序读写来提升的性能。Kafka的message是不断追加到本地磁盘文件末尾的，而不是随机的写入，这使得Kafka写入吞吐量得到了显著提升</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-Page-Cache"><a href="#3-2-Page-Cache" class="headerlink" title="3.2 Page Cache"></a>3.2 Page Cache</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	为了优化读写性能，Kafka利用了操作系统本身的Page Cache，就是利用操作系统自身的内存而不是JVM空间内存。这样做的好处有：</span><br><span class="line"></span><br><span class="line">（1）避免Object消耗：如果是使用Java堆，Java对象的内存消耗比较大，通常是所存储数据的两倍甚至更多。</span><br><span class="line">（2）避免GC问题：随着JVM中数据不断增多，垃圾回收将会变得复杂与缓慢，使用系统缓存就不会存在GC问题。</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-零拷贝-sendfile"><a href="#3-3-零拷贝-sendfile" class="headerlink" title="3.3 零拷贝(sendfile)"></a>3.3 零拷贝(sendfile)</h4><ul>
+<li><p>零拷贝并不是不需要拷贝，而是减少不必要的拷贝次数。通常是说在IO读写过程中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Kafka利用linux操作系统的 &quot;零拷贝（zero-copy）&quot; 机制在消费端做的优化。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>首先来了解下数据从文件发送到socket网络连接中的常规传输路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">比如：读取文件，再用socket发送出去</span><br><span class="line">传统方式实现：</span><br><span class="line">先读取、再发送，实际经过1~4四次copy。</span><br><span class="line">buffer = File.read </span><br><span class="line">Socket.send(buffer)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* 第一步：操作系统从磁盘读取数据到内核空间（kernel space）的Page Cache缓冲区</span><br><span class="line">* 第二步：应用程序读取内核缓冲区的数据copy到用户空间（user space）的缓冲区</span><br><span class="line">* 第三步：应用程序将用户空间缓冲区的数据copy回内核空间到socket缓冲区</span><br><span class="line">* 第四步：操作系统将数据从socket缓冲区copy到网卡，由网卡进行网络传输</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/11/kafka内部原理和机制一/%E4%BC%A0%E7%BB%9FIO.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">传统方式，读取磁盘文件并进行网络发送，经过的四次数据copy是非常繁琐的。实际IO读写，需要进行IO中断，需要CPU响应中断(带来上下文切换)，尽管后来引入DMA来接管CPU的中断请求，但四次copy是存在“不必要的拷贝”的。</span><br><span class="line"></span><br><span class="line">重新思考传统IO方式，会注意到实际上并不需要第二个和第三个数据副本。应用程序除了缓存数据并将其传输回套接字缓冲区之外什么都不做。相反，数据可以直接从读缓冲区传输到套接字缓冲区。</span><br><span class="line"></span><br><span class="line">显然，第二次和第三次数据copy 其实在这种场景下没有什么帮助反而带来开销，这也正是零拷贝出现的意义。</span><br><span class="line"></span><br><span class="line">这种场景：是指读取磁盘文件后，不需要做其他处理，直接用网络发送出去。试想，如果读取磁盘的数据需要用程序进一步处理的话，必须要经过第二次和第三次数据copy，让应用程序在内存缓冲区处理。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/11/kafka内部原理和机制一/sendfile.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">	此时我们会发现用户态“空空如也”。数据没有来到用户态，而是直接在核心态就进行了传输，但这样依然还是有多次复制。首先数据被读取到read buffer中，然后发到socket buffer，最后才发到网卡。虽然减少了用户态和核心态的切换，但依然存在多次数据复制。</span><br><span class="line">如果可以进一步减少数据复制的次数，甚至没有数据复制是不是就会做到最快呢？</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>DMA</strong></p>
+<ul>
+<li>DMA，全称叫Direct Memory Access，一种可让某些硬件子系统去直接访问系统主内存，而不用依赖CPU的计算机系统的功能。听着是不是很厉害，跳过CPU，直接访问主内存。传统的内存访问都需要通过CPU的调度来完成。如下图：</li>
+</ul>
+<p>![](kafka内部原理和机制一/access memory.png)</p>
+<ul>
+<li>DMA，则可以绕过CPU，硬件自己去直接访问系统主内存。如下图</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577687862577.png" alt></p>
+<ul>
+<li>回到本文中的文件传输，有了DMA后，就可以实现绝对的零拷贝了，因为网卡是直接去访问系统主内存的。如下图：</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/%E9%9B%B6%E6%8B%B7%E8%B4%9D.png" alt></p>
+<ul>
+<li><p>总结</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">	Kafka采用顺序读写、Page Cache、零拷贝以及分区分段等这些设计，再加上在索引方面做的优化，另外Kafka数据读写也是批量的而不是单条的，使得Kafka具有了高性能、高吞吐、低延时的特点。这样Kafka提供大容量的磁盘存储也变成了一种优点</span><br><span class="line"></span><br><span class="line">Java的NIO提供了FileChannle，它的transferTo、transferFrom方法就是Zero Copy。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="4-kafka整合flume"><a href="#4-kafka整合flume" class="headerlink" title="4. kafka整合flume"></a>4. kafka整合flume</h3><ul>
+<li><p>1、安装flume</p>
+</li>
+<li><p>2、添加flume的配置</p>
+<ul>
+<li>vi flume-kafka.conf</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">为我们的<span class="built_in">source</span> channel  sink起名</span></span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks = k1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的<span class="built_in">source</span>数据收集策略</span></span><br><span class="line">a1.sources.r1.type = spooldir</span><br><span class="line">a1.sources.r1.spoolDir = /kkb/install/flumeData/files</span><br><span class="line">a1.sources.r1.inputCharset = utf-8</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的<span class="built_in">source</span>收集到的数据发送到哪个管道</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的channel为memory,即表示所有的数据都装进memory当中</span></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的sink为kafka sink，并指定我们的sink从哪个channel当中读取数据</span></span><br><span class="line">a1.sinks.k1.channel = c1</span><br><span class="line">a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line">a1.sinks.k1.kafka.topic = kaikeba</span><br><span class="line">a1.sinks.k1.kafka.bootstrap.servers = node01:9092,node02:9092,node03:9092</span><br><span class="line">a1.sinks.k1.kafka.flumeBatchSize = 20</span><br><span class="line">a1.sinks.k1.kafka.producer.acks = 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>3、创建topic</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-topics.sh --create --topic kaikeba --partitions 3 --replication-factor 2  --zookeeper node01:2181,node02:2181,node03:2181</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>4、启动flume</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf -f conf/flume-kafka.conf -Dflume.root.logger=info,console</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>5、启动kafka控制台消费者，验证数据写入成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-console-consumer.sh --topic kaikeba --bootstrap-server node01:9092,node02:9092,node03:9092  --from-beginning</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="5-kafka监控工具安装和使用"><a href="#5-kafka监控工具安装和使用" class="headerlink" title="5. kafka监控工具安装和使用"></a>5. kafka监控工具安装和使用</h3><h4 id="5-1-Kafka-Manager"><a href="#5-1-Kafka-Manager" class="headerlink" title="5.1. Kafka Manager"></a>5.1. Kafka Manager</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kafkaManager它是由雅虎开源的可以监控整个kafka集群相关信息的一个工具。</span><br><span class="line">（1）可以管理几个不同的集群</span><br><span class="line">（2）监控集群的状态(topics, brokers, 副本分布, 分区分布)</span><br><span class="line">（3）创建topic、修改topic相关配置</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>1、上传安装包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-manager-1.3.0.4.zip</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2、解压安装包</p>
+<ul>
+<li>unzip kafka-manager-1.3.0.4.zip  -d /kkb/install</li>
+</ul>
+</li>
+<li><p>3、修改配置文件</p>
+<ul>
+<li><p>进入到conf</p>
+<ul>
+<li><p>vim application.conf</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">修改kafka-manager.zkhosts的值，指定kafka集群地址</span></span><br><span class="line">kafka-manager.zkhosts="node01:2181,node02:2181,node03:2181"</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>4、启动kafka-manager</p>
+<ul>
+<li>启动zk集群，kafka集群，再使用root用户启动kafka-manager服务。</li>
+<li>bin/kafka-manager 默认的端口是9000，可通过 -Dhttp.port，指定端口</li>
+<li>-Dconfig.file=conf/application.conf指定配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup bin/kafka-manager -Dconfig.file=conf/application.conf -Dhttp.port=8080 &amp;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>5、访问地址</p>
+<ul>
+<li>kafka-manager所在的主机名:8080</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577433769349.png" alt></p>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577433916851.png" alt></p>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577433957837.png" alt></p>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577434031844.png" alt></p>
+<h4 id="5-2-KafkaOffsetMonitor"><a href="#5-2-KafkaOffsetMonitor" class="headerlink" title="5.2. KafkaOffsetMonitor"></a>5.2. KafkaOffsetMonitor</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">该监控是基于一个jar包的形式运行，部署较为方便。只有监控功能，使用起来也较为安全</span><br><span class="line"></span><br><span class="line">(1)消费者组列表</span><br><span class="line">(2)查看topic的历史消费信息.</span><br><span class="line">(3)每个topic的所有parition列表(topic,pid,offset,logSize,lag,owner)</span><br><span class="line">(4)对consumer消费情况进行监控,并能列出每个consumer offset,滞后数据。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>1、下载安装包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KafkaOffsetMonitor-assembly-0.2.0.jar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2、在服务器上新建一个目录kafka_moitor，把jar包上传到该目录中</p>
+</li>
+<li><p>3、在kafka_moitor目录下新建一个脚本</p>
+<ul>
+<li>vim start_kafka_web.sh</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">java -cp KafkaOffsetMonitor-assembly-0.2.0.jar com.quantifind.kafka.offsetapp.OffsetGetterWeb --zk node01:2181,node02:2181,node03:2181 --port 8089 --refresh 10.seconds --retain 1.days</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>4、启动脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup sh start_kafka_web.sh &amp;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>5、访问地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在浏览器中即可使用ip:8089访问kafka的监控页面。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577435232773.png" alt></p>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577435264270.png" alt></p>
+<h4 id="5-3-Kafka-Eagle"><a href="#5-3-Kafka-Eagle" class="headerlink" title="5.3. Kafka Eagle"></a>5.3. Kafka Eagle</h4><ul>
+<li><p>1、下载Kafka Eagle安装包</p>
+<ul>
+<li><a href="http://download.smartloli.org/" target="_blank" rel="noopener">http://download.smartloli.org/</a><ul>
+<li>kafka-eagle-bin-1.2.3.tar.gz</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>2、解压 </p>
+<ul>
+<li>tar -zxvf kafka-eagle-bin-1.2.3.tar.gz -C /kkb/install</li>
+<li>解压之后进入到kafka-eagle-bin-1.2.3目录中<ul>
+<li>得到kafka-eagle-web-1.2.3-bin.tar.gz</li>
+<li>然后解压  tar -zxvf kafka-eagle-web-1.2.3-bin.tar.gz</li>
+<li>重命名  mv kafka-eagle-web-1.2.3  kafka-eagle-web</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>3、修改配置文件</p>
+<ul>
+<li><p>进入到conf目录</p>
+<ul>
+<li><p>修改system-config.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 填上你的kafka集群信息</span><br><span class="line">kafka.eagle.zk.cluster.alias=cluster1</span><br><span class="line">cluster1.zk.list=node01:2181,node02:2181,node03:2181</span><br><span class="line"></span><br><span class="line"># kafka eagle页面访问端口</span><br><span class="line">kafka.eagle.webui.port=8048</span><br><span class="line"></span><br><span class="line"># kafka sasl authenticate</span><br><span class="line">kafka.eagle.sasl.enable=false</span><br><span class="line">kafka.eagle.sasl.protocol=SASL_PLAINTEXT</span><br><span class="line">kafka.eagle.sasl.mechanism=PLAIN</span><br><span class="line">kafka.eagle.sasl.client=/kkb/install/kafka-eagle-bin-1.2.3/kafka-eagle-web/conf/kafka_client_jaas.conf</span><br><span class="line"></span><br><span class="line">#  添加刚刚导入的ke数据库配置，我这里使用的是mysql</span><br><span class="line">kafka.eagle.driver=com.mysql.jdbc.Driver</span><br><span class="line">kafka.eagle.url=jdbc:mysql://node03:3306/ke?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</span><br><span class="line">kafka.eagle.username=root</span><br><span class="line">kafka.eagle.password=123456</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>4、配置环境变量</p>
+<ul>
+<li><p>vi /etc/profile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export KE_HOME=/kkb/install/kafka-eagle-bin-1.2.3/kafka-eagle-web</span><br><span class="line">export PATH=$PATH:$KE_HOME/bin</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>5、启动kafka-eagle</p>
+<ul>
+<li>进入到$KE_HOME/bin目录<ul>
+<li>执行脚本sh ke.sh start</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>6、访问地址</p>
+<ul>
+<li><p>启动成功后在浏览器中输入<code>http://node01:8048/ke</code>就可以访问kafka eagle 了。 </p>
+<ul>
+<li>用户名：admin</li>
+<li>password：123456</li>
+<li>登录首页</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577436432903.png" alt></p>
+<ul>
+<li>仪表盘信息</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577436484277.png" alt></p>
+<ul>
+<li><p>kafka集群信息</p>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577436652696.png" alt></p>
+</li>
+<li><p>zookeeper集群</p>
+</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577436743101.png" alt></p>
+<ul>
+<li>topic信息</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577436683550.png" alt></p>
+<ul>
+<li>consumer消费者信息</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577436838605.png" alt></p>
+<ul>
+<li>zk客户端命令</li>
+</ul>
+<p><img src="/2020/02/11/kafka内部原理和机制一/1577436895495.png" alt></p>
+</li>
+</ul>
+</li>
+</ul>
+
     </div>
 
     
@@ -414,6 +779,15 @@
       
 
       <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/kafka/" rel="tag"># kafka</a>
+            
+          </div>
+        
 
         
 
@@ -429,6 +803,10 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2020/02/12/kafka内部原理和机制二/" rel="prev" title="kafka内部原理和机制二">
+                  kafka内部原理和机制二 <i class="fa fa-chevron-right"></i>
+                </a>
               
             </div>
           </div>
@@ -475,6 +853,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-kafka分区策略"><span class="nav-number">1.</span> <span class="nav-text">1.  kafka分区策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-kafka的文件存储机制"><span class="nav-number">2.</span> <span class="nav-text">2. kafka的文件存储机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-概述"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-数据消费问题讨论"><span class="nav-number">2.2.</span> <span class="nav-text">2.2  数据消费问题讨论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-Segment文件"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Segment文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-kafka如何快速查询数据"><span class="nav-number">2.4.</span> <span class="nav-text">2.4  kafka如何快速查询数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-kafka高效文件存储设计特点"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 kafka高效文件存储设计特点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-为什么Kafka速度那么快"><span class="nav-number">3.</span> <span class="nav-text">3. 为什么Kafka速度那么快</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-顺序读写"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 顺序读写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Page-Cache"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Page Cache</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-零拷贝-sendfile"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 零拷贝(sendfile)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-kafka整合flume"><span class="nav-number">4.</span> <span class="nav-text">4. kafka整合flume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-kafka监控工具安装和使用"><span class="nav-number">5.</span> <span class="nav-text">5. kafka监控工具安装和使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-Kafka-Manager"><span class="nav-number">5.1.</span> <span class="nav-text">5.1. Kafka Manager</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-KafkaOffsetMonitor"><span class="nav-number">5.2.</span> <span class="nav-text">5.2. KafkaOffsetMonitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-Kafka-Eagle"><span class="nav-number">5.3.</span> <span class="nav-text">5.3. Kafka Eagle</span></a></li></ol></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
@@ -492,7 +872,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
