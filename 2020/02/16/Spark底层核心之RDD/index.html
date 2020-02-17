@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="spark内存计算框架1. RDD是什么 RDD（Resilient Distributed Dataset）叫做==弹性分布式数据集==，是Spark中最基本的数据抽象，它代表一个不可变、可分区、里面的元素可并行计算的集合. Dataset:          就是一个集合，存储很多数据. Distributed：它内部的元素进行了分布式存储，方便于后期进行分布式计算. Resilient：">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark底层核心之RDD">
+<meta property="og:url" content="http://yoursite.com/2020/02/16/Spark底层核心之RDD/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="spark内存计算框架1. RDD是什么 RDD（Resilient Distributed Dataset）叫做==弹性分布式数据集==，是Spark中最基本的数据抽象，它代表一个不可变、可分区、里面的元素可并行计算的集合. Dataset:          就是一个集合，存储很多数据. Distributed：它内部的元素进行了分布式存储，方便于后期进行分布式计算. Resilient：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/02/16/Spark底层核心之RDD/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%AC%AC%E5%9B%9B%E6%9C%9F/14_spark%E5%86%85%E5%AD%98%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/spark_day02/spark_day02/spark_day02%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1.assets/1568707186549.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/16/Spark底层核心之RDD/rdd%E7%9A%84%E4%BA%94%E5%A4%A7%E5%B1%9E%E6%80%A7.png">
+<meta property="og:updated_time" content="2020-02-16T14:05:11.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark底层核心之RDD">
+<meta name="twitter:description" content="spark内存计算框架1. RDD是什么 RDD（Resilient Distributed Dataset）叫做==弹性分布式数据集==，是Spark中最基本的数据抽象，它代表一个不可变、可分区、里面的元素可并行计算的集合. Dataset:          就是一个集合，存储很多数据. Distributed：它内部的元素进行了分布式存储，方便于后期进行分布式计算. Resilient：">
+<meta name="twitter:image" content="http://yoursite.com/2020/02/16/Spark底层核心之RDD/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%AC%AC%E5%9B%9B%E6%9C%9F/14_spark%E5%86%85%E5%AD%98%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/spark_day02/spark_day02/spark_day02%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1.assets/1568707186549.png">
+  <link rel="canonical" href="http://yoursite.com/2020/02/16/Spark底层核心之RDD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Spark底层核心之RDD | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">43</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">10</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">52</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/16/Spark底层核心之RDD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Spark底层核心之RDD
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-16 19:00:43 / 修改时间：22:05:11" itemprop="dateCreated datePublished" datetime="2020-02-16T19:00:43+08:00">2020-02-16</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据开发/" itemprop="url" rel="index"><span itemprop="name">大数据开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="spark内存计算框架"><a href="#spark内存计算框架" class="headerlink" title="spark内存计算框架"></a>spark内存计算框架</h1><h3 id="1-RDD是什么"><a href="#1-RDD是什么" class="headerlink" title="1. RDD是什么"></a>1. RDD是什么</h3><ul>
+<li>RDD（Resilient Distributed Dataset）叫做==弹性分布式数据集==，是Spark中最基本的数据抽象，它代表一个不可变、可分区、里面的元素可并行计算的集合.<ul>
+<li><strong>Dataset</strong>:          就是一个集合，存储很多数据.</li>
+<li><strong>Distributed</strong>：它内部的元素进行了分布式存储，方便于后期进行分布式计算.</li>
+<li><strong>Resilient</strong>：     表示弹性，rdd的数据是可以保存在内存或者是磁盘中.</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+
+<h3 id="2-RDD的五大属性"><a href="#2-RDD的五大属性" class="headerlink" title="2. RDD的五大属性"></a>2. RDD的五大属性</h3><p><img src="/2020/02/16/Spark底层核心之RDD/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%AC%AC%E5%9B%9B%E6%9C%9F/14_spark%E5%86%85%E5%AD%98%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/spark_day02/spark_day02/spark_day02%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1.assets/1568707186549.png" alt="1568707186549"></p>
+<ul>
+<li>（1）A list of partitions<ul>
+<li>一个分区（Partition）列表，数据集的基本组成单位。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">	这里表示一个rdd有很多分区，每一个分区内部是包含了该rdd的部分数据，</span><br><span class="line">spark中任务是以task线程的方式运行， 一个分区就对应一个task线程。</span><br><span class="line"></span><br><span class="line">	用户可以在创建RDD时指定RDD的分区个数，如果没有指定，那么就会采用默认值。</span><br><span class="line">    val rdd=sparkContext.textFile(&quot;/words.txt&quot;)</span><br><span class="line">    	</span><br><span class="line">    //通过sc读取hdfs上的数据文件生成的RDD分区数：</span><br><span class="line">    RDD的分区数=max(文件的block个数，defaultMinPartitions【=2】)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>（2）A function for computing each split<ul>
+<li>一个计算每个分区的函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Spark中RDD的计算是以分区为单位的，每个RDD都会实现compute计算函数以达到这个目的.</span><br><span class="line"></span><br><span class="line">val rdd1 =sc.textFile(&quot;/words.txt&quot;)</span><br><span class="line">val rdd2 =rdd1.flatMap(_.split(&quot; &quot;)) //_.split(&quot; &quot;)计算每个分区的函数</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>（3）A list of dependencies on other RDDs<ul>
+<li>一个rdd会依赖于其他多个rdd</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> 这里就涉及到rdd与rdd之间的依赖关系，spark任务的容错机制就是根据这个特性（血统）而来。</span><br><span class="line"> </span><br><span class="line"> 	val rdd1 =sc.textFile(&quot;/words.txt&quot;)</span><br><span class="line">val rdd2 =rdd1.flatMap(_.split(&quot; &quot;))</span><br><span class="line">val rdd3 =rdd2.map((_,1))</span><br><span class="line"></span><br><span class="line">val rdd4=rdd3.join(rdd2)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>（4）Optionally, a Partitioner for key-value RDDs (e.g. to say that the RDD is hash-partitioned)<ul>
+<li>一个Partitioner，即RDD的分区函数（可选项）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当前Spark中实现了两种类型的分区函数，</span><br><span class="line">一个是基于哈希的HashPartitioner，(key.hashcode % 分区数= 分区号)【它是默认值】</span><br><span class="line">另外一个是基于范围的RangePartitioner。</span><br><span class="line"></span><br><span class="line">只有对于key-value的RDD(RDD[(String, Int)]),并且产生shuffle，才会有Partitioner，</span><br><span class="line">非key-value的RDD(RDD[String])的Parititioner的值是None。</span><br><span class="line"></span><br><span class="line">Option类型可以表示有值或者没有值</span><br><span class="line">	有2个子类：</span><br><span class="line">		一个是Some表示有值</span><br><span class="line">		一个是None表示没有值</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>（5）Optionally, a list of preferred locations to compute each split on (e.g. block locations for an HDFS file)<ul>
+<li>一个列表，存储每个Partition的优先位置(可选项)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">这里涉及到数据的本地性，数据块位置最优。</span><br><span class="line">spark任务在调度的时候会优先考虑存有数据的节点开启计算任务，减少数据的网络传输，提升计算效率。</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-基于spark的单词统计程序剖析rdd的五大属性"><a href="#3-基于spark的单词统计程序剖析rdd的五大属性" class="headerlink" title="3. 基于spark的单词统计程序剖析rdd的五大属性"></a>3. 基于spark的单词统计程序剖析rdd的五大属性</h3><ul>
+<li><p>需求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HDFS上有一个大小为300M的文件，通过spark实现文件单词统计，最后把结果数据保存到HDFS上</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc.textFile(<span class="string">"/words.txt"</span>).flatMap(_.split(<span class="string">" "</span>)).map((_,<span class="number">1</span>)).reduceByKey(_+_).saveAsTextFile(<span class="string">"/out"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>流程分析</p>
+</li>
+</ul>
+<p><img src="/2020/02/16/Spark底层核心之RDD/rdd%E7%9A%84%E4%BA%94%E5%A4%A7%E5%B1%9E%E6%80%A7.png" alt></p>
+<h3 id="4-RDD的创建方式"><a href="#4-RDD的创建方式" class="headerlink" title="4. RDD的创建方式"></a>4. RDD的创建方式</h3><ul>
+<li><p>1、通过已经存在的scala集合去构建</p>
+<ul>
+<li>前期做测试用到的比较多</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1=sc.parallelize(<span class="type">List</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>))</span><br><span class="line"><span class="keyword">val</span> rdd2=sc.parallelize(<span class="type">Array</span>(<span class="string">"hadoop"</span>,<span class="string">"hive"</span>,<span class="string">"spark"</span>))</span><br><span class="line"><span class="keyword">val</span> rdd3=sc.makeRDD(<span class="type">List</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2、加载外部的数据源去构建</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1=sc.textFile(<span class="string">"/words.txt"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>3、从已经存在的rdd进行转换生成一个新的rdd</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd2=rdd1.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line"><span class="keyword">val</span> rdd3=rdd2.map((_,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="5-RDD的算子分类"><a href="#5-RDD的算子分类" class="headerlink" title="5. RDD的算子分类"></a>5. RDD的算子分类</h3><ul>
+<li>1、transformation（转换）<ul>
+<li>根据已经存在的rdd转换生成一个新的rdd,  它是延迟加载，它不会立即执行</li>
+<li>例如<ul>
+<li>map / flatMap / reduceByKey 等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>2、action (动作)<ul>
+<li>它会真正触发任务的运行<ul>
+<li>将rdd的计算的结果数据返回给Driver端，或者是保存结果数据到外部存储介质中</li>
+</ul>
+</li>
+<li>例如<ul>
+<li>collect / saveAsTextFile 等</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-RDD常见的算子操作说明"><a href="#6-RDD常见的算子操作说明" class="headerlink" title="6. RDD常见的算子操作说明"></a>6. RDD常见的算子操作说明</h3><h4 id="6-1-transformation算子"><a href="#6-1-transformation算子" class="headerlink" title="6.1 transformation算子"></a>6.1 transformation算子</h4><table>
+<thead>
+<tr>
+<th><strong>转换</strong></th>
+<th><strong>含义</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>map(func)</strong></td>
+<td>返回一个新的RDD，该RDD由每一个输入元素经过func函数转换后组成</td>
+</tr>
+<tr>
+<td><strong>filter(func)</strong></td>
+<td>返回一个新的RDD，该RDD由经过func函数计算后返回值为true的输入元素组成</td>
+</tr>
+<tr>
+<td><strong>flatMap(func)</strong></td>
+<td>类似于map，但是每一个输入元素可以被映射为0或多个输出元素（所以func应该返回一个序列，而不是单一元素）</td>
+</tr>
+<tr>
+<td><strong>mapPartitions(func)</strong></td>
+<td>类似于map，但独立地在RDD的每一个分片上运行，因此在类型为T的RDD上运行时，func的函数类型必须是Iterator[T] =&gt; Iterator[U]</td>
+</tr>
+<tr>
+<td><strong>mapPartitionsWithIndex(func)</strong></td>
+<td>类似于mapPartitions，但func带有一个整数参数表示分片的索引值，因此在类型为T的RDD上运行时，func的函数类型必须是(Int, Interator[T]) =&gt; Iterator[U]</td>
+</tr>
+<tr>
+<td><strong>union(otherDataset)</strong></td>
+<td>对源RDD和参数RDD求并集后返回一个新的RDD</td>
+</tr>
+<tr>
+<td><strong>intersection(otherDataset)</strong></td>
+<td>对源RDD和参数RDD求交集后返回一个新的RDD</td>
+</tr>
+<tr>
+<td><strong>distinct([numTasks]))</strong></td>
+<td>对源RDD进行去重后返回一个新的RDD</td>
+</tr>
+<tr>
+<td><strong>groupByKey([numTasks])</strong></td>
+<td>在一个(K,V)的RDD上调用，返回一个(K, Iterator[V])的RDD</td>
+</tr>
+<tr>
+<td><strong>reduceByKey(func, [numTasks])</strong></td>
+<td>在一个(K,V)的RDD上调用，返回一个(K,V)的RDD，使用指定的reduce函数，将相同key的值聚合到一起，与groupByKey类似，reduce任务的个数可以通过第二个可选的参数来设置</td>
+</tr>
+<tr>
+<td><strong>sortByKey([ascending], [numTasks])</strong></td>
+<td>在一个(K,V)的RDD上调用，K必须实现Ordered接口，返回一个按照key进行排序的(K,V)的RDD</td>
+</tr>
+<tr>
+<td><strong>sortBy(func,[ascending], [numTasks])</strong></td>
+<td>与sortByKey类似，但是更灵活</td>
+</tr>
+<tr>
+<td><strong>join(otherDataset, [numTasks])</strong></td>
+<td>在类型为(K,V)和(K,W)的RDD上调用，返回一个相同key对应的所有元素对在一起的(K,(V,W))的RDD</td>
+</tr>
+<tr>
+<td><strong>cogroup(otherDataset, [numTasks])</strong></td>
+<td>在类型为(K,V)和(K,W)的RDD上调用，返回一个(K,(Iterable<v>,Iterable<w>))类型的RDD</w></v></td>
+</tr>
+<tr>
+<td><strong>coalesce(numPartitions)</strong></td>
+<td>减少 RDD 的分区数到指定值。</td>
+</tr>
+<tr>
+<td><strong>repartition(numPartitions)</strong></td>
+<td>重新给 RDD 分区</td>
+</tr>
+<tr>
+<td><strong>repartitionAndSortWithinPartitions(partitioner)</strong></td>
+<td>重新给 RDD 分区，并且每个分区内以记录的 key 排序</td>
+</tr>
+</tbody></table>
+<h4 id="6-2-action算子"><a href="#6-2-action算子" class="headerlink" title="6.2 action算子"></a>6.2 action算子</h4><table>
+<thead>
+<tr>
+<th><strong>动作</strong></th>
+<th><strong>含义</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>reduce(func)</strong></td>
+<td>reduce将RDD中元素前两个传给输入函数，产生一个新的return值，新产生的return值与RDD中下一个元素（第三个元素）组成两个元素，再被传给输入函数，直到最后只有一个值为止。</td>
+</tr>
+<tr>
+<td><strong>collect()</strong></td>
+<td>在驱动程序中，以数组的形式返回数据集的所有元素</td>
+</tr>
+<tr>
+<td><strong>count()</strong></td>
+<td>返回RDD的元素个数</td>
+</tr>
+<tr>
+<td><strong>first()</strong></td>
+<td>返回RDD的第一个元素（类似于take(1)）</td>
+</tr>
+<tr>
+<td><strong>take(n)</strong></td>
+<td>返回一个由数据集的前n个元素组成的数组</td>
+</tr>
+<tr>
+<td><strong>takeOrdered(n, [ordering])</strong></td>
+<td>返回自然顺序或者自定义顺序的前 n 个元素</td>
+</tr>
+<tr>
+<td><strong>saveAsTextFile(path)</strong></td>
+<td>将数据集的元素以textfile的形式保存到HDFS文件系统或者其他支持的文件系统，对于每个元素，Spark将会调用toString方法，将它装换为文件中的文本</td>
+</tr>
+<tr>
+<td><strong>saveAsSequenceFile(path)</strong></td>
+<td>将数据集中的元素以Hadoop sequencefile的格式保存到指定的目录下，可以使HDFS或者其他Hadoop支持的文件系统。</td>
+</tr>
+<tr>
+<td><strong>saveAsObjectFile(path)</strong></td>
+<td>将数据集的元素，以 Java 序列化的方式保存到指定的目录下</td>
+</tr>
+<tr>
+<td><strong>countByKey()</strong></td>
+<td>针对(K,V)类型的RDD，返回一个(K,Int)的map，表示每一个key对应的元素个数。</td>
+</tr>
+<tr>
+<td><strong>foreach(func)</strong></td>
+<td>在数据集的每一个元素上，运行函数func</td>
+</tr>
+<tr>
+<td><strong>foreachPartition(func)</strong></td>
+<td>在数据集的每一个分区上，运行函数func</td>
+</tr>
+</tbody></table>
+<h3 id="7-RDD常用的算子操作演示"><a href="#7-RDD常用的算子操作演示" class="headerlink" title="7. RDD常用的算子操作演示"></a>7. RDD常用的算子操作演示</h3><ul>
+<li><p>为了方便前期的测试和学习，可以使用spark-shell进行演示</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark-shell --master local[2]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="7-1-map"><a href="#7-1-map" class="headerlink" title="7.1 map"></a>7.1 map</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>(<span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">1</span>, <span class="number">10</span>))</span><br><span class="line"><span class="comment">//把rdd1中每一个元素乘以10</span></span><br><span class="line">rdd1.map(_*<span class="number">10</span>).collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-2-filter"><a href="#7-2-filter" class="headerlink" title="7.2 filter"></a>7.2 filter</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>(<span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">1</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">//把rdd1中大于5的元素进行过滤</span></span><br><span class="line">rdd1.filter(x =&gt; x &gt;<span class="number">5</span>).collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-3-flatMap"><a href="#7-3-flatMap" class="headerlink" title="7.3 flatMap"></a>7.3 flatMap</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">Array</span>(<span class="string">"a b c"</span>, <span class="string">"d e f"</span>, <span class="string">"h i j"</span>))</span><br><span class="line"><span class="comment">//获取rdd1中元素的每一个字母</span></span><br><span class="line">rdd1.flatMap(_.split(<span class="string">" "</span>)).collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-4-intersection、union"><a href="#7-4-intersection、union" class="headerlink" title="7.4 intersection、union"></a>7.4 intersection、union</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>(<span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">val</span> rdd2 = sc.parallelize(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>))</span><br><span class="line"><span class="comment">//求交集</span></span><br><span class="line">rdd1.intersection(rdd2).collect</span><br><span class="line"><span class="comment">//求并集</span></span><br><span class="line">rdd1.union(rdd2).collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-5-distinct"><a href="#7-5-distinct" class="headerlink" title="7.5 distinct"></a>7.5 distinct</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>(<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>))</span><br><span class="line"><span class="comment">//去重</span></span><br><span class="line">rdd1.distinct.collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-6-join、groupByKey"><a href="#7-6-join、groupByKey" class="headerlink" title="7.6 join、groupByKey"></a>7.6 join、groupByKey</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>((<span class="string">"tom"</span>, <span class="number">1</span>), (<span class="string">"jerry"</span>, <span class="number">3</span>), (<span class="string">"kitty"</span>, <span class="number">2</span>)))</span><br><span class="line"><span class="keyword">val</span> rdd2 = sc.parallelize(<span class="type">List</span>((<span class="string">"jerry"</span>, <span class="number">2</span>), (<span class="string">"tom"</span>, <span class="number">1</span>), (<span class="string">"shuke"</span>, <span class="number">2</span>)))</span><br><span class="line"><span class="comment">//求join</span></span><br><span class="line"><span class="keyword">val</span> rdd3 = rdd1.join(rdd2)</span><br><span class="line">rdd3.collect</span><br><span class="line"><span class="comment">//求并集</span></span><br><span class="line"><span class="keyword">val</span> rdd4 = rdd1 union rdd2</span><br><span class="line">rdd4.groupByKey.collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-7-cogroup"><a href="#7-7-cogroup" class="headerlink" title="7.7 cogroup"></a>7.7 cogroup</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>((<span class="string">"tom"</span>, <span class="number">1</span>), (<span class="string">"tom"</span>, <span class="number">2</span>), (<span class="string">"jerry"</span>, <span class="number">3</span>), (<span class="string">"kitty"</span>, <span class="number">2</span>)))</span><br><span class="line"><span class="keyword">val</span> rdd2 = sc.parallelize(<span class="type">List</span>((<span class="string">"jerry"</span>, <span class="number">2</span>), (<span class="string">"tom"</span>, <span class="number">1</span>), (<span class="string">"jim"</span>, <span class="number">2</span>)))</span><br><span class="line"><span class="comment">//分组</span></span><br><span class="line"><span class="keyword">val</span> rdd3 = rdd1.cogroup(rdd2)</span><br><span class="line">rdd3.collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-8-reduce"><a href="#7-8-reduce" class="headerlink" title="7.8 reduce"></a>7.8 reduce</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">//reduce聚合</span></span><br><span class="line"><span class="keyword">val</span> rdd2 = rdd1.reduce(_ + _)</span><br><span class="line">rdd2.collect</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> rdd3 = sc.parallelize(<span class="type">List</span>(<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>,<span class="string">"4"</span>,<span class="string">"5"</span>))</span><br><span class="line">rdd3.reduce(_+_)</span><br><span class="line"></span><br><span class="line">这里可能会出现多个不同的结果，由于元素在不同的分区中，每一个分区都是一个独立的task线程去运行。这些task运行有先后关系</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-9-reduceByKey、sortByKey"><a href="#7-9-reduceByKey、sortByKey" class="headerlink" title="7.9 reduceByKey、sortByKey"></a>7.9 reduceByKey、sortByKey</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>((<span class="string">"tom"</span>, <span class="number">1</span>), (<span class="string">"jerry"</span>, <span class="number">3</span>), (<span class="string">"kitty"</span>, <span class="number">2</span>),  (<span class="string">"shuke"</span>, <span class="number">1</span>)))</span><br><span class="line"><span class="keyword">val</span> rdd2 = sc.parallelize(<span class="type">List</span>((<span class="string">"jerry"</span>, <span class="number">2</span>), (<span class="string">"tom"</span>, <span class="number">3</span>), (<span class="string">"shuke"</span>, <span class="number">2</span>), (<span class="string">"kitty"</span>, <span class="number">5</span>)))</span><br><span class="line"><span class="keyword">val</span> rdd3 = rdd1.union(rdd2)</span><br><span class="line"></span><br><span class="line"><span class="comment">//按key进行聚合</span></span><br><span class="line"><span class="keyword">val</span> rdd4 = rdd3.reduceByKey(_ + _)</span><br><span class="line">rdd4.collect</span><br><span class="line"></span><br><span class="line"><span class="comment">//按value的降序排序</span></span><br><span class="line"><span class="keyword">val</span> rdd5 = rdd4.map(t =&gt; (t._2, t._1)).sortByKey(<span class="literal">false</span>).map(t =&gt; (t._2, t._1))</span><br><span class="line">rdd5.collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-10-repartition、coalesce"><a href="#7-10-repartition、coalesce" class="headerlink" title="7.10 repartition、coalesce"></a>7.10 repartition、coalesce</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="number">1</span> to <span class="number">10</span>,<span class="number">3</span>)</span><br><span class="line"><span class="comment">//打印rdd1的分区数</span></span><br><span class="line">rdd1.partitions.size</span><br><span class="line"></span><br><span class="line"><span class="comment">//利用repartition改变rdd1分区数</span></span><br><span class="line"><span class="comment">//减少分区</span></span><br><span class="line">rdd1.repartition(<span class="number">2</span>).partitions.size</span><br><span class="line"></span><br><span class="line"><span class="comment">//增加分区</span></span><br><span class="line">rdd1.repartition(<span class="number">4</span>).partitions.size</span><br><span class="line"></span><br><span class="line"><span class="comment">//利用coalesce改变rdd1分区数</span></span><br><span class="line"><span class="comment">//减少分区</span></span><br><span class="line">rdd1.coalesce(<span class="number">2</span>).partitions.size</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//repartition:  重新分区， 有shuffle</span></span><br><span class="line"><span class="comment">//coalesce:     合并分区 / 减少分区 	默认不shuffle   </span></span><br><span class="line"><span class="comment">//默认 coalesce 不能扩大分区数量。除非添加true的参数，或者使用repartition。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//适用场景：</span></span><br><span class="line">    <span class="comment">//1、如果要shuffle，都用 repartition</span></span><br><span class="line">    <span class="comment">//2、不需要shuffle，仅仅是做分区的合并，coalesce</span></span><br><span class="line">    <span class="comment">//3、repartition常用于扩大分区。</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="7-11-map、mapPartitions-、mapPartitionsWithIndex"><a href="#7-11-map、mapPartitions-、mapPartitionsWithIndex" class="headerlink" title="7.11 map、mapPartitions   、mapPartitionsWithIndex"></a>7.11 map、mapPartitions   、mapPartitionsWithIndex</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1=sc.parallelize(<span class="number">1</span> to <span class="number">10</span>,<span class="number">5</span>)</span><br><span class="line">rdd1.map(x =&gt; x*<span class="number">10</span>)).collect</span><br><span class="line">rdd1.mapPartitions(iter =&gt; iter.map(x=&gt;x*<span class="number">10</span>)).collect</span><br><span class="line"></span><br><span class="line"><span class="comment">//index表示分区号  可以获取得到每一个元素属于哪一个分区</span></span><br><span class="line">rdd1.mapPartitionsWithIndex((index,iter)=&gt;iter.map(x=&gt;(index,x)))</span><br><span class="line"></span><br><span class="line">map：用于遍历<span class="type">RDD</span>,将函数f应用于每一个元素，返回新的<span class="type">RDD</span>(transformation算子)。</span><br><span class="line">mapPartitions:用于遍历操作<span class="type">RDD</span>中的每一个分区，返回生成一个新的<span class="type">RDD</span>（transformation算子）。</span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line">如果在映射的过程中需要频繁创建额外的对象，使用mapPartitions要比map高效</span><br><span class="line">比如，将<span class="type">RDD</span>中的所有数据通过<span class="type">JDBC</span>连接写入数据库，如果使用map函数，可能要为每一个元素都创建一个connection，这样开销很大，如果使用mapPartitions，那么只需要针对每一个分区建立一个connection。</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-12-foreach、foreachPartition"><a href="#7-12-foreach、foreachPartition" class="headerlink" title="7.12 foreach、foreachPartition"></a>7.12 foreach、foreachPartition</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1 = sc.parallelize(<span class="type">List</span>(<span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">1</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">//foreach实现对rdd1里的每一个元素乘10然后打印输出</span></span><br><span class="line">rdd1.foreach(x=&gt;println(x * <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">//foreachPartition实现对rdd1里的每一个元素乘10然后打印输出</span></span><br><span class="line">rdd1.foreachPartition(iter =&gt; iter.foreach(x=&gt;println(x * <span class="number">10</span>)))</span><br><span class="line"></span><br><span class="line">foreach:用于遍历<span class="type">RDD</span>,将函数f应用于每一个元素，无返回值(action算子)。</span><br><span class="line">foreachPartition: 用于遍历操作<span class="type">RDD</span>中的每一个分区。无返回值(action算子)。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line">一般使用mapPartitions或者foreachPartition算子比map和foreach更加高效，推荐使用。</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2020/02/16/Spark底层核心之RDD/" title="Spark底层核心之RDD">http://yoursite.com/2020/02/16/Spark底层核心之RDD/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Spark/" rel="tag"># Spark</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/02/12/kafka内部原理和机制二/" rel="next" title="kafka内部原理和机制二">
+                  <i class="fa fa-chevron-left"></i> kafka内部原理和机制二
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2020/02/17/Hive原理与优化/" rel="prev" title="Hive原理与优化">
+                  Hive原理与优化 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spark内存计算框架"><span class="nav-number">1.</span> <span class="nav-text">spark内存计算框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-RDD是什么"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. RDD是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-RDD的五大属性"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. RDD的五大属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-基于spark的单词统计程序剖析rdd的五大属性"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. 基于spark的单词统计程序剖析rdd的五大属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-RDD的创建方式"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. RDD的创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-RDD的算子分类"><span class="nav-number">1.0.5.</span> <span class="nav-text">5. RDD的算子分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-RDD常见的算子操作说明"><span class="nav-number">1.0.6.</span> <span class="nav-text">6. RDD常见的算子操作说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-transformation算子"><span class="nav-number">1.0.6.1.</span> <span class="nav-text">6.1 transformation算子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-action算子"><span class="nav-number">1.0.6.2.</span> <span class="nav-text">6.2 action算子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-RDD常用的算子操作演示"><span class="nav-number">1.0.7.</span> <span class="nav-text">7. RDD常用的算子操作演示</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-map"><span class="nav-number">1.0.7.1.</span> <span class="nav-text">7.1 map</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-filter"><span class="nav-number">1.0.7.2.</span> <span class="nav-text">7.2 filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-flatMap"><span class="nav-number">1.0.7.3.</span> <span class="nav-text">7.3 flatMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-4-intersection、union"><span class="nav-number">1.0.7.4.</span> <span class="nav-text">7.4 intersection、union</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-5-distinct"><span class="nav-number">1.0.7.5.</span> <span class="nav-text">7.5 distinct</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-6-join、groupByKey"><span class="nav-number">1.0.7.6.</span> <span class="nav-text">7.6 join、groupByKey</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-7-cogroup"><span class="nav-number">1.0.7.7.</span> <span class="nav-text">7.7 cogroup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-8-reduce"><span class="nav-number">1.0.7.8.</span> <span class="nav-text">7.8 reduce</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-9-reduceByKey、sortByKey"><span class="nav-number">1.0.7.9.</span> <span class="nav-text">7.9 reduceByKey、sortByKey</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-10-repartition、coalesce"><span class="nav-number">1.0.7.10.</span> <span class="nav-text">7.10 repartition、coalesce</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-11-map、mapPartitions-、mapPartitionsWithIndex"><span class="nav-number">1.0.7.11.</span> <span class="nav-text">7.11 map、mapPartitions   、mapPartitionsWithIndex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-12-foreach、foreachPartition"><span class="nav-number">1.0.7.12.</span> <span class="nav-text">7.12 foreach、foreachPartition</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
