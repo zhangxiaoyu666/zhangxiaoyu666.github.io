@@ -250,7 +250,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">53</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">54</span></a>
 
   </li>
       
@@ -334,6 +334,297 @@
           <div id="content" class="content">
             
   <div id="posts" class="posts-expand">
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/18/Spark内存计算框架原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2020/02/18/Spark内存计算框架原理/" class="post-title-link" itemprop="url">Spark内存计算框架原理</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-18 15:17:03 / 修改时间：18:44:15" itemprop="dateCreated datePublished" datetime="2020-02-18T15:17:03+08:00">2020-02-18</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据开发/" itemprop="url" rel="index"><span itemprop="name">大数据开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="spark内存计算框架"><a href="#spark内存计算框架" class="headerlink" title="spark内存计算框架"></a>spark内存计算框架</h1><h3 id="1-RDD的依赖关系"><a href="#1-RDD的依赖关系" class="headerlink" title="1. RDD的依赖关系"></a>1. RDD的依赖关系</h3><p><img src="/2020/02/18/Spark内存计算框架原理/rdd-dependencies.png" alt></p>
+<ul>
+<li><p>RDD和它依赖的父RDD的关系有两种不同的类型</p>
+</li>
+<li><p>窄依赖（narrow dependency）和宽依赖（wide dependency）</p>
+<ul>
+<li><p>窄依赖</p>
+<ul>
+<li><p>窄依赖指的是每一个父RDD的Partition最多被子RDD的一个Partition使用</p>
+<ul>
+<li>总结：窄依赖我们形象的比喻为独生子女</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">哪些算子操作是窄依赖：</span><br><span class="line">	map/flatMap/filter/union等等</span><br><span class="line">	</span><br><span class="line">	所有的窄依赖不会产生shuffle</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>宽依赖</p>
+<ul>
+<li><p>宽依赖指的是多个子RDD的Partition会依赖同一个父RDD的Partition</p>
+<ul>
+<li>总结：宽依赖我们形象的比喻为超生 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">哪些算子操作是宽依赖：</span><br><span class="line">	reduceByKey/sortByKey/groupBy/groupByKey/join等等</span><br><span class="line">	</span><br><span class="line">	所有的宽依赖会产生shuffle</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>补充说明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">由上图可知，join分为宽依赖和窄依赖，如果RDD有相同的partitioner，那么将不会引起shuffle，这种join是窄依赖，反之就是宽依赖</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-lineage（血统）"><a href="#2-lineage（血统）" class="headerlink" title="2. lineage（血统）"></a>2. lineage（血统）</h3><ul>
+<li>RDD只支持粗粒度转换<ul>
+<li>即只记录单个块上执行的单个操作。</li>
+</ul>
+</li>
+<li>将创建RDD的一系列Lineage（即血统）记录下来，以便恢复丢失的分区</li>
+<li>RDD的Lineage会记录RDD的元数据信息和转换行为，lineage保存了RDD的依赖关系，当该RDD的部分分区数据丢失时，它可以根据这些信息来重新运算和恢复丢失的数据分区。</li>
+</ul>
+<h3 id="3-RDD的缓存机制（★★★★★"><a href="#3-RDD的缓存机制（★★★★★" class="headerlink" title="3. RDD的缓存机制（★★★★★)"></a>3. RDD的缓存机制（★★★★★)</h3><h4 id="3-1-什么是rdd的缓存"><a href="#3-1-什么是rdd的缓存" class="headerlink" title="3.1 什么是rdd的缓存"></a>3.1 什么是rdd的缓存</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可以把一个rdd的数据缓存起来，后续有其他的job需要用到该rdd的结果数据，可以直接从缓存中获取得到，避免了重复计算。缓存是加快后续对该数据的访问操作。</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-如何对rdd设置缓存"><a href="#3-2-如何对rdd设置缓存" class="headerlink" title="3.2 如何对rdd设置缓存"></a>3.2 如何对rdd设置缓存</h4><ul>
+<li>RDD通过persist方法或cache方法可以将前面的计算结果缓存。<ul>
+<li>但是并不是这两个方法被调用时立即缓存，而是==触发后面的action==时，该RDD将会被缓存在计算节点的内存中，并供后面重用。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/02/18/Spark内存计算框架原理/1569036662039.png" alt></p>
+<ul>
+<li>通过查看源码发现cache最终也是调用了persist方法，默认的存储级别都是仅在内存存储一份，Spark的存储级别还有好多种，存储级别在object StorageLevel中定义的。</li>
+</ul>
+<p><img src="/2020/02/18/Spark内存计算框架原理/1569036703460.png" alt></p>
+<ul>
+<li>使用演示</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1=sc.textFile(<span class="string">"/words.txt"</span>)</span><br><span class="line"><span class="keyword">val</span> rdd2=rdd1.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line"><span class="keyword">val</span> rdd3=rdd2.cache</span><br><span class="line">rdd3.collect</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> rdd4=rdd3.map((_,<span class="number">1</span>))</span><br><span class="line"><span class="keyword">val</span> rdd5=rdd4.persist(缓存级别)</span><br><span class="line">rdd5.collect</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-cache和persist区别"><a href="#3-3-cache和persist区别" class="headerlink" title="3.3 cache和persist区别"></a>3.3 cache和persist区别</h4><ul>
+<li><p>面试经常被问到(★★★★★)</p>
+<ul>
+<li>例如<ul>
+<li>简述下如何对RDD设置缓存，以及它们的区别是什么？</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">	对RDD设置缓存成可以调用rdd的2个方法： 一个是cache，一个是persist</span><br><span class="line">调用上面2个方法都可以对rdd的数据设置缓存，但不是立即就触发缓存执行，后面需要有action，才会触发缓存的执行。</span><br><span class="line"></span><br><span class="line">cache方法和persist方法区别：</span><br><span class="line">    cache:   默认是把数据缓存在内存中，其本质就是调用persist方法；</span><br><span class="line">    persist：可以把数据缓存在内存或者是磁盘，有丰富的缓存级别，这些缓存级别都被定义在StorageLevel这个object中。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="3-4-什么时候设置缓存"><a href="#3-4-什么时候设置缓存" class="headerlink" title="3.4 什么时候设置缓存"></a>3.4 什么时候设置缓存</h4><ul>
+<li>1、某个rdd的数据后期被使用了多次</li>
+</ul>
+<p><img src="/2020/02/18/Spark内存计算框架原理/1569037915592.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">如上图所示的计算逻辑： </span><br><span class="line">（1）当第一次使用rdd2做相应的算子操作得到rdd3的时候，就会从rdd1开始计算，先读取HDFS上的文件，然后对rdd1 做对应的算子操作得到rdd2,再由rdd2计算之后得到rdd3。同样为了计算得到rdd4，前面的逻辑会被重新计算。</span><br><span class="line"></span><br><span class="line">（2）默认情况下多次对一个rdd执行算子操作， rdd都会对这个rdd及之前的父rdd全部重新计算一次。 这种情况在实际开发代码的时候会经常遇到，但是我们一定要避免一个rdd重复计算多次，否则会导致性能急剧降低。   </span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line">可以把多次使用到的rdd，也就是公共rdd进行持久化，避免后续需要，再次重新计算，提升效率。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/18/Spark内存计算框架原理/1569045749546.png" alt></p>
+<ul>
+<li>2、为了获取得到一个rdd的结果数据，经过了大量的算子操作或者是计算逻辑比较复杂<ul>
+<li>总之某个rdd的数据来之不易</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val rdd2=rdd1.flatMap(函数).map(函数).reduceByKey(函数).xxx.xxx.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-5-清除缓存数据"><a href="#3-5-清除缓存数据" class="headerlink" title="3.5  清除缓存数据"></a>3.5  清除缓存数据</h4><ul>
+<li><p>1、自动清除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个application应用程序结束之后，对应的缓存数据也就自动清除</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2、手动清除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">调用rdd的unpersist方法</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="4-RDD的checkpoint机制（★★★★★"><a href="#4-RDD的checkpoint机制（★★★★★" class="headerlink" title="4. RDD的checkpoint机制（★★★★★)"></a>4. RDD的checkpoint机制（★★★★★)</h3><h4 id="4-1-checkpoint概念"><a href="#4-1-checkpoint概念" class="headerlink" title="4.1 checkpoint概念"></a>4.1 checkpoint概念</h4><ul>
+<li><p>我们可以对rdd的数据进行缓存，保存在内存或者是磁盘中。</p>
+<ul>
+<li><p>后续就可以直接从内存或者磁盘中获取得到，但是它们不是特别安全。</p>
+</li>
+<li><p><strong>cache</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">它是直接把数据保存在内存中，后续操作起来速度比较快，直接从内存中获取得到。但这种方式很不安全，由于服务器挂掉或者是进程终止，会导致数据的丢失。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>persist</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">它可以把数据保存在本地磁盘中，后续可以从磁盘中获取得到该数据，但它也不是特别安全，由于系统管理员一些误操作删除了，或者是磁盘损坏，也有可能导致数据的丢失。</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>checkpoint</strong>（检查点）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">它是提供了一种相对而言更加可靠的数据持久化方式。它是把数据保存在分布式文件系统，</span><br><span class="line">比如HDFS上。这里就是利用了HDFS高可用性，高容错性（多副本）来最大程度保证数据的安全性。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="4-2-如何设置checkpoint"><a href="#4-2-如何设置checkpoint" class="headerlink" title="4.2 如何设置checkpoint"></a>4.2 如何设置checkpoint</h4><ul>
+<li><p>1、在hdfs上设置一个checkpoint目录</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc.setCheckpointDir(<span class="string">"hdfs://node01:8020/checkpoint"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2、对需要做checkpoint操作的rdd调用checkpoint方法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd1=sc.textFile(<span class="string">"/words.txt"</span>)</span><br><span class="line">rdd1.checkpoint</span><br><span class="line"><span class="keyword">val</span> rdd2=rdd1.flatMap(_.split(<span class="string">" "</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>3、最后需要有一个action操作去触发任务的运行</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdd2.collect</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="4-3-cache、persist、checkpoint三者区别"><a href="#4-3-cache、persist、checkpoint三者区别" class="headerlink" title="4.3 cache、persist、checkpoint三者区别"></a>4.3 cache、persist、checkpoint三者区别</h4><ul>
+<li>cache和persist<ul>
+<li>cache默认数据缓存在内存中</li>
+<li>persist可以把数据保存在内存或者磁盘中</li>
+<li>后续要触发 cache 和 persist 持久化操作，需要有一个action操作</li>
+<li>它不会开启其他新的任务，一个action操作就对应一个job </li>
+<li>它不会改变rdd的依赖关系，程序运行完成后对应的缓存数据就自动消失</li>
+</ul>
+</li>
+<li>checkpoint<ul>
+<li>可以把数据持久化写入到hdfs上</li>
+<li>后续要触发checkpoint持久化操作，需要有一个action操作，后续会开启新的job执行checkpoint操作</li>
+<li>它会改变rdd的依赖关系，后续数据丢失了不能够在通过血统进行数据的恢复。</li>
+<li>程序运行完成后对应的checkpoint数据就不会消失</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sc.setCheckpointDir(<span class="string">"/checkpoint"</span>)</span><br><span class="line"><span class="keyword">val</span> rdd1=sc.textFile(<span class="string">"/words.txt"</span>)</span><br><span class="line"><span class="keyword">val</span> rdd2=rdd1.cache</span><br><span class="line">rdd2.checkpoint</span><br><span class="line"><span class="keyword">val</span> rdd3=rdd2.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line">rdd3.collect</span><br><span class="line"></span><br><span class="line">checkpoint操作要执行需要有一个action操作，一个action操作对应后续的一个job。该job执行完成之后，它会再次单独开启另外一个job来执行 rdd1.checkpoint操作。</span><br><span class="line"></span><br><span class="line">对checkpoint在使用的时候进行优化，在调用checkpoint操作之前，可以先来做一个cache操作，缓存对应rdd的结果数据，后续就可以直接从cache中获取到rdd的数据写入到指定checkpoint目录中</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-DAG有向无环图生成"><a href="#5-DAG有向无环图生成" class="headerlink" title="5. DAG有向无环图生成"></a>5. DAG有向无环图生成</h3><h4 id="5-1-DAG是什么"><a href="#5-1-DAG是什么" class="headerlink" title="5.1 DAG是什么"></a>5.1 DAG是什么</h4><ul>
+<li>DAG(Directed Acyclic Graph) 叫做有向无环图（有方向,无闭环,代表着数据的流向），原始的RDD通过一系列的转换就形成了DAG。</li>
+<li>下图是基于单词统计逻辑得到的DAG有向无环图</li>
+</ul>
+<p><img src="/2020/02/18/Spark内存计算框架原理/1569047954944.png" alt></p>
+<h3 id="6-DAG划分stage（★★★★★"><a href="#6-DAG划分stage（★★★★★" class="headerlink" title="6. DAG划分stage（★★★★★)"></a>6. DAG划分stage（★★★★★)</h3><h4 id="6-1-stage是什么"><a href="#6-1-stage是什么" class="headerlink" title="6.1 stage是什么"></a>6.1 stage是什么</h4><ul>
+<li>一个Job会被拆分为多组Task，每组任务被称为一个stage</li>
+<li>stage表示不同的调度阶段，一个spark job会对应产生很多个stage<ul>
+<li>stage类型一共有2种<ul>
+<li>ShuffleMapStage<ul>
+<li>最后一个shuffle之前的所有变换的Stage叫ShuffleMapStage<ul>
+<li>它对应的task是shuffleMapTask</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ResultStage<ul>
+<li>最后一个shuffle之后操作的Stage叫ResultStage，它是最后一个Stage。<ul>
+<li>它对应的task是ResultTask</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-2-为什么要划分stage"><a href="#6-2-为什么要划分stage" class="headerlink" title="6.2 为什么要划分stage"></a>6.2 为什么要划分stage</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">根据RDD之间依赖关系的不同将DAG划分成不同的Stage(调度阶段)</span><br><span class="line">对于窄依赖，partition的转换处理在一个Stage中完成计算</span><br><span class="line">对于宽依赖，由于有Shuffle的存在，只能在parent RDD处理完成后，才能开始接下来的计算，</span><br><span class="line"></span><br><span class="line">由于划分完stage之后，在同一个stage中只有窄依赖，没有宽依赖，可以实现流水线计算，</span><br><span class="line">stage中的每一个分区对应一个task，在同一个stage中就有很多可以并行运行的task。</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-3-如何划分stage"><a href="#6-3-如何划分stage" class="headerlink" title="6.3 如何划分stage"></a>6.3 如何划分stage</h4><ul>
+<li>划分stage的依据就是宽依赖</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(1) 首先根据rdd的算子操作顺序生成DAG有向无环图，接下里从最后一个rdd往前推，创建一个新的stage，把该rdd加入到该stage中，它是最后一个stage。</span><br><span class="line"></span><br><span class="line">(2) 在往前推的过程中运行遇到了窄依赖就把该rdd加入到本stage中，如果遇到了宽依赖，就从宽依赖切开，那么最后一个stage也就结束了。</span><br><span class="line"></span><br><span class="line">(3) 重新创建一个新的stage，按照第二个步骤继续往前推，一直到最开始的rdd，整个划分stage也就结束了</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/18/Spark内存计算框架原理/%E5%88%92%E5%88%86stage.png" alt></p>
+<h4 id="6-4-stage与stage之间的关系"><a href="#6-4-stage与stage之间的关系" class="headerlink" title="6.4 stage与stage之间的关系"></a>6.4 stage与stage之间的关系</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">	划分完stage之后，每一个stage中有很多可以并行运行的task，后期把每一个stage中的task封装在一个taskSet集合中，最后把一个一个的taskSet集合提交到worker节点上的executor进程中运行。</span><br><span class="line"></span><br><span class="line">rdd与rdd之间存在依赖关系，stage与stage之前也存在依赖关系，前面stage中的task先运行，运行完成了再运行后面stage中的task，也就是说后面stage中的task输入数据是前面stage中task的输出结果数据。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/18/Spark内存计算框架原理/stage.png" alt></p>
+<h3 id="7、spark的任务调度"><a href="#7、spark的任务调度" class="headerlink" title="7、spark的任务调度"></a>7、spark的任务调度</h3><p><img src="/2020/02/18/Spark内存计算框架原理/spark%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(1) Driver端运行客户端的main方法，构建SparkContext对象，在SparkContext对象内部依次构建DAGScheduler和TaskScheduler</span><br><span class="line"></span><br><span class="line">(2) 按照rdd的一系列操作顺序，来生成DAG有向无环图</span><br><span class="line"></span><br><span class="line">(3) DAGScheduler拿到DAG有向无环图之后，按照宽依赖进行stage的划分。每一个stage内部有很多可以并行运行的task，最后封装在一个一个的taskSet集合中，然后把taskSet发送给TaskScheduler</span><br><span class="line"></span><br><span class="line">(4) TaskScheduler得到taskSet集合之后，依次遍历取出每一个task提交到worker节点上的executor进程中运行。</span><br><span class="line"></span><br><span class="line">(5) 所有task运行完成，整个任务也就结束了</span><br></pre></td></tr></table></figure>
+
+<h3 id="8、spark的运行架构"><a href="#8、spark的运行架构" class="headerlink" title="8、spark的运行架构"></a>8、spark的运行架构</h3><p><img src="/2020/02/18/Spark内存计算框架原理/spark.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(1) Driver端向资源管理器Master发送注册和申请计算资源的请求</span><br><span class="line"></span><br><span class="line">(2) Master通知对应的worker节点启动executor进程(计算资源)</span><br><span class="line"></span><br><span class="line">(3) executor进程向Driver端发送注册并且申请task请求</span><br><span class="line"></span><br><span class="line">(4) Driver端运行客户端的main方法，构建SparkContext对象，在SparkContext对象内部依次构建DAGScheduler和TaskScheduler</span><br><span class="line"></span><br><span class="line">(5) 按照客户端代码洪rdd的一系列操作顺序，生成DAG有向无环图</span><br><span class="line"></span><br><span class="line">(6) DAGScheduler拿到DAG有向无环图之后，按照宽依赖进行stage的划分。每一个stage内部有很多可以并行运行的task，最后封装在一个一个的taskSet集合中，然后把taskSet发送给TaskScheduler</span><br><span class="line"></span><br><span class="line">(7) TaskScheduler得到taskSet集合之后，依次遍历取出每一个task提交到worker节点上的executor进程中运行</span><br><span class="line"></span><br><span class="line">(8) 所有task运行完成，Driver端向Master发送注销请求，Master通知Worker关闭executor进程，Worker上的计算资源得到释放，最后整个任务也就结束了。</span><br></pre></td></tr></table></figure>
+
+<h3 id="9、基于wordcount程序剖析spark任务的提交、划分、调度流程（★★★★★"><a href="#9、基于wordcount程序剖析spark任务的提交、划分、调度流程（★★★★★" class="headerlink" title="9、基于wordcount程序剖析spark任务的提交、划分、调度流程（★★★★★)"></a>9、基于wordcount程序剖析spark任务的提交、划分、调度流程（★★★★★)</h3><p><img src="/2020/02/18/Spark内存计算框架原理/job-scheduler-running.png" alt></p>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><ul>
+<li>1、rdd的依赖关系<ul>
+<li>宽依赖</li>
+<li>窄依赖</li>
+</ul>
+</li>
+<li>2、rdd的缓存机制（★★★★★)  <ul>
+<li>cache</li>
+<li>persist</li>
+</ul>
+</li>
+<li>3、checkpoint机制（★★★★★)  </li>
+<li>4、DAG有向无环图是什么</li>
+<li>5、如何划分stage（★★★★★)  </li>
+<li>6、spark任务的提交、划分、调度流程（★★★★★)  </li>
+</ul>
+
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
         <article itemscope itemtype="http://schema.org/Article">
   
   
@@ -559,11 +850,19 @@
                 
               
 
-              <time title="创建时间：2020-02-16 19:00:43 / 修改时间：22:05:11" itemprop="dateCreated datePublished" datetime="2020-02-16T19:00:43+08:00">2020-02-16</time>
+              <time title="创建时间：2020-02-16 19:00:43" itemprop="dateCreated datePublished" datetime="2020-02-16T19:00:43+08:00">2020-02-16</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-18 15:15:18" itemprop="dateModified" datetime="2020-02-18T15:15:18+08:00">2020-02-18</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -592,7 +891,7 @@
 
       
           <h1 id="spark内存计算框架"><a href="#spark内存计算框架" class="headerlink" title="spark内存计算框架"></a>spark内存计算框架</h1><h3 id="1-RDD是什么"><a href="#1-RDD是什么" class="headerlink" title="1. RDD是什么"></a>1. RDD是什么</h3><ul>
-<li>RDD（Resilient Distributed Dataset）叫做==弹性分布式数据集==，是Spark中最基本的数据抽象，它代表一个不可变、可分区、里面的元素可并行计算的集合.<ul>
+<li>RDD（Resilient Distributed Dataset）叫做弹性分布式数据集，是Spark中最基本的数据抽象，它代表一个不可变、可分区、里面的元素可并行计算的集合.<ul>
 <li><strong>Dataset</strong>:          就是一个集合，存储很多数据.</li>
 <li><strong>Distributed</strong>：它内部的元素进行了分布式存储，方便于后期进行分布式计算.</li>
 <li><strong>Resilient</strong>：     表示弹性，rdd的数据是可以保存在内存或者是磁盘中.</li>
@@ -1233,108 +1532,6 @@
   </article>
 
     
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/数据结构与算法之回溯算法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="小鱼儿">
-      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
-      <meta itemprop="image" content="/images/fish.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="一只鱼的博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/11/20/数据结构与算法之回溯算法/" class="post-title-link" itemprop="url">从《蝴蝶效应》中学习回溯算法</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-11-20 10:42:35" itemprop="dateCreated datePublished" datetime="2019-11-20T10:42:35+08:00">2019-11-20</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-21 14:03:54" itemprop="dateModified" datetime="2019-11-21T14:03:54+08:00">2019-11-21</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深度优先搜索算法利用的是回溯算法思想</p>
-          <!--noindex-->
-          
-            <div class="post-button">
-              <a class="btn" href="/2019/11/20/数据结构与算法之回溯算法/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
   </div>
 
   
@@ -1386,7 +1583,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
