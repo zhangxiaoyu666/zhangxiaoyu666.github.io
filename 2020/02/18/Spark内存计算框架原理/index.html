@@ -55,13 +55,13 @@
   };
 </script>
 
-  <meta name="description" content="spark内存计算框架1. RDD的依赖关系  RDD和它依赖的父RDD的关系有两种不同的类型  窄依赖（narrow dependency）和宽依赖（wide dependency）  窄依赖  窄依赖指的是每一个父RDD的Partition最多被子RDD的一个Partition使用  总结：窄依赖我们形象的比喻为独生子女  1234哪些算子操作是窄依赖：	map/flatMap/filter/">
+  <meta name="description" content="spark内存计算框架1. RDD的依赖关系  RDD和它依赖的父RDD的关系有两种不同的类型">
 <meta name="keywords" content="Spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark内存计算框架原理">
 <meta property="og:url" content="http://yoursite.com/2020/02/18/Spark内存计算框架原理/index.html">
 <meta property="og:site_name" content="一只鱼的博客">
-<meta property="og:description" content="spark内存计算框架1. RDD的依赖关系  RDD和它依赖的父RDD的关系有两种不同的类型  窄依赖（narrow dependency）和宽依赖（wide dependency）  窄依赖  窄依赖指的是每一个父RDD的Partition最多被子RDD的一个Partition使用  总结：窄依赖我们形象的比喻为独生子女  1234哪些算子操作是窄依赖：	map/flatMap/filter/">
+<meta property="og:description" content="spark内存计算框架1. RDD的依赖关系  RDD和它依赖的父RDD的关系有两种不同的类型">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2020/02/18/Spark内存计算框架原理/rdd-dependencies.png">
 <meta property="og:image" content="http://yoursite.com/2020/02/18/Spark内存计算框架原理/1569036662039.png">
@@ -74,10 +74,10 @@
 <meta property="og:image" content="http://yoursite.com/2020/02/18/Spark内存计算框架原理/spark%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png">
 <meta property="og:image" content="http://yoursite.com/2020/02/18/Spark内存计算框架原理/spark.png">
 <meta property="og:image" content="http://yoursite.com/2020/02/18/Spark内存计算框架原理/job-scheduler-running.png">
-<meta property="og:updated_time" content="2020-02-18T10:44:15.184Z">
+<meta property="og:updated_time" content="2020-02-20T05:05:06.348Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark内存计算框架原理">
-<meta name="twitter:description" content="spark内存计算框架1. RDD的依赖关系  RDD和它依赖的父RDD的关系有两种不同的类型  窄依赖（narrow dependency）和宽依赖（wide dependency）  窄依赖  窄依赖指的是每一个父RDD的Partition最多被子RDD的一个Partition使用  总结：窄依赖我们形象的比喻为独生子女  1234哪些算子操作是窄依赖：	map/flatMap/filter/">
+<meta name="twitter:description" content="spark内存计算框架1. RDD的依赖关系  RDD和它依赖的父RDD的关系有两种不同的类型">
 <meta name="twitter:image" content="http://yoursite.com/2020/02/18/Spark内存计算框架原理/rdd-dependencies.png">
   <link rel="canonical" href="http://yoursite.com/2020/02/18/Spark内存计算框架原理/">
 
@@ -220,7 +220,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">43</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">45</span></a>
 
   </li>
       
@@ -264,7 +264,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">54</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">67</span></a>
 
   </li>
       
@@ -382,11 +382,19 @@
                 
               
 
-              <time title="创建时间：2020-02-18 15:17:03 / 修改时间：18:44:15" itemprop="dateCreated datePublished" datetime="2020-02-18T15:17:03+08:00">2020-02-18</time>
+              <time title="创建时间：2020-02-18 15:17:03" itemprop="dateCreated datePublished" datetime="2020-02-18T15:17:03+08:00">2020-02-18</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-20 13:05:06" itemprop="dateModified" datetime="2020-02-20T13:05:06+08:00">2020-02-20</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -416,8 +424,11 @@
       
         <h1 id="spark内存计算框架"><a href="#spark内存计算框架" class="headerlink" title="spark内存计算框架"></a>spark内存计算框架</h1><h3 id="1-RDD的依赖关系"><a href="#1-RDD的依赖关系" class="headerlink" title="1. RDD的依赖关系"></a>1. RDD的依赖关系</h3><p><img src="/2020/02/18/Spark内存计算框架原理/rdd-dependencies.png" alt></p>
 <ul>
-<li><p>RDD和它依赖的父RDD的关系有两种不同的类型</p>
-</li>
+<li>RDD和它依赖的父RDD的关系有两种不同的类型</li>
+</ul>
+<a id="more"></a>
+
+<ul>
 <li><p>窄依赖（narrow dependency）和宽依赖（wide dependency）</p>
 <ul>
 <li><p>窄依赖</p>
@@ -671,6 +682,10 @@
 
             <div class="post-nav-prev post-nav-item">
               
+                <a href="/2020/02/25/hive调优/" rel="prev" title="hive调优">
+                  hive调优 <i class="fa fa-chevron-right"></i>
+                </a>
+              
             </div>
           </div>
         
@@ -735,7 +750,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -761,7 +776,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

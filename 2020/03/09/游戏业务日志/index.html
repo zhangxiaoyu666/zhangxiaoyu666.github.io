@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="游戏行业背景现在的市面上很多游戏公司主要分类两大类：一是游戏研发类，二是游戏运营类。">
+<meta name="keywords" content="数据仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="游戏日志业务日志">
+<meta property="og:url" content="http://yoursite.com/2020/03/09/游戏业务日志/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="游戏行业背景现在的市面上很多游戏公司主要分类两大类：一是游戏研发类，二是游戏运营类。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/09/游戏业务日志/1583754304533.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/09/游戏业务日志/1583754129043.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/09/游戏业务日志/1583755041646.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/09/游戏业务日志/1583755289953.png">
+<meta property="og:updated_time" content="2020-03-09T12:18:51.867Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="游戏日志业务日志">
+<meta name="twitter:description" content="游戏行业背景现在的市面上很多游戏公司主要分类两大类：一是游戏研发类，二是游戏运营类。">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/09/游戏业务日志/1583754304533.png">
+  <link rel="canonical" href="http://yoursite.com/2020/03/09/游戏业务日志/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>游戏日志业务日志 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">45</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">10</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">67</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/游戏业务日志/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">游戏日志业务日志
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-09 19:26:01 / 修改时间：20:18:51" itemprop="dateCreated datePublished" datetime="2020-03-09T19:26:01+08:00">2020-03-09</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据项目开发/" itemprop="url" rel="index"><span itemprop="name">大数据项目开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="游戏行业背景"><a href="#游戏行业背景" class="headerlink" title="游戏行业背景"></a>游戏行业背景</h1><p>现在的市面上很多游戏公司主要分类两大类：一是游戏研发类，二是游戏运营类。<a id="more"></a>研发类公司就是自己开发游戏，有自己的游戏策划师，美术团队，有原画师，美术设计师，设计场景和角色，有3D建模师，有渲染师，程序员游戏开发工程师。这种团队一般是以工作室的形式存在，不是有限责任公司的形式。他们没有自己的运营和客服团队，他们一般是把自己的游戏卖给专门做运营的公司，由运营公司负责游戏的运营、客服服务、玩家服务、游戏活动策划等工作。他们再根据流水来分成。而这部分流水，不仅仅由游戏研发公司和游戏运营公司分钱，还有第三方渠道也要参与分钱。比如一款游戏是通过苹果的AppStore下载的，那苹果就要分钱，通过腾讯应用宝的，那腾讯也要分。</p>
+<h1 id="数仓整体架构"><a href="#数仓整体架构" class="headerlink" title="数仓整体架构"></a>数仓整体架构</h1><p>所有的大数据平台都是一样的功能设计，虽然组件和模块各有不同。但是主要的功流程还是3个板块，数据采集，数据存储与计算，数据产出与展示。</p>
+<p><img src="/2020/03/09/游戏业务日志/1583754304533.png" alt="1583754304533"></p>
+<p>数据采集的方式很多，组件也很多。主要根据业务场景来选择实时采集和离线采集的方式</p>
+<ul>
+<li>实时采集</li>
+</ul>
+<p>比如常见的flume + kafka + 流计算框架。这种业务场景就要大数据团队能够有权限实时的去获得数据，或者由对方能够实时的输出出来，才可以。</p>
+<ul>
+<li>离线采集</li>
+</ul>
+<p>不能实时获取数据的，有些是采集日志，有些公司是采集关系型数据库。比如采集mysql，离线的有人用sqoop去采集，实时的有些公司是通过flume或者解析binlog日志。</p>
+<p>但是一般的游戏公司不能做到实时采集，因为很多游戏是代理的，自己的开发人员不能左右游戏研发团队，而且往往采集日志时游戏已经开发完毕，这时候只能通过读取原来游戏日志存储的位置来获取。</p>
+<p>运营人员需要做各种报表的统计：可以通过T+1的方式来采集服务器的数据库中的数据，然后对数据进行报表分析。运营人员根据分析结果，反馈给开发人员。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">读取数据方式一：读取服务器配置文件，使用java代码循环的去连接数据库服务器，使用多线程获取数据</span><br><span class="line">读取数据方式二：自定义flume的mysqlsource，去采集mysql数据库当中的数据</span><br><span class="line">如何自定义flume的sourceèextends AbstractSource</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/03/09/游戏业务日志/1583754129043.png" alt="1583754129043"></p>
+<h1 id="游戏日志采集"><a href="#游戏日志采集" class="headerlink" title="游戏日志采集"></a>游戏日志采集</h1><h2 id="游戏日志采集架构"><a href="#游戏日志采集架构" class="headerlink" title="游戏日志采集架构"></a>游戏日志采集架构</h2><p><img src="/2020/03/09/游戏业务日志/1583755041646.png" alt="1583755041646"></p>
+<p>由于玩游戏的人很多，游戏服务器压力太大，为了减轻服务器压力</p>
+<p>首先，分了很多区服</p>
+<p>第二，如果某一区数据库压力还是很大，在数据库的基础上，再做分库以及分表的操作</p>
+<h2 id="日志分表分库"><a href="#日志分表分库" class="headerlink" title="日志分表分库"></a>日志分表分库</h2><p>游戏数据分析数据的采集一般是采集日志，就是每个玩家的行为日志，包括注册、登录、充值、关卡、基本信息这些。而这些数据都是存在多个服务器和数据库中的，比如很多游戏登录的时候就分了四川一服、广东一服、重庆一服等等，就是为了缓解服务器的压力，而这些相应的日志数据，也是根据服务器所在的区进行分散，同样是为了减少服务器的压力。</p>
+<p>日志数据一般是存放在mysql里面，做主从备份。由于数据量很大，一般会采用分表的形式来存储，一般是一个月一个表。</p>
+<p>比如《热血精灵王》的游戏用户登录日志，这款游戏日志的存储分了30多个服区，每个服区的登录用户都是存进了相应服区的数据库，而每个库里面都是采用分表的形式，每个月一个表，结构如下：</p>
+<p><img src="/2020/03/09/游戏业务日志/1583755289953.png" alt="1583755289953"></p>
+<p>user_login就是游戏用户登录日志表，由于是分表分库，所以在每个区服上会生成一个以后面月份为后缀的表，格式可能不一定是这样的，可能还有 name_2015_1 n_yyyym, name_201501 n_yyyymm, name n等多种格式。</p>
+<p>这就意味着，每个游戏，每个区服的数据是分散的，如果要查询某个游戏下某个用户的登录详情，就得查询所有的库，而且不同游戏不同服区的数据彼此之间是相互独立的，每个游戏都是一个独立的小王国。</p>
+<p>比如我们要查询《热血精灵王》这个游戏里面某一个用户的登录记录，我们就要挨个服区的数据库去遍历查询，因为这个用户可能在任何一个服务区上玩，遍历查询出来之后我们在汇总这个用户的所有结果。但是这样查询一次就非常的麻烦而且要消耗很长的时间。</p>
+<p>消除各个信息孤岛，整合所有数据形成数据中心，提供海量数据的存储与快速查询。</p>
+<p>我们要先将数据采集到hive中，然后才能进行数据仓库的建设，才能进行数据分析和挖掘。</p>
+<h1 id="游戏业务日志分类"><a href="#游戏业务日志分类" class="headerlink" title="游戏业务日志分类"></a>游戏业务日志分类</h1><p>游戏日志有很多，按照常规的业务可以分为3大类：基础信息类、行为属性类、交易属性类</p>
+<h2 id="基础信息类"><a href="#基础信息类" class="headerlink" title="基础信息类"></a>基础信息类</h2><p>这类信息就是关于到用户的基本条件，所属的，是可变化的，但是是单一的属性</p>
+<p>1、 游戏账号创建日志</p>
+<p>2、 角色创建日志</p>
+<p>3、 角色升级日志</p>
+<p>4、 角色vip升级日志</p>
+<p>5、 角色技能升级日志</p>
+<p>6、 角色转职日志</p>
+<p>7、 角色组队日志</p>
+<p>8、 角色改名日志</p>
+<p>9、 好友添加日志</p>
+<p>10、夫妻组建日志</p>
+<p>11、帮会创建</p>
+<p>12、加入退出帮会日志</p>
+<p>13、帮会更改</p>
+<p>14、帮会职位日志</p>
+<p>15、角色属性变化日志</p>
+<p>16、角色附属品升级日志</p>
+<h2 id="行为属性类"><a href="#行为属性类" class="headerlink" title="行为属性类"></a>行为属性类</h2><p>这类信息就是用户每天都会产生的行为变化，是可变的，要根据不同的日期做不同的变化。</p>
+<p>1、 角色登录登出日志</p>
+<p>2、 背包扩充日志</p>
+<p>3、 仓库扩充日志</p>
+<p>4、 账号封停日志</p>
+<p>5、 死亡日志</p>
+<p>6、 任务日志</p>
+<p>7、 副本开始日志</p>
+<p>8、 副本结束日志</p>
+<p>9、 Boss挑战开始日志</p>
+<p>10、Boss挑战结束日志</p>
+<p>11、战斗力变化日志</p>
+<p>12、战斗模式切换</p>
+<p>13、活动日志</p>
+<p>14、自定义监控</p>
+<p>15、自定义埋点</p>
+<p>16、游戏启动日志</p>
+<p>17、游戏分享日志</p>
+<p>18、游戏关卡开始日志</p>
+<p>19、游戏关卡结束日志</p>
+<p>20、游戏通关日志</p>
+<p>21、聊天日志</p>
+<h2 id="交易属性类"><a href="#交易属性类" class="headerlink" title="交易属性类"></a>交易属性类</h2><p>这类就是核心业务，涉及到公司收入和分成，涉及到业务和运营的考核指标。</p>
+<p>1、 角色充值日志</p>
+<p>2、 道具产出日志</p>
+<p>3、 道具交易日志</p>
+<p>4、 道具锻造日志</p>
+<p>5、 道具消耗日志</p>
+<p>6、 装备操作日志</p>
+<p>7、 货币产出日志</p>
+<p>8、 货币消耗日志</p>
+<p>9、 坐骑产出日志</p>
+<p>10、坐骑出战日志</p>
+<p>11、坐骑升级日志</p>
+<p>12、武将产出日志</p>
+<p>13、武将升级日志</p>
+<p>14、武将出战日志</p>
+<p>15、道具销毁日志</p>
+<p>16、广告展示日志</p>
+<h1 id="游戏日志仓库表结构"><a href="#游戏日志仓库表结构" class="headerlink" title="游戏日志仓库表结构"></a>游戏日志仓库表结构</h1><ul>
+<li>游戏登录日志表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>区服id</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>client_ip</td>
+<td>string</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>op_type</td>
+<td>string</td>
+<td>操作类型(1:登录-1登出)</td>
+</tr>
+<tr>
+<td>online_time</td>
+<td>int</td>
+<td>在线时长(s)</td>
+</tr>
+<tr>
+<td>operating_system</td>
+<td>string</td>
+<td>操作系统名称</td>
+</tr>
+<tr>
+<td>operating_version</td>
+<td>string</td>
+<td>操作系统版本</td>
+</tr>
+<tr>
+<td>device_brand</td>
+<td>string</td>
+<td>设备型号</td>
+</tr>
+<tr>
+<td>device_type</td>
+<td>string</td>
+<td>设备品牌</td>
+</tr>
+</tbody></table>
+<ul>
+<li>游戏角色创建日志表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>角色创建服</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道(平台)ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>client_ip</td>
+<td>string</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>job_name</td>
+<td>string</td>
+<td>职业名称</td>
+</tr>
+<tr>
+<td>role_sex</td>
+<td>int</td>
+<td>角色性别(0:男1:女)</td>
+</tr>
+</tbody></table>
+<ul>
+<li>战斗力日志表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>服务器ID</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>client_ip</td>
+<td>string</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>change_count</td>
+<td>bigint</td>
+<td>战斗力变化</td>
+</tr>
+<tr>
+<td>combat_power</td>
+<td>bigint</td>
+<td>当前战斗力</td>
+</tr>
+</tbody></table>
+<ul>
+<li>角色充值日志表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>服务器ID</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>string</td>
+<td>订单ID</td>
+</tr>
+<tr>
+<td>acer_count</td>
+<td>int</td>
+<td>获得的元宝数量</td>
+</tr>
+<tr>
+<td>recharge_amount</td>
+<td>double</td>
+<td>充值金额</td>
+</tr>
+<tr>
+<td>order_status</td>
+<td>int</td>
+<td>订单状态</td>
+</tr>
+<tr>
+<td>recharge_purpose</td>
+<td>int</td>
+<td>充值用途（0:商城充值充值获得元宝的形式    1:月卡充值    2:礼包充值）</td>
+</tr>
+</tbody></table>
+<ul>
+<li>虚拟币消费日志表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>服务器ID</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>client_ip</td>
+<td>string</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>log_id</td>
+<td>string</td>
+<td>日志id</td>
+</tr>
+<tr>
+<td>monetary_type</td>
+<td>int</td>
+<td>货币类型(1:元宝2:金币3:礼金 )</td>
+</tr>
+<tr>
+<td>consume_type</td>
+<td>int</td>
+<td>产出类型ID</td>
+</tr>
+<tr>
+<td>consume_count</td>
+<td>bigint</td>
+<td>产出数量</td>
+</tr>
+<tr>
+<td>monetary_stock</td>
+<td>bigint</td>
+<td>货币存量</td>
+</tr>
+</tbody></table>
+<ul>
+<li>玩家死亡日志表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>服务器ID</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>client_ip</td>
+<td>string</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>log_id</td>
+<td>string</td>
+<td>日志ID</td>
+</tr>
+<tr>
+<td>map_id</td>
+<td>int</td>
+<td>地图ID</td>
+</tr>
+<tr>
+<td>attacker_uid</td>
+<td>string</td>
+<td>凶手用户ID/怪物id</td>
+</tr>
+<tr>
+<td>attacker_rid</td>
+<td>string</td>
+<td>凶手角色ID/怪物id</td>
+</tr>
+<tr>
+<td>attacker_rname</td>
+<td>string</td>
+<td>凶手/怪物名称</td>
+</tr>
+<tr>
+<td>attacker_level</td>
+<td>int</td>
+<td>凶手/怪物等级</td>
+</tr>
+<tr>
+<td>death_level</td>
+<td>int</td>
+<td>死亡等级</td>
+</tr>
+<tr>
+<td>hero_power</td>
+<td>bigint</td>
+<td>当前玩家战斗力或者伤害</td>
+</tr>
+<tr>
+<td>death_detail</td>
+<td>string</td>
+<td>死亡详细</td>
+</tr>
+</tbody></table>
+<ul>
+<li>游戏关卡日志表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>服务器ID</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>client_ip</td>
+<td>string</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>log_id</td>
+<td>string</td>
+<td>日志ID</td>
+</tr>
+<tr>
+<td>level_before</td>
+<td>int</td>
+<td>玩家通关之前的关卡</td>
+</tr>
+<tr>
+<td>level_after</td>
+<td>int</td>
+<td>玩家通关后的关卡</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2020/03/09/游戏业务日志/" title="游戏日志业务日志">http://yoursite.com/2020/03/09/游戏业务日志/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/数据仓库/" rel="tag"># 数据仓库</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/03/09/游戏数据集市层/" rel="next" title="游戏数据集市层">
+                  <i class="fa fa-chevron-left"></i> 游戏数据集市层
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2020/03/09/数据仓库建设规范/" rel="prev" title="数据仓库建设规范">
+                  数据仓库建设规范 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏行业背景"><span class="nav-number">1.</span> <span class="nav-text">游戏行业背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数仓整体架构"><span class="nav-number">2.</span> <span class="nav-text">数仓整体架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏日志采集"><span class="nav-number">3.</span> <span class="nav-text">游戏日志采集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏日志采集架构"><span class="nav-number">3.1.</span> <span class="nav-text">游戏日志采集架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志分表分库"><span class="nav-number">3.2.</span> <span class="nav-text">日志分表分库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏业务日志分类"><span class="nav-number">4.</span> <span class="nav-text">游戏业务日志分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础信息类"><span class="nav-number">4.1.</span> <span class="nav-text">基础信息类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行为属性类"><span class="nav-number">4.2.</span> <span class="nav-text">行为属性类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交易属性类"><span class="nav-number">4.3.</span> <span class="nav-text">交易属性类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏日志仓库表结构"><span class="nav-number">5.</span> <span class="nav-text">游戏日志仓库表结构</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="数据仓库分层设计">
+<meta name="keywords" content="数据仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ODS数据原始层设计">
+<meta property="og:url" content="http://yoursite.com/2020/03/09/ODS数据原始层设计/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="数据仓库分层设计">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/09/ODS数据原始层设计/1583756538347.png">
+<meta property="og:updated_time" content="2020-03-09T13:45:57.817Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ODS数据原始层设计">
+<meta name="twitter:description" content="数据仓库分层设计">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/09/ODS数据原始层设计/1583756538347.png">
+  <link rel="canonical" href="http://yoursite.com/2020/03/09/ODS数据原始层设计/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ODS数据原始层设计 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">45</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">10</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">67</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/ODS数据原始层设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">ODS数据原始层设计
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-09 19:18:10 / 修改时间：21:45:57" itemprop="dateCreated datePublished" datetime="2020-03-09T19:18:10+08:00">2020-03-09</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据项目开发/" itemprop="url" rel="index"><span itemprop="name">大数据项目开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="数据仓库分层设计"><a href="#数据仓库分层设计" class="headerlink" title="数据仓库分层设计"></a>数据仓库分层设计</h1><a id="more"></a>
+
+<p><img src="/2020/03/09/ODS数据原始层设计/1583756538347.png" alt></p>
+<ul>
+<li><p>ODS层 原始数据层，存放原始数据，直接加载原始日志、数据，数据保持原貌不做处理</p>
+</li>
+<li><p>DW层 明细数据层，结构和粒度与原始表保持一致，对ODS层数据进行清洗（去除空值、脏数据、超过极限范围的数据）</p>
+</li>
+<li><p>RSE层 数据应用层，为各种统计报表提供数据</p>
+</li>
+</ul>
+<h1 id="ODS数据原始层设计"><a href="#ODS数据原始层设计" class="headerlink" title="ODS数据原始层设计"></a>ODS数据原始层设计</h1><p>通过Java程序采集数据，将日志数据上传到服务器  /datas/gamecenter路径下，将采集到的数据原封不动的存入hive，统一用ods_ 开头来命名表。</p>
+<p>比如：游戏登录日志 user_login_201901</p>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字段类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plat_id</td>
+<td>string</td>
+<td>平台id</td>
+</tr>
+<tr>
+<td>server_id</td>
+<td>int</td>
+<td>区服id</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>渠道</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>role_id</td>
+<td>string</td>
+<td>角色ID</td>
+</tr>
+<tr>
+<td>role_name</td>
+<td>string</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>client_ip</td>
+<td>string</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>event_time</td>
+<td>int</td>
+<td>事件时间</td>
+</tr>
+<tr>
+<td>op_type</td>
+<td>string</td>
+<td>操作类型(1:登录,-1登出)</td>
+</tr>
+<tr>
+<td>online_time</td>
+<td>int</td>
+<td>在线时长(s)</td>
+</tr>
+<tr>
+<td>operating_system</td>
+<td>string</td>
+<td>操作系统名称</td>
+</tr>
+<tr>
+<td>operating_version</td>
+<td>string</td>
+<td>操作系统版本</td>
+</tr>
+<tr>
+<td>device_brand</td>
+<td>string</td>
+<td>设备型号</td>
+</tr>
+<tr>
+<td>device_type</td>
+<td>string</td>
+<td>设备品牌</td>
+</tr>
+</tbody></table>
+<p>将每个服区的表中的字段拉取出来，其中平台id和区服id在MySQL数据库的表结构中是没有的，因为游戏研发存储日志的时候他们是根据数据库地址来存储的。我们要将所有分区分库分表中的数据集中到一个数据表中 ods_user_login 中，为了区分数据来源加入这两个字段。</p>
+<h2 id="ODS层表创建"><a href="#ODS层表创建" class="headerlink" title="ODS层表创建"></a>ODS层表创建</h2><p>使用动态分区，将不同日期的数据加载到不同的分区文件夹里面去</p>
+<ul>
+<li>创建hive数据库</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span>  game_center;</span><br><span class="line"><span class="keyword">use</span> game_center;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建游戏登录登出表</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> ods_user_login(</span><br><span class="line">plat_id            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'平台id'</span>,</span><br><span class="line">server_id          <span class="built_in">int</span>        <span class="keyword">comment</span> <span class="string">'区服id'</span>,</span><br><span class="line">channel_id         <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'渠道'</span>,</span><br><span class="line">user_id            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'用户ID'</span>,</span><br><span class="line">role_id            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'角色ID'</span>,</span><br><span class="line">role_name          <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'角色名称'</span>,</span><br><span class="line">client_ip          <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'客户端IP'</span>,</span><br><span class="line">event_time         <span class="built_in">int</span>        <span class="keyword">comment</span> <span class="string">'事件时间'</span>,</span><br><span class="line">op_type            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'操作类型(1:登录,-1登出)'</span>,</span><br><span class="line">online_time        <span class="built_in">int</span>        <span class="keyword">comment</span> <span class="string">'在线时长(s)'</span>,</span><br><span class="line">operating_system   <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'操作系统名称'</span>,</span><br><span class="line">operating_version  <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'操作系统版本'</span>,</span><br><span class="line">device_brand       <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'设备型号'</span>,</span><br><span class="line">device_type        <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'设备品牌'</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">comment</span> <span class="string">'游戏登录登出'</span></span><br><span class="line">PARTITIONED <span class="keyword">BY</span>(part_date <span class="built_in">date</span>)</span><br><span class="line"><span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\t'</span></span><br><span class="line"><span class="keyword">LINES</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\n'</span></span><br><span class="line"><span class="keyword">STORED</span> <span class="keyword">AS</span> TEXTFILE;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建游戏登录登出临时表</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> tmp_ods_user_login(</span><br><span class="line">plat_id            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'平台id'</span>,</span><br><span class="line">server_id          <span class="built_in">int</span>        <span class="keyword">comment</span> <span class="string">'区服id'</span>,</span><br><span class="line">channel_id         <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'渠道'</span>,</span><br><span class="line">user_id            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'用户ID'</span>,</span><br><span class="line">role_id            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'角色ID'</span>,</span><br><span class="line">role_name          <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'角色名称'</span>,</span><br><span class="line">client_ip          <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'客户端IP'</span>,</span><br><span class="line">event_time         <span class="built_in">int</span>        <span class="keyword">comment</span> <span class="string">'事件时间'</span>,</span><br><span class="line">op_type            <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'操作类型(1:登录,-1登出)'</span>,</span><br><span class="line">online_time        <span class="built_in">int</span>        <span class="keyword">comment</span> <span class="string">'在线时长(s)'</span>,</span><br><span class="line">operating_system   <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'操作系统名称'</span>,</span><br><span class="line">operating_version  <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'操作系统版本'</span>,</span><br><span class="line">device_brand       <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'设备型号'</span>,</span><br><span class="line">device_type        <span class="keyword">string</span>     <span class="keyword">comment</span> <span class="string">'设备品牌'</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">comment</span> <span class="string">'游戏登录登出-临时表，用于将数据通过动态分区载入ods_user_login中'</span></span><br><span class="line"><span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\t'</span></span><br><span class="line"><span class="keyword">LINES</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\n'</span></span><br><span class="line"><span class="keyword">STORED</span> <span class="keyword">AS</span> TEXTFILE;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>日志数据加载到游戏登录登出临时表</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/datas/gamecenter/ods_user_login.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> tmp_ods_user_login;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将数据通过动态分区载入ods_user_login中</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> hive.exec.dynamic.partition=<span class="literal">true</span>; 【开启动态分区】</span><br><span class="line"><span class="keyword">set</span> hive.exec.dynamic.partition.mode=nostrict; 【动态分区模式为非严格模式】</span><br><span class="line"><span class="keyword">set</span> hive.exec.max.dynamic.partitions.pernode=<span class="number">1000</span>; 【最大动态分区数量设置为1000】</span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> ods_user_login <span class="keyword">partition</span>(part_date)</span><br><span class="line"><span class="keyword">select</span> plat_id,server_id,channel_id,user_id,role_id,role_name,client_ip,event_time,op_type,online_time,operating_system,operating_version,device_brand,device_type,from_unixtime(event_time,<span class="string">'yyyy-MM-dd'</span>) <span class="keyword">as</span> part_date </span><br><span class="line"><span class="keyword">from</span> tmp_ods_user_login;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Shell脚本"><a href="#Shell脚本" class="headerlink" title="Shell脚本"></a>Shell脚本</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">vim ods_user_login.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">DBNAME=game_center</span><br><span class="line">hive_home=/install/hive-1.1.0-cdh5.14.2/bin/hive</span><br><span class="line"></span><br><span class="line">sql="</span><br><span class="line">create database if not exists  game_center;</span><br><span class="line">use game_center;</span><br><span class="line"></span><br><span class="line">CREATE TABLE if not exists  "$DBNAME".ods_user_login(</span><br><span class="line">plat_id            string     comment '平台id',</span><br><span class="line">server_id          int        comment '区服id',</span><br><span class="line">channel_id         string     comment '渠道',</span><br><span class="line">user_id            string     comment '用户ID',</span><br><span class="line">role_id            string     comment '角色ID',</span><br><span class="line">role_name          string     comment '角色名称',</span><br><span class="line">client_ip          string     comment '客户端IP',</span><br><span class="line">event_time         int        comment '事件时间',</span><br><span class="line">op_type            string     comment '操作类型(1:登录,-1登出)',</span><br><span class="line">online_time        int        comment '在线时长(s)',</span><br><span class="line">operating_system   string     comment '操作系统名称',</span><br><span class="line">operating_version  string     comment '操作系统版本',</span><br><span class="line">device_brand       string     comment '设备型号',</span><br><span class="line">device_type        string     comment '设备品牌'</span><br><span class="line">)</span><br><span class="line">comment '游戏登录登出'</span><br><span class="line">PARTITIONED BY(part_date date)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'</span><br><span class="line">LINES TERMINATED BY '\n'</span><br><span class="line">STORED AS TEXTFILE;</span><br><span class="line"></span><br><span class="line">CREATE TABLE if not exists tmp_ods_user_login(</span><br><span class="line">plat_id            string     comment '平台id',</span><br><span class="line">server_id          int        comment '区服id',</span><br><span class="line">channel_id         string     comment '渠道',</span><br><span class="line">user_id            string     comment '用户ID',</span><br><span class="line">role_id            string     comment '角色ID',</span><br><span class="line">role_name          string     comment '角色名称',</span><br><span class="line">client_ip          string     comment '客户端IP',</span><br><span class="line">event_time         int        comment '事件时间',</span><br><span class="line">op_type            string     comment '操作类型(1:登录,-1登出)',</span><br><span class="line">online_time        int        comment '在线时长(s)',</span><br><span class="line">operating_system   string     comment '操作系统名称',</span><br><span class="line">operating_version  string     comment '操作系统版本',</span><br><span class="line">device_brand       string     comment '设备型号',</span><br><span class="line">device_type        string     comment '设备品牌'</span><br><span class="line">)</span><br><span class="line">comment '游戏登录登出-临时表，用于将数据通过动态分区载入ods_user_login中'</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'</span><br><span class="line">LINES TERMINATED BY '\n'</span><br><span class="line">STORED AS TEXTFILE;</span><br><span class="line"></span><br><span class="line">load data local inpath '/datas/gamecenter/ods_user_login.txt' overwrite into table tmp_ods_user_login;</span><br><span class="line">set hive.exec.dynamic.partition=true;</span><br><span class="line">set hive.exec.dynamic.partition.mode=nostrict;</span><br><span class="line">set hive.exec.max.dynamic.partitions.pernode=1000;</span><br><span class="line">insert overwrite table ods_user_login partition(part_date)</span><br><span class="line">select plat_id,server_id,channel_id,user_id,role_id,role_name,client_ip,event_time,op_type,online_time,operating_system,operating_version,device_brand,device_type,from_unixtime(event_time,'yyyy-MM-dd') as part_date </span><br><span class="line">from tmp_ods_user_login;</span><br><span class="line">"</span><br><span class="line"><span class="meta">$</span>hive_home -e "$sql"</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2020/03/09/ODS数据原始层设计/" title="ODS数据原始层设计">http://yoursite.com/2020/03/09/ODS数据原始层设计/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/数据仓库/" rel="tag"># 数据仓库</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/03/08/智慧出行1/" rel="next" title="智慧出行1">
+                  <i class="fa fa-chevron-left"></i> 智慧出行1
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2020/03/09/游戏数仓的架构/" rel="prev" title="游戏数仓的架构">
+                  游戏数仓的架构 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据仓库分层设计"><span class="nav-number">1.</span> <span class="nav-text">数据仓库分层设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ODS数据原始层设计"><span class="nav-number">2.</span> <span class="nav-text">ODS数据原始层设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ODS层表创建"><span class="nav-number">2.1.</span> <span class="nav-text">ODS层表创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shell脚本"><span class="nav-number">2.2.</span> <span class="nav-text">Shell脚本</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
