@@ -225,7 +225,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">45</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">44</span></a>
 
   </li>
       
@@ -896,7 +896,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load data local inpath '/kkb/install/hivedatas/teacher.csv' into table myhive.teacher;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>从hdfs上面加载文件到teacher表里面去(将teacher.csv文件上传到hdfs的/kkb/hdfsload/hivedatas路径下)</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hivedatas</span><br><span class="line">hdfs dfs -mkdir -p /kkb/hdfsload/hivedatas</span><br><span class="line">hdfs dfs -put teacher.csv /kkb/hdfsload/hivedatas</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在hive的客户端当中执行</span></span><br><span class="line">load data inpath '/kkb/hdfsload/hivedatas' overwrite into table myhive.teacher;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/install/hivedatas</span><br><span class="line">hdfs dfs -mkdir -p /kkb/hdfsload/hivedatas</span><br><span class="line">hdfs dfs -put teacher.csv /kkb/hdfsload/hivedatas</span><br><span class="line"><span class="meta">#</span> 在hive的客户端当中执行</span><br><span class="line">load data inpath '/kkb/hdfsload/hivedatas' overwrite into table myhive.teacher;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
@@ -1234,7 +1234,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

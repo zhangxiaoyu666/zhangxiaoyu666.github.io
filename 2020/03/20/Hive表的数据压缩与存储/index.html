@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="1. Hive表的数据压缩1、数据的压缩说明 压缩模式评价">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive表的数据压缩">
+<meta property="og:url" content="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/index.html">
+<meta property="og:site_name" content="一只鱼的博客">
+<meta property="og:description" content="1. Hive表的数据压缩1、数据的压缩说明 压缩模式评价">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/clip_image002.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/clip_image003.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/clip_image005.jpg">
+<meta property="og:updated_time" content="2020-03-20T13:06:28.914Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive表的数据压缩">
+<meta name="twitter:description" content="1. Hive表的数据压缩1、数据的压缩说明 压缩模式评价">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/clip_image002.jpg">
+  <link rel="canonical" href="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Hive表的数据压缩 | 一只鱼的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只鱼的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">七秒钟的记忆多一秒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-question-circle"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">44</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-question-circle"></i>分类<span class="badge">10</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-question-circle"></i>归档<span class="badge">67</span></a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-schedule">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-sitemap">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-commonweal">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小鱼儿">
+      <meta itemprop="description" content="肩膀有点痒，可能在长小翅膀">
+      <meta itemprop="image" content="/images/fish.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只鱼的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Hive表的数据压缩
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-20 21:01:02 / 修改时间：21:06:28" itemprop="dateCreated datePublished" datetime="2020-03-20T21:01:02+08:00">2020-03-20</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据开发/" itemprop="url" rel="index"><span itemprop="name">大数据开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="1-Hive表的数据压缩"><a href="#1-Hive表的数据压缩" class="headerlink" title="1. Hive表的数据压缩"></a>1. Hive表的数据压缩</h3><h4 id="1、数据的压缩说明"><a href="#1、数据的压缩说明" class="headerlink" title="1、数据的压缩说明"></a>1、数据的压缩说明</h4><ul>
+<li>压缩模式评价<a id="more"></a><ul>
+<li>可使用以下三种标准对压缩方式进行评价<ul>
+<li>1、压缩比：压缩比越高，压缩后文件越小，所以压缩比越高越好</li>
+<li>2、压缩时间：越快越好</li>
+<li>3、已经压缩的格式文件是否可以再分割：可以分割的格式允许单一文件由多个Mapper程序处理，可以更好的并行化</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>常见压缩格式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">压缩方式</th>
+<th align="center">压缩比</th>
+<th align="center">压缩速度</th>
+<th align="center">解压缩速度</th>
+<th align="center">是否可分割</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">gzip</td>
+<td align="center">13.4%</td>
+<td align="center">21 MB/s</td>
+<td align="center">118 MB/s</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">bzip2</td>
+<td align="center">13.2%</td>
+<td align="center">2.4MB/s</td>
+<td align="center">9.5MB/s</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">lzo</td>
+<td align="center">20.5%</td>
+<td align="center">135 MB/s</td>
+<td align="center">410 MB/s</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">snappy</td>
+<td align="center">22.2%</td>
+<td align="center">172 MB/s</td>
+<td align="center">409 MB/s</td>
+<td align="center">否</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Hadoop编码/解码器方式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">压缩格式</th>
+<th align="center">对应的编码/解码器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">DEFLATE</td>
+<td align="center">org.apache.hadoop.io.compress.DefaultCodec</td>
+</tr>
+<tr>
+<td align="center">Gzip</td>
+<td align="center">org.apache.hadoop.io.compress.GzipCodec</td>
+</tr>
+<tr>
+<td align="center">BZip2</td>
+<td align="center">org.apache.hadoop.io.compress.BZip2Codec</td>
+</tr>
+<tr>
+<td align="center">LZO</td>
+<td align="center">com.hadoop.compress.lzo.LzopCodec</td>
+</tr>
+<tr>
+<td align="center">Snappy</td>
+<td align="center">org.apache.hadoop.io.compress.SnappyCodec</td>
+</tr>
+</tbody></table>
+<pre><code>压缩性能的比较</code></pre><table>
+<thead>
+<tr>
+<th>压缩算法</th>
+<th>原始文件大小</th>
+<th>压缩文件大小</th>
+<th>压缩速度</th>
+<th>解压速度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>gzip</td>
+<td>8.3GB</td>
+<td>1.8GB</td>
+<td>17.5MB/s</td>
+<td>58MB/s</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>8.3GB</td>
+<td>1.1GB</td>
+<td>2.4MB/s</td>
+<td>9.5MB/s</td>
+</tr>
+<tr>
+<td>LZO</td>
+<td>8.3GB</td>
+<td>2.9GB</td>
+<td>49.3MB/s</td>
+<td>74.6MB/s</td>
+</tr>
+</tbody></table>
+<p><a href="http://google.github.io/snappy/" target="_blank" rel="noopener">http://google.github.io/snappy/</a></p>
+<p>On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.</p>
+<h4 id="2、压缩配置参数"><a href="#2、压缩配置参数" class="headerlink" title="2、压缩配置参数"></a>2、压缩配置参数</h4><p>要在Hadoop中启用压缩，可以配置如下参数（mapred-site.xml文件中）：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>阶段</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>io.compression.codecs      （在core-site.xml中配置）</td>
+<td>org.apache.hadoop.io.compress.DefaultCodec,   org.apache.hadoop.io.compress.GzipCodec, org.apache.hadoop.io.compress.BZip2Codec,   org.apache.hadoop.io.compress.Lz4Codec</td>
+<td>输入压缩</td>
+<td>Hadoop使用文件扩展名判断是否支持某种编解码器</td>
+</tr>
+<tr>
+<td>mapreduce.map.output.compress</td>
+<td>false</td>
+<td>mapper输出</td>
+<td>这个参数设为true启用压缩</td>
+</tr>
+<tr>
+<td>mapreduce.map.output.compress.codec</td>
+<td>org.apache.hadoop.io.compress.DefaultCodec</td>
+<td>mapper输出</td>
+<td>使用LZO、LZ4或snappy编解码器在此阶段压缩数据</td>
+</tr>
+<tr>
+<td>mapreduce.output.fileoutputformat.compress</td>
+<td>false</td>
+<td>reducer输出</td>
+<td>这个参数设为true启用压缩</td>
+</tr>
+<tr>
+<td>mapreduce.output.fileoutputformat.compress.codec</td>
+<td>org.apache.hadoop.io.compress. DefaultCodec</td>
+<td>reducer输出</td>
+<td>使用标准工具或者编解码器，如gzip和bzip2</td>
+</tr>
+<tr>
+<td>mapreduce.output.fileoutputformat.compress.type</td>
+<td>RECORD</td>
+<td>reducer输出</td>
+<td>SequenceFile输出使用的压缩类型：NONE和BLOCK</td>
+</tr>
+</tbody></table>
+<h4 id="3、开启Map输出阶段压缩"><a href="#3、开启Map输出阶段压缩" class="headerlink" title="3、开启Map输出阶段压缩"></a>3、开启Map输出阶段压缩</h4><p>开启map输出阶段压缩可以减少job中map和Reduce task间数据传输量。具体配置如下：</p>
+<p><strong>案例实操：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1）开启hive中间传输数据压缩功能</span><br><span class="line">hive (default)&gt;set hive.exec.compress.intermediate=true;</span><br><span class="line"></span><br><span class="line">2）开启mapreduce中map输出压缩功能</span><br><span class="line">hive (default)&gt;set mapreduce.map.output.compress=true;</span><br><span class="line"></span><br><span class="line">3）设置mapreduce中map输出数据的压缩方式</span><br><span class="line">hive (default)&gt;set mapreduce.map.output.compress.codec= org.apache.hadoop.io.compress.SnappyCodec;</span><br><span class="line"></span><br><span class="line">4）执行查询语句</span><br><span class="line">   select count(1) from score;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、-开启Reduce输出阶段压缩"><a href="#4、-开启Reduce输出阶段压缩" class="headerlink" title="4、 开启Reduce输出阶段压缩"></a>4、 开启Reduce输出阶段压缩</h4><p>当Hive将输出写入到表中时，输出内容同样可以进行压缩。属性hive.exec.compress.output控制着这个功能。用户可能需要保持默认设置文件中的默认值false，这样默认的输出就是非压缩的纯文本文件了。用户可以通过在查询语句或执行脚本中设置这个值为true，来开启输出结果压缩功能。</p>
+<p><strong>案例实操：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">1）开启hive最终输出数据压缩功能</span><br><span class="line">hive (default)&gt;set hive.exec.compress.output=true;</span><br><span class="line"></span><br><span class="line">2）开启mapreduce最终输出数据压缩</span><br><span class="line">hive (default)&gt;set mapreduce.output.fileoutputformat.compress=true;</span><br><span class="line"></span><br><span class="line">3）设置mapreduce最终数据输出压缩方式</span><br><span class="line">hive (default)&gt; set mapreduce.output.fileoutputformat.compress.codec = org.apache.hadoop.io.compress.SnappyCodec;</span><br><span class="line"></span><br><span class="line">4）设置mapreduce最终数据输出压缩为块压缩</span><br><span class="line">hive (default)&gt;set mapreduce.output.fileoutputformat.compress.type=BLOCK;</span><br><span class="line"></span><br><span class="line">5）测试一下输出结果是否是压缩文件</span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">local</span> <span class="keyword">directory</span> <span class="string">'/kkb/install/hivedatas/snappy'</span> <span class="keyword">select</span> * <span class="keyword">from</span> score <span class="keyword">distribute</span> <span class="keyword">by</span> s_id <span class="keyword">sort</span> <span class="keyword">by</span> s_id <span class="keyword">desc</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Hive表的文件存储格式"><a href="#2-Hive表的文件存储格式" class="headerlink" title="2. Hive表的文件存储格式"></a>2. Hive表的文件存储格式</h3><p>Hive支持的存储数的格式主要有：TEXTFILE（行式存储） 、SEQUENCEFILE(行式存储)、ORC（列式存储）、PARQUET（列式存储）。</p>
+<h4 id="1、列式存储和行式存储"><a href="#1、列式存储和行式存储" class="headerlink" title="1、列式存储和行式存储"></a>1、列式存储和行式存储</h4><p><img src="/2020/03/20/Hive表的数据压缩与存储/clip_image002.jpg" alt></p>
+<p>上图左边为逻辑表，右边第一个为行式存储，第二个为列式存储。</p>
+<p><strong>行存储的特点：</strong> 查询满足条件的一整行数据的时候，列存储则需要去每个聚集的字段找到对应的每个列的值，行存储只需要找到其中一个值，其余的值都在相邻地方，所以此时行存储查询的速度更快。select  *  </p>
+<p><strong>列存储的特点：</strong> 因为每个字段的数据聚集存储，在查询只需要少数几个字段的时候，能大大减少读取的数据量；每个字段的数据类型一定是相同的，列式存储可以针对性的设计更好的设计压缩算法。  select   某些字段效率更高</p>
+<p>TEXTFILE和SEQUENCEFILE的存储格式都是基于行存储的；</p>
+<p>ORC和PARQUET是基于列式存储的。</p>
+<h4 id="2-、TEXTFILE格式"><a href="#2-、TEXTFILE格式" class="headerlink" title="2 、TEXTFILE格式"></a>2 、TEXTFILE格式</h4><p>默认格式，数据不做压缩，磁盘开销大，数据解析开销大。可结合Gzip、Bzip2使用(系统自动检查，执行查询时自动解压)，但使用这种方式，hive不会对数据进行切分，从而无法对数据进行并行操作。</p>
+<h4 id="3-、ORC格式"><a href="#3-、ORC格式" class="headerlink" title="3 、ORC格式"></a>3 、ORC格式</h4><p>Orc (Optimized Row Columnar)是hive 0.11版里引入的新的存储格式。</p>
+<p>可以看到每个Orc文件由1个或多个stripe组成，每个stripe250MB大小，这个Stripe实际相当于RowGroup概念，不过大小由4MB-&gt;250MB，这样能提升顺序读的吞吐率。每个Stripe里有三部分组成，分别是Index Data,Row Data,Stripe Footer：</p>
+<p><img src="/2020/03/20/Hive表的数据压缩与存储/clip_image003.png" alt></p>
+<p>一个orc文件可以分为若干个Stripe</p>
+<p>一个stripe可以分为三个部分</p>
+<p>indexData：某些列的索引数据</p>
+<p>rowData :真正的数据存储</p>
+<p>StripFooter：stripe的元数据信息</p>
+<p>   1）Index Data：一个轻量级的index，默认是每隔1W行做一个索引。这里做的索引只是记录某行的各字段在Row Data中的offset。</p>
+<p>​    2）Row Data：存的是具体的数据，先取部分行，然后对这些行按列进行存储。对每个列进行了编码，分成多个Stream来存储。</p>
+<p>​    3）Stripe Footer：存的是各个stripe的元数据信息</p>
+<p>每个文件有一个File Footer，这里面存的是每个Stripe的行数，每个Column的数据类型信息等；每个文件的尾部是一个PostScript，这里面记录了整个文件的压缩类型以及FileFooter的长度信息等。在读取文件时，会seek到文件尾部读PostScript，从里面解析到File Footer长度，再读FileFooter，从里面解析到各个Stripe信息，再读各个Stripe，即从后往前读。</p>
+<h4 id="4-、PARQUET格式"><a href="#4-、PARQUET格式" class="headerlink" title="4 、PARQUET格式"></a>4 、PARQUET格式</h4><p>Parquet是面向分析型业务的列式存储格式，由Twitter和Cloudera合作开发，2015年5月从Apache的孵化器里毕业成为Apache顶级项目。</p>
+<p>Parquet文件是以二进制方式存储的，所以是不可以直接读取的，文件中包括该文件的数据和元数据，因此Parquet格式文件是自解析的。</p>
+<p>通常情况下，在存储Parquet数据的时候会按照Block大小设置<strong>行组</strong>的大小，由于一般情况下每一个Mapper任务处理数据的最小单位是一个Block，这样可以把每一个行组由一个Mapper任务处理，增大任务执行并行度。Parquet文件的格式如下图所示。</p>
+<p><img src="/2020/03/20/Hive表的数据压缩与存储/clip_image005.jpg" alt></p>
+<p>上图展示了一个Parquet文件的内容，一个文件中可以存储多个行组，文件的首位都是该文件的Magic Code，用于校验它是否是一个Parquet文件，Footer length记录了文件元数据的大小，通过该值和文件长度可以计算出元数据的偏移量，文件的元数据中包括每一个行组的元数据信息和该文件存储数据的Schema信息。除了文件中每一个行组的元数据，每一页的开始都会存储该页的元数据，在Parquet中，有三种类型的页：数据页、字典页和索引页。数据页用于存储当前行组中该列的值，字典页存储该列值的编码字典，每一个列块中最多包含一个字典页，索引页用来存储当前行组下该列的索引，目前Parquet中还不支持索引页。</p>
+<h4 id="5-主流文件存储格式对比实验"><a href="#5-主流文件存储格式对比实验" class="headerlink" title="5 主流文件存储格式对比实验"></a>5 主流文件存储格式对比实验</h4><p>从存储文件的压缩比和查询速度两个角度对比。</p>
+<p><strong>存储文件的压缩比测试：</strong></p>
+<p>测试数据 参见log.data</p>
+<h5 id="1）TextFile"><a href="#1）TextFile" class="headerlink" title="1）TextFile"></a>1）TextFile</h5><p>（1）创建表，存储数据格式为TEXTFILE</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">use myhive;</span><br><span class="line">create table log_text (</span><br><span class="line">track_time string,</span><br><span class="line">url string,</span><br><span class="line">session_id string,</span><br><span class="line">referer string,</span><br><span class="line">ip string,</span><br><span class="line">end_user_id string,</span><br><span class="line">city_id string</span><br><span class="line">)ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;</span><br><span class="line">STORED AS TEXTFILE ;</span><br></pre></td></tr></table></figure>
+
+<p>（2）向表中加载数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load data local inpath &apos;/kkb/install/hivedatas/log.data&apos; into table log_text ;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>（3）查看表中数据大小，大小为18.1M</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dfs -du -h /user/hive/warehouse/myhive.db/log_text;</span><br><span class="line">18.1 M  /user/hive/warehouse/log_text/log.data</span><br></pre></td></tr></table></figure>
+
+<h5 id="2）ORC"><a href="#2）ORC" class="headerlink" title="2）ORC"></a>2）ORC</h5><p>（1）创建表，存储数据格式为ORC</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table log_orc(</span><br><span class="line">track_time string,</span><br><span class="line">url string,</span><br><span class="line">session_id string,</span><br><span class="line">referer string,</span><br><span class="line">ip string,</span><br><span class="line">end_user_id string,</span><br><span class="line">city_id string)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;</span><br><span class="line">STORED AS orc ;</span><br></pre></td></tr></table></figure>
+
+<p>（2）向表中加载数据，ORC存储格式的表无法使用load方式加载数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into table log_orc select * from log_text ;</span><br></pre></td></tr></table></figure>
+
+<p>（3）查看表中数据大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dfs -du -h /user/hive/warehouse/myhive.db/log_orc;</span><br><span class="line"></span><br><span class="line">2.8 M  /user/hive/warehouse/log_orc/123456_0</span><br></pre></td></tr></table></figure>
+
+<p>orc这种存储格式，默认使用了zlib压缩方式来对数据进行压缩，所以数据会变成了2.8M，非常小</p>
+<p>数仓里面：</p>
+<p>ods层 表是原始数据 -&gt;textfile格式</p>
+<p>dw层 orc + snappy | lzo snappy尽量控制文件大小 128M左右</p>
+<h5 id="3）Parquet"><a href="#3）Parquet" class="headerlink" title="3）Parquet"></a>3）Parquet</h5><p>（1）创建表，存储数据格式为parquet</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table log_parquet(</span><br><span class="line">track_time string,</span><br><span class="line">url string,</span><br><span class="line">session_id string,</span><br><span class="line">referer string,</span><br><span class="line">ip string,</span><br><span class="line">end_user_id string,</span><br><span class="line">city_id string)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;</span><br><span class="line">STORED AS PARQUET ;</span><br></pre></td></tr></table></figure>
+
+<p>（2）向表中加载数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">table</span> log_parquet <span class="keyword">select</span> * <span class="keyword">from</span> log_text ;</span><br></pre></td></tr></table></figure>
+
+<p>（3）查看表中数据大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dfs -du -h /user/hive/warehouse/myhive.db/log_parquet;</span><br><span class="line"></span><br><span class="line">13.1 M  /user/hive/warehouse/log_parquet/123456_0</span><br></pre></td></tr></table></figure>
+
+<p>存储文件的压缩比总结：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ORC &gt;  Parquet &gt;  textFile</span><br></pre></td></tr></table></figure>
+
+<p><strong>存储文件的查询速度测试：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">1）TextFile</span><br><span class="line">hive (default)&gt; select count(*) from log_text;</span><br><span class="line">_c0</span><br><span class="line">100000</span><br><span class="line">Time taken: 21.54 seconds, Fetched: 1 row(s)  </span><br><span class="line"></span><br><span class="line">2）ORC</span><br><span class="line">hive (default)&gt; select count(*) from log_orc;</span><br><span class="line">_c0</span><br><span class="line">100000</span><br><span class="line">Time taken: 20.867 seconds, Fetched: 1 row(s)  </span><br><span class="line"></span><br><span class="line">3）Parquet</span><br><span class="line">hive (default)&gt; select count(*) from log_parquet; </span><br><span class="line">_c0</span><br><span class="line">100000</span><br><span class="line">Time taken: 22.922 seconds, Fetched: 1 row(s)</span><br><span class="line"></span><br><span class="line">存储文件的查询速度总结：</span><br><span class="line">ORC &gt; TextFile &gt; Parquet</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、存储和压缩结合"><a href="#3、存储和压缩结合" class="headerlink" title="3、存储和压缩结合"></a>3、存储和压缩结合</h3><p>官网：<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ORC" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ORC</a></p>
+<p>ORC存储方式的压缩：</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>orc.compress</td>
+<td>ZLIB</td>
+<td>high level   compression (one of NONE, ZLIB, SNAPPY)</td>
+</tr>
+<tr>
+<td>orc.compress.size</td>
+<td>262,144</td>
+<td>number of bytes in   each compression chunk</td>
+</tr>
+<tr>
+<td>orc.stripe.size</td>
+<td>67,108,864</td>
+<td>number of bytes in   each stripe</td>
+</tr>
+<tr>
+<td>orc.row.index.stride</td>
+<td>10,000</td>
+<td>number of rows   between index entries (must be &gt;= 1000)</td>
+</tr>
+<tr>
+<td>orc.create.index</td>
+<td>true</td>
+<td>whether to create row   indexes</td>
+</tr>
+<tr>
+<td>orc.bloom.filter.columns</td>
+<td>“”</td>
+<td>comma separated list of column names for which bloom filter   should be created</td>
+</tr>
+<tr>
+<td>orc.bloom.filter.fpp</td>
+<td>0.05</td>
+<td>false positive probability for bloom filter (must &gt;0.0 and   &lt;1.0)</td>
+</tr>
+</tbody></table>
+<h4 id="1）创建一个非压缩的的ORC存储方式"><a href="#1）创建一个非压缩的的ORC存储方式" class="headerlink" title="1）创建一个非压缩的的ORC存储方式"></a>1）创建一个非压缩的的ORC存储方式</h4><p>（1）建表语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">create table log_orc_none(</span><br><span class="line">track_time string,</span><br><span class="line">url string,</span><br><span class="line">session_id string,</span><br><span class="line">referer string,</span><br><span class="line">ip string,</span><br><span class="line">end_user_id string,</span><br><span class="line">city_id string</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;</span><br><span class="line">STORED AS orc tblproperties (&quot;orc.compress&quot;=&quot;NONE&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>（2）插入数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into table log_orc_none select * from log_text ;</span><br></pre></td></tr></table></figure>
+
+<p>（3）查看插入后数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dfs -du -h /user/hive/warehouse/myhive.db/log_orc_none;</span><br><span class="line"></span><br><span class="line">7.7 M  /user/hive/warehouse/log_orc_none/123456_0</span><br></pre></td></tr></table></figure>
+
+<h4 id="2）创建一个SNAPPY压缩的ORC存储方式"><a href="#2）创建一个SNAPPY压缩的ORC存储方式" class="headerlink" title="2）创建一个SNAPPY压缩的ORC存储方式"></a>2）创建一个SNAPPY压缩的ORC存储方式</h4><p>（1）建表语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">create table log_orc_snappy(</span><br><span class="line">track_time string,</span><br><span class="line">url string,</span><br><span class="line">session_id string,</span><br><span class="line">referer string,</span><br><span class="line">ip string,</span><br><span class="line">end_user_id string,</span><br><span class="line">city_id string</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;</span><br><span class="line">STORED AS orc tblproperties (&quot;orc.compress&quot;=&quot;SNAPPY&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>（2）插入数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into table log_orc_snappy select * from log_text ;</span><br></pre></td></tr></table></figure>
+
+<p>（3）查看插入后数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dfs -du -h /user/hive/warehouse/myhive.db/log_orc_snappy ;</span><br><span class="line">3.8 M  /user/hive/warehouse/log_orc_snappy/123456_0</span><br></pre></td></tr></table></figure>
+
+<p>3）上一节中默认创建的ORC存储方式，导入数据后的大小为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2.8 M  /user/hive/warehouse/log_orc/123456_0</span><br></pre></td></tr></table></figure>
+
+<p>比Snappy压缩的还小。原因是orc存储文件默认采用ZLIB压缩。比snappy压缩的小。</p>
+<p>4）存储方式和压缩总结：</p>
+<p>​        在实际的项目开发当中【dw层】，hive表的数据存储格式一般选择：orc或parquet。压缩方式一般选择snappy。</p>
+<h4 id="3-企业实战"><a href="#3-企业实战" class="headerlink" title="3  企业实战"></a>3  企业实战</h4><h5 id="1-通过MultiDelimitSerDe-解决多字符分割场景"><a href="#1-通过MultiDelimitSerDe-解决多字符分割场景" class="headerlink" title="1 通过MultiDelimitSerDe 解决多字符分割场景"></a>1 通过MultiDelimitSerDe 解决多字符分割场景</h5><ul>
+<li>1、创建表</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> myhive;</span><br><span class="line"><span class="keyword">create</span>  <span class="keyword">table</span> t1 (<span class="keyword">id</span> <span class="keyword">String</span>, <span class="keyword">name</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> serde <span class="string">'org.apache.hadoop.hive.contrib.serde2.MultiDelimitSerDe'</span></span><br><span class="line"><span class="keyword">WITH</span> SERDEPROPERTIES (<span class="string">"field.delim"</span>=<span class="string">"##"</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>2、准备数据 t1.txt</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd /kkb/<span class="keyword">install</span>/hivedatas</span><br><span class="line">vim t1.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">1</span><span class="comment">##xiaoming</span></span><br><span class="line"><span class="number">2</span><span class="comment">##xiaowang</span></span><br><span class="line"><span class="number">3</span><span class="comment">##xiaozhang</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3、加载数据</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/kkb/install/hivedatas/t1.txt'</span> <span class="keyword">into</span> <span class="keyword">table</span> t1;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>4、查询数据</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:hive2://node1:10000&gt; select * from t1;</span><br><span class="line">+<span class="comment">--------+------------+--+</span></span><br><span class="line">| t1.id  |  t1.name   |</span><br><span class="line">+<span class="comment">--------+------------+--+</span></span><br><span class="line">| 1      | xiaoming   |</span><br><span class="line">| 2      | xiaowang   |</span><br><span class="line">| 3      | xiaozhang  |</span><br><span class="line">+<span class="comment">--------+------------+--+</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-通过RegexSerDe-解决多字符分割场景"><a href="#2-通过RegexSerDe-解决多字符分割场景" class="headerlink" title="2 通过RegexSerDe 解决多字符分割场景"></a>2 通过RegexSerDe 解决多字符分割场景</h5><ul>
+<li>1、创建表</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span>  <span class="keyword">table</span> t2(<span class="keyword">id</span> <span class="built_in">int</span>, <span class="keyword">name</span> <span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> serde <span class="string">'org.apache.hadoop.hive.serde2.RegexSerDe'</span> </span><br><span class="line"><span class="keyword">WITH</span> SERDEPROPERTIES (<span class="string">"input.regex"</span> = <span class="string">"^(.*)\\#\\#(.*)$"</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>2、准备数据 t1.txt</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1##xiaoming</span><br><span class="line">2##xiaowang</span><br><span class="line">3##xiaozhang</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3、加载数据</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/kkb/install/hivedatas/t1.txt'</span> <span class="keyword">into</span> <span class="keyword">table</span> t2;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>4、查询数据</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:hive2://node1:10000&gt; select * from t2;</span><br><span class="line">+<span class="comment">--------+------------+--+</span></span><br><span class="line">| t2.id  |  t2.name   |</span><br><span class="line">+<span class="comment">--------+------------+--+</span></span><br><span class="line">| 1      | xiaoming   |</span><br><span class="line">| 2      | xiaowang   |</span><br><span class="line">| 3      | xiaozhang  |</span><br><span class="line">+<span class="comment">--------+------------+--+</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小鱼儿</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/" title="Hive表的数据压缩">http://yoursite.com/2020/03/20/Hive表的数据压缩与存储/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Hive/" rel="tag"># Hive</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/03/09/数据仓库建模/" rel="next" title="数据仓库建模">
+                  <i class="fa fa-chevron-left"></i> 数据仓库建模
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Hive表的数据压缩"><span class="nav-number">1.</span> <span class="nav-text">1. Hive表的数据压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、数据的压缩说明"><span class="nav-number">1.1.</span> <span class="nav-text">1、数据的压缩说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、压缩配置参数"><span class="nav-number">1.2.</span> <span class="nav-text">2、压缩配置参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、开启Map输出阶段压缩"><span class="nav-number">1.3.</span> <span class="nav-text">3、开启Map输出阶段压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、-开启Reduce输出阶段压缩"><span class="nav-number">1.4.</span> <span class="nav-text">4、 开启Reduce输出阶段压缩</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Hive表的文件存储格式"><span class="nav-number">2.</span> <span class="nav-text">2. Hive表的文件存储格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、列式存储和行式存储"><span class="nav-number">2.1.</span> <span class="nav-text">1、列式存储和行式存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-、TEXTFILE格式"><span class="nav-number">2.2.</span> <span class="nav-text">2 、TEXTFILE格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-、ORC格式"><span class="nav-number">2.3.</span> <span class="nav-text">3 、ORC格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-、PARQUET格式"><span class="nav-number">2.4.</span> <span class="nav-text">4 、PARQUET格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-主流文件存储格式对比实验"><span class="nav-number">2.5.</span> <span class="nav-text">5 主流文件存储格式对比实验</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1）TextFile"><span class="nav-number">2.5.1.</span> <span class="nav-text">1）TextFile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2）ORC"><span class="nav-number">2.5.2.</span> <span class="nav-text">2）ORC</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3）Parquet"><span class="nav-number">2.5.3.</span> <span class="nav-text">3）Parquet</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、存储和压缩结合"><span class="nav-number">3.</span> <span class="nav-text">3、存储和压缩结合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1）创建一个非压缩的的ORC存储方式"><span class="nav-number">3.1.</span> <span class="nav-text">1）创建一个非压缩的的ORC存储方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2）创建一个SNAPPY压缩的ORC存储方式"><span class="nav-number">3.2.</span> <span class="nav-text">2）创建一个SNAPPY压缩的ORC存储方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-企业实战"><span class="nav-number">3.3.</span> <span class="nav-text">3  企业实战</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-通过MultiDelimitSerDe-解决多字符分割场景"><span class="nav-number">3.3.1.</span> <span class="nav-text">1 通过MultiDelimitSerDe 解决多字符分割场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-通过RegexSerDe-解决多字符分割场景"><span class="nav-number">3.3.2.</span> <span class="nav-text">2 通过RegexSerDe 解决多字符分割场景</span></a></li></ol></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/fish.png"
+      alt="小鱼儿">
+  <p class="site-author-name" itemprop="name">小鱼儿</p>
+  <div class="site-description" itemprop="description">肩膀有点痒，可能在长小翅膀</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-Hans" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小鱼儿</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+

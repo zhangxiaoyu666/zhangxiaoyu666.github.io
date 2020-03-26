@@ -230,7 +230,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">45</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-question-circle"></i>标签<span class="badge">44</span></a>
 
   </li>
       
@@ -593,7 +593,7 @@
 <ul>
 <li>vi flume-kafka.conf</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">为我们的<span class="built_in">source</span> channel  sink起名</span></span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks = k1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的<span class="built_in">source</span>数据收集策略</span></span><br><span class="line">a1.sources.r1.type = spooldir</span><br><span class="line">a1.sources.r1.spoolDir = /kkb/install/flumeData/files</span><br><span class="line">a1.sources.r1.inputCharset = utf-8</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的<span class="built_in">source</span>收集到的数据发送到哪个管道</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的channel为memory,即表示所有的数据都装进memory当中</span></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定我们的sink为kafka sink，并指定我们的sink从哪个channel当中读取数据</span></span><br><span class="line">a1.sinks.k1.channel = c1</span><br><span class="line">a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line">a1.sinks.k1.kafka.topic = kaikeba</span><br><span class="line">a1.sinks.k1.kafka.bootstrap.servers = node01:9092,node02:9092,node03:9092</span><br><span class="line">a1.sinks.k1.kafka.flumeBatchSize = 20</span><br><span class="line">a1.sinks.k1.kafka.producer.acks = 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>为我们的source channel  sink起名</span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks = k1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>指定我们的source数据收集策略</span><br><span class="line">a1.sources.r1.type = spooldir</span><br><span class="line">a1.sources.r1.spoolDir = /kkb/install/flumeData/files</span><br><span class="line">a1.sources.r1.inputCharset = utf-8</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>指定我们的source收集到的数据发送到哪个管道</span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>指定我们的channel为memory,即表示所有的数据都装进memory当中</span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>指定我们的sink为kafka sink，并指定我们的sink从哪个channel当中读取数据</span><br><span class="line">a1.sinks.k1.channel = c1</span><br><span class="line">a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line">a1.sinks.k1.kafka.topic = kaikeba</span><br><span class="line">a1.sinks.k1.kafka.bootstrap.servers = node01:9092,node02:9092,node03:9092</span><br><span class="line">a1.sinks.k1.kafka.flumeBatchSize = 20</span><br><span class="line">a1.sinks.k1.kafka.producer.acks = 1</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>3、创建topic</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-topics.sh --create --topic kaikeba --partitions 3 --replication-factor 2  --zookeeper node01:2181,node02:2181,node03:2181</span><br></pre></td></tr></table></figure>
@@ -622,7 +622,7 @@
 <li><p>进入到conf</p>
 <ul>
 <li><p>vim application.conf</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">修改kafka-manager.zkhosts的值，指定kafka集群地址</span></span><br><span class="line">kafka-manager.zkhosts="node01:2181,node02:2181,node03:2181"</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>修改kafka-manager.zkhosts的值，指定kafka集群地址</span><br><span class="line">kafka-manager.zkhosts="node01:2181,node02:2181,node03:2181"</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
@@ -658,7 +658,7 @@
 <ul>
 <li>vim start_kafka_web.sh</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">java -cp KafkaOffsetMonitor-assembly-0.2.0.jar com.quantifind.kafka.offsetapp.OffsetGetterWeb --zk node01:2181,node02:2181,node03:2181 --port 8089 --refresh 10.seconds --retain 1.days</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">java -cp KafkaOffsetMonitor-assembly-0.2.0.jar com.quantifind.kafka.offsetapp.OffsetGetterWeb --zk node01:2181,node02:2181,node03:2181 --port 8089 --refresh 10.seconds --retain 1.days</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>4、启动脚本</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup sh start_kafka_web.sh &amp;</span><br></pre></td></tr></table></figure>
@@ -898,7 +898,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
